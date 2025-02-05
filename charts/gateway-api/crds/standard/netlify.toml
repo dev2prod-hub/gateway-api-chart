@@ -1,0 +1,33 @@
+# Netlify build instructions
+[build]
+    command = "make docs"
+    publish = "site"
+[build.environment]
+    PYTHON_VERSION = "3.8"
+    GO_VERSION = "1.21.4"
+
+# Standard Netlify redirects
+[[redirects]]
+    from = "https://main--kubernetes-sigs-gateway-api.netlify.com/*"
+    to = "https://main.gateway-api.sigs.k8s.io/:splat"
+    status = 301
+    force = true
+
+# HTTP-to-HTTPS rules
+[[redirects]]
+    from = "http://main.gateway-api.sigs.k8s.io/*"
+    to = "https://main.gateway-api.sigs.k8s.io/:splat"
+    status = 301
+    force = true
+
+[[redirects]]
+    from = "http://main--kubernetes-sigs-gateway-api.netlify.com/*"
+    to = "http://main.gateway-api.sigs.k8s.io/:splat"
+    status = 301
+    force = true
+
+[[redirects]]
+    from = "/geps/gep-1426"
+    to = "/geps/gep-1294"
+    status = 301
+    force = true
