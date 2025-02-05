@@ -3,7 +3,7 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-helm/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-helm/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api)](https://artifacthub.io/packages/search?repo=gateway-api)
 
-**Production-ready Helm templates for standardized Kubernetes L7 traffic management using [Gateway API](https://gateway-api.sigs.k8s.io/)** -  
+**Production-ready Helm templates for standardized Kubernetes L7 traffic management using [Gateway API](https://gateway-api.sigs.k8s.io/)** -
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
 
 ## Why This Chart? 🌟
@@ -29,10 +29,10 @@ helm install my-gateway gateway-api/gateway-api \
 ```
 
 ## Features 📦
-✔️ **CRD Management** (v1.0+ Gateway API versions)  
-✔️ **Pre-configured Listeners** (HTTP/HTTPS, TLS termination)  
-✔️ **Multi-cloud Profiles** (AWS ALB, GCP GLB, Azure AGIC)  
-✔️ **RBAC-ready** ServiceAccount & Role bindings  
+✔️ **CRD Management** (v1.0+ Gateway API versions)
+✔️ **Pre-configured Listeners** (HTTP/HTTPS, TLS termination)
+✔️ **Multi-cloud Profiles** (AWS ALB, GCP GLB, Azure AGIC)
+✔️ **RBAC-ready** ServiceAccount & Role bindings
 ✔️ **Version-safe** upgrades (Helm hooks for CRD changes)
 
 ## Configuration Example 🔧
