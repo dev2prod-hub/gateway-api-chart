@@ -15,6 +15,7 @@ cover, and documentation to help users get started.
 ## Gateway Controller Implementation Status <a name="gateways"></a>
 
 - [Acnodal EPIC][1]
+- [Airlock Microgateway][34]
 - [Amazon Elastic Kubernetes Service][23] (alpha)
 - [Apache APISIX][2] (beta)
 - [Avi Kubernetes Operator][31] (tech preview)
@@ -31,9 +32,11 @@ cover, and documentation to help users get started.
 - [HAProxy Kubernetes Ingress Controller][32] (GA)
 - [HashiCorp Consul][8]
 - [Istio][9] (GA)
-- [Kong][10] (GA)
+- [Kong Ingress Controller][10] (GA)
+- [Kong Gateway Operator][35] (GA)
 - [Kuma][11] (GA)
 - [LiteSpeed Ingress Controller][19]
+- [LoxiLB][36] (beta)
 - [NGINX Gateway Fabric][12] (GA)
 - [ngrok][33] (preview)
 - [STUNner][21] (beta)
@@ -64,7 +67,7 @@ cover, and documentation to help users get started.
 [7]:#haproxy-ingress
 [8]:#hashicorp-consul
 [9]:#istio
-[10]:#kong
+[10]:#kong-kubernetes-ingress-controller
 [11]:#kuma
 [12]:#nginx-gateway-fabric
 [13]:#traefik-proxy
@@ -87,6 +90,10 @@ cover, and documentation to help users get started.
 [31]:#avi-kubernetes-operator
 [32]:#haproxy-kubernetes-ingress-controller
 [33]:#ngrok-kubernetes-operator
+[34]:#airlock-microgateway
+[35]:#kong-gateway-operator
+[36]:#loxilb
+
 
 [gamma]:/concepts/gamma/
 
@@ -104,6 +111,35 @@ In this section you will find specific links to blog posts, documentation and ot
 
 [epicdocs]:https://www.epic-gateway.org/
 [epicsource]:https://github.com/epic-gateway
+
+### Airlock Microgateway
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.1.0-Airlock%20Microgateway-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/airlock-microgateway)
+
+[Airlock Microgateway][airlock-microgateway] is a Kubernetes native WAAP (Web Application and API Protection) solution to protect microservices.
+Modern application security is embedded in the development workflow and follows DevSecOps paradigms.
+Airlock Microgateway protects your applications and microservices with the tried-and-tested Airlock security features against attacks, while also providing a high degree of scalability.
+
+With [Airlock Microgateway 4.4][airlock-microgateway-v4.4], Airlock Microgateway introduces a sidecarless data plane mode
+based on Gateway API to avoid the operational complexity of sidecars.
+
+#### Features
+- Kubernetes native integration with sidecar injection and Gateway API support
+- Reverse proxy functionality with request routing rules, TLS termination and remote IP extraction
+- Using native Envoy HTTP filters like Lua scripting, RBAC, ext_authz, JWT authentication
+- Content security filters for protecting against known attacks (OWASP Top 10)
+- API security features like JSON parsing, OpenAPI specification enforcement or GraphQL schema validation
+
+#### Documentation and links
+- [Product documentation][airlock-microgateway-documentation]
+- [Gateway specific documentation][airlock-microgateway-guide]
+- Check our [Airlock community forum][airlock-microgateway-community-support] and [support process][airlock-microgateway-premium-support] for support.
+
+[airlock-microgateway]:https://www.airlock.com/en/secure-access-hub/components/microgateway
+[airlock-microgateway-v4.4]:https://docs.airlock.com/microgateway/4.4/#data/1725073468781.html
+[airlock-microgateway-documentation]:https://docs.airlock.com/microgateway/latest
+[airlock-microgateway-guide]:https://docs.airlock.com/microgateway/4.4/#data/1726159368351.html
+[airlock-microgateway-community-support]:https://forum.airlock.com/
+[airlock-microgateway-premium-support]:https://techzone.ergon.ch/support-process
 
 ### Amazon Elastic Kubernetes Service
 
@@ -136,7 +172,7 @@ Documentation to deploy and use AKO Gateway API can be found at [Avi Kubernetes 
 
 ### Azure Application Gateway for Containers
 
-[![Conformance](https://img.shields.io/badge/Gateway%20API%20Partial%20Conformance%20v1.0.0-Azure%20Application%20Gateway%20for%20Containers-orange)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.0.0/azure-application-gateway-for-containers)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Partial%20Conformance%20v1.1.1-Azure%20Application%20Gateway%20for%20Containers-orange)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/azure-application-gateway-for-containers)
 
 [Application Gateway for Containers][azure-application-gateway-for-containers] is a managed application (layer 7) load balancing solution, providing dynamic traffic management capabilities for workloads running in a Kubernetes cluster in Azure. Follow the [quickstart guide][azure-application-gateway-for-containers-quickstart-controller] to deploy the ALB controller and get started with Gateway API.
 
@@ -241,9 +277,13 @@ FSM support of Gateway API is built on top [Flomesh Gateway API](fgw) and it cur
 ### Gloo Gateway
 
 [![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.0.0-GlooGateway-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.0.0/gloo-gateway)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Partial%20Conformance%20v1.1.0-GlooGateway-orange)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/gloo-gateway)
 
 [Gloo Gateway][gloogateway] by [Solo.io][solo] is a feature-rich, Kubernetes-native ingress controller and next-generation API gateway.
 Gloo Gateway brings the full power and community support of Gateway API to its existing control-plane implementation.
+
+The Gloo Gateway ingress controller passes all the core Gateway API conformance tests in the v1.1.0 release for the GATEWAY_HTTP conformance 
+profile except `HTTPRouteServiceTypes`.
 
 [gloogateway]:https://docs.solo.io/gateway/latest/
 [solo]:https://www.solo.io
@@ -300,14 +340,14 @@ Please see the [Consul API Gateway documentation][consul-api-gw-doocs] for curre
 
 ### Istio
 
-[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.1.0-Istio-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/istio-istio)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.2.1-Istio-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.2.1/istio-istio)
 
 [Istio][istio] is an open source [service mesh][istio-mesh] and gateway implementation.
 
 A minimal install of Istio can be used to provide a fully compliant
 implementation of the Kubernetes Gateway API for cluster ingress traffic
 control. For service mesh users, Istio also fully supports the [GAMMA
-initiative's][gamma] experimental Gateway API [support for east-west traffic
+initiative's][gamma] Gateway API [support for east-west traffic
 management][gamma] within the mesh.
 
 Much of Istio's documentation, including all of the [ingress tasks][istio-1] and several mesh-internal traffic management tasks, already includes parallel instructions for
@@ -319,25 +359,36 @@ Check out the [Gateway API task][istio-2] for more information about the Gateway
 [istio-1]:https://istio.io/latest/docs/tasks/traffic-management/ingress/
 [istio-2]:https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/
 
-### Kong
+### Kong Kubernetes Ingress Controller
 
-[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.0.0-Kong%20Ingress%20Controller-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.0.0/kong-kubernetes-ingress-controller)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.2.1-Kong%20Ingress%20Controller-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.2.1/kong-kubernetes-ingress-controller)
 
 [Kong][kong] is an open source API Gateway built for hybrid and multi-cloud environments.
 
-Kong supports Gateway API in the [Kong Kubernetes Ingress Controller (KIC)][kic], see the [Gateway API Guide][kong-gw-guide] for usage information.
+The [Kong Kubernetes Ingress Controller (KIC)][kic] can be used to configure unmanaged Gateways. See the [Gateway API Guide][kong-gw-guide] for usage information.. See the [Gateway API Guide][kong-gw-guide] for usage information.
 
-Kong also supports Gateway API in the [Kong Gateway Operator][kgo].
-
-For help and support with Kong's implementations please feel free to [create an issue][kong-issue-new] or a [discussion][kong-disc-new]. You can also ask for help in the [#kong channel on Kubernetes slack][kong-slack].
+For help and support with Kong Kubernetes Ingress Controller please feel free to [create an issue][kic-issue-new] or a [discussion][kic-disc-new]. You can also ask for help in the [#kong channel on Kubernetes slack][kong-slack].
 
 [kong]:https://konghq.com
 [kic]:https://github.com/kong/kubernetes-ingress-controller
 [kong-gw-guide]:https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/using-gateway-api/
-[kgo]:https://docs.konghq.com/gateway-operator/latest/
-[kong-issue-new]:https://github.com/Kong/kubernetes-ingress-controller/issues/new
-[kong-disc-new]:https://github.com/Kong/kubernetes-ingress-controller/discussions/new
+[kic-issue-new]:https://github.com/Kong/kubernetes-ingress-controller/issues/new
+[kic-disc-new]:https://github.com/Kong/kubernetes-ingress-controller/discussions/new
 [kong-slack]:https://kubernetes.slack.com/archives/CDCA87FRD
+
+### Kong Gateway Operator
+
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.2.0-Kong%20Gateway%20Operator-orange)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.2.0/kong-gateway-operator)
+
+[Kong][kong] is an open source API Gateway built for hybrid and multi-cloud environments.
+
+The [Kong Gateway operator (KGO)][kgo] can be used to configure managed Gateways and orchestrate instances of [Kong Kubernetes Ingress Controllers](#kong-kubernetes-ingress-controller).
+
+For help and support with Kong Gateway operator please feel free to [create an issue][kgo-issue-new] or a [discussion][kgo-disc-new]. You can also ask for help in the [#kong channel on Kubernetes slack][kong-slack].
+
+[kgo]:https://docs.konghq.com/gateway-operator/latest/
+[kgo-issue-new]:https://github.com/Kong/gateway-operator/issues/new
+[kgo-disc-new]:https://github.com/Kong/gateway-operator/discussions/new
 
 ### Kuma
 
@@ -347,7 +398,7 @@ For help and support with Kong's implementations please feel free to [create an 
 
 Kuma implements the Gateway API specification for the Kuma built-in, Envoy-based Gateway with a beta stability guarantee. Check the [Gateway API Documentation][kuma-1] for information on how to setup a Kuma built-in gateway using the Gateway API.
 
-Kuma 2.3 and later support the [GAMMA initiative's][gamma] experimental
+Kuma 2.3 and later support the [GAMMA initiative's][gamma]
 Gateway API [support for east-west traffic management][gamma] within the mesh.
 
 [kuma]:https://kuma.io
@@ -360,7 +411,7 @@ It is the only major mesh not based on Envoy, instead relying on a
 purpose-built Rust micro-proxy to bring security, observability, and
 reliability to Kubernetes, without the complexity.
 
-Linkerd 2.14 and later support the [GAMMA initiative's][gamma] experimental
+Linkerd 2.14 and later support the [GAMMA initiative's][gamma]
 Gateway API [support for east-west traffic management][gamma] within the mesh.
 
 [linkerd]:https://linkerd.io/
@@ -374,9 +425,22 @@ The [LiteSpeed Ingress Controller](https://litespeedtech.com/products/litespeed-
 - [Gateway specific documentation](https://docs.litespeedtech.com/cloud/kubernetes/gateway).
 - Full support is available on the [LiteSpeed support web site](https://www.litespeedtech.com/support).
 
+### LoxiLB
+
+[kube-loxilb][kube-loxilb-gh] is [LoxiLB's][loxilb-org] implementation of Gateway API and kubernetes service load-balancer spec which includes support for load-balancer class, advanced IPAM (shared or exclusive) etc. kube-loxilb manages Gateway API resources with [LoxiLB][loxilb-gh] as L4 service LB and [loxilb-ingress][loxilb-ingress-gh] for Ingress(L7) resources.  
+
+Follow the [quickstart guide][loxigw-guide] to get LoxiLB running with Gateway API in a few simple steps.
+
+[loxilb-home]:https://loxilb.io/
+[loxilb-org]:https://github.com/loxilb-io
+[loxilb-gh]:https://github.com/loxilb-io/loxilb
+[kube-loxilb-gh]:https://github.com/loxilb-io/kube-loxilb
+[loxilb-ingress-gh]:https://github.com/loxilb-io/loxilb-ingress
+[loxigw-guide]:https://docs.loxilb.io/latest/gw-api/
+
 ### NGINX Gateway Fabric
 
-[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.1.0-NGINX Gateway Fabric-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/nginxinc-nginx-gateway-fabric)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.2.1-NGINX Gateway Fabric-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.2.1/nginx-nginx-gateway-fabric)
 
 [NGINX Gateway Fabric][nginx-gateway-fabric] is an open-source project that provides an implementation of the Gateway API using [NGINX][nginx] as the data plane. The goal of this project is to implement the core Gateway API to configure an HTTP or TCP/UDP load balancer, reverse-proxy, or API gateway for applications running on Kubernetes. You can find the comprehensive NGINX Gateway Fabric user documentation on the [NGINX Documentation][nginx-docs] website.
 
@@ -384,12 +448,12 @@ For a list of supported Gateway API resources and features, see the [Gateway API
 
 If you have any suggestions or experience issues with NGINX Gateway Fabric, please [create an issue][nginx-issue-new] or a [discussion][nginx-disc-new] on GitHub. You can also ask for help in the [#nginx-gateway-fabric channel on NGINX slack][nginx-slack].
 
-[nginx-gateway-fabric]:https://github.com/nginxinc/nginx-gateway-fabric
+[nginx-gateway-fabric]:https://github.com/nginx/nginx-gateway-fabric
 [nginx]:https://nginx.org/
 [nginx-docs]:https://docs.nginx.com/nginx-gateway-fabric/
 [nginx-compat]:https://docs.nginx.com/nginx-gateway-fabric/overview/gateway-api-compatibility/
-[nginx-issue-new]:https://github.com/nginxinc/nginx-gateway-fabric/issues/new
-[nginx-disc-new]:https://github.com/nginxinc/nginx-gateway-fabric/discussions/new
+[nginx-issue-new]:https://github.com/nginx/nginx-gateway-fabric/issues/new
+[nginx-disc-new]:https://github.com/nginx/nginx-gateway-fabric/discussions/new
 [nginx-slack]:https://nginxcommunity.slack.com/channels/nginx-gateway-fabric
 
 
@@ -399,10 +463,10 @@ If you have any suggestions or experience issues with NGINX Gateway Fabric, plea
 
 You can read our [docs][ngrok-k8s-gwapi-docs] for more information. If you have any feature requests or bug reports, please [create an issue][ngrok-issue-new]. You can also reach out for help on [Slack][ngrok-slack]
 
-[ngrok-k8s-operator]:https://github.com/ngrok/kubernetes-ingress-controller
+[ngrok-k8s-operator]:https://github.com/ngrok/ngrok-operator
 [ngrok]:https://ngrok.com
 [ngrok-k8s-gwapi-docs]:https://ngrok.com/docs/k8s/
-[ngrok-issue-new]: https://github.com/ngrok/kubernetes-ingress-controller/issues/new
+[ngrok-issue-new]: https://github.com/ngrok/ngrok-operator/issues/new/choose
 [ngrok-slack]:https://ngrokcommunity.slack.com/channels/general
 
 ### STUNner
@@ -416,17 +480,17 @@ STUNner currently supports version `v1alpha2` of the Gateway API specification. 
 
 ### Traefik Proxy
 
-[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.1.0-Traefik Proxy-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.1.0/traefik-traefik)
+[![Conformance](https://img.shields.io/badge/Gateway%20API%20Conformance%20v1.2.1-Traefik Proxy-green)](https://github.com/kubernetes-sigs/gateway-api/blob/main/conformance/reports/v1.2.1/traefik-traefik)
 
 [Traefik Proxy][traefik-proxy] is an open source cloud-native application proxy.
 
-Traefik Proxy currently supports version `v1.1.0` of the Gateway API specification, check the [Kubernetes Gateway Provider Documentation][traefik-proxy-gateway-api-doc] for more information on how to deploy and use it.
-Traefik Proxy's implementation passes all HTTP core and some extended conformance tests, but also supports the TCPRoute and TLSRoute features from the Experimental channel.
+Traefik Proxy currently supports version `v1.2.1` of the Gateway API specification, check the [Kubernetes Gateway Provider Documentation][traefik-proxy-gateway-api-doc] for more information on how to deploy and use it.
+Traefik Proxy's implementation passes all HTTP core and some extended conformance tests, like GRPCRoute, but also supports TCPRoute and TLSRoute features from the Experimental channel.
 
 For help and support with Traefik Proxy, [create an issue][traefik-proxy-issue-new] or ask for help in the [Traefik Labs Community Forum][traefiklabs-community-forum].
 
 [traefik-proxy]:https://traefik.io
-[traefik-proxy-gateway-api-doc]:https://doc.traefik.io/traefik/routing/providers/kubernetes-gateway/
+[traefik-proxy-gateway-api-doc]:https://doc.traefik.io/traefik/v3.2/routing/providers/kubernetes-gateway/
 [traefik-proxy-issue-new]:https://github.com/traefik/traefik/issues/new/choose
 [traefiklabs-community-forum]:https://community.traefik.io/c/traefik/traefik-v3/21
 

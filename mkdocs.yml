@@ -3,6 +3,7 @@ repo_url: https://github.com/kubernetes-sigs/gateway-api
 repo_name: kubernetes-sigs/gateway-api
 site_dir: site
 docs_dir: site-src
+trademark: https://www.linuxfoundation.org/legal/trademark-usage
 extra_css:
   - stylesheets/extra.css
 extra_javascript:
@@ -73,6 +74,7 @@ nav:
         Conformance: concepts/conformance.md
         Roles and Personas: concepts/roles-and-personas.md
         Security Model: concepts/security-model.md
+        Tools: concepts/tooling.md
         Use Cases: concepts/use-cases.md
         Versioning: concepts/versioning.md
     - Service Mesh:
@@ -82,6 +84,7 @@ nav:
     - Implementations:
         - List: implementations.md
         - Comparisons:
+          - v1.2: implementations/v1.2.md
           - v1.1: implementations/v1.1.md
           - v1.0: implementations/v1.0.md
     - FAQ: faq.md
@@ -101,6 +104,7 @@ nav:
       - gRPC Routing: guides/grpc-routing.md
       - Migrating from Ingress: guides/migrating-from-ingress.md
       - Backend Protocol Selection: guides/backend-protocol.md
+      - Infrastructure attributes: guides/infrastructure.md
     - API Design: guides/api-design.md
     - CRD Management: guides/crd-management.md
     - Implementer's Guide: guides/implementers.md
@@ -119,10 +123,13 @@ nav:
     - Overview: geps/overview.md
     - Provisional:
       - geps/gep-91/index.md
+      - geps/gep-1494/index.md
       - geps/gep-1651/index.md
+      - geps/gep-1713/index.md
       - geps/gep-1867/index.md
       - geps/gep-2648/index.md
       - geps/gep-2649/index.md
+      - geps/gep-3388/index.md
     - Implementable:
       - geps/gep-3155/index.md
     - Experimental:
