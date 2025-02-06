@@ -6,4 +6,22 @@ crds:
   enabled: false  # Set to false to disable CRD installation
   mode: "standard"  # Options: "standard" or "experimental"
 
-gatewayClass: {}
+gatewayClass:
+  enabled: true
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+
+gateway:
+  enabled: true
+  listeners:
+    - name: prod-web
+      protocol: HTTP
+      port: 80
+#    - name: prod-web-https
+#      hostname: mydomain.com
+#      port: 443
+#      protocol: HTTPS
+#      tls:
+#        mode: Terminate
+#        certificateRefs:
+#        - name: mydomain-com-tls
+#          kind: Secret

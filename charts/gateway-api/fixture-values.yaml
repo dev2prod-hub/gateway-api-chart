@@ -8,14 +8,45 @@ crds:
 
 gatewayClass:
   enabled: true
-  name: "my-gatewayclass"
-  labels:
-    demo: "gateway-api"
-  annotations: {}
-#    example.com/annotation: "example"
+  name: envoy-gateway # Optional
+  labels: # Optional
+    stage: fixture-testing
+  annotations: # Optional
+    stage: fixture-testing
 
-  controller: "example.com/my-gateway-controller"
-  parametersRef:
-    group: "example.com"
-    kind: "MyGatewayParameters"
-    name: "default"
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  description: "This is a custom GatewayClass for Envoy" # Optional
+  parametersRef: # Optional
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: proxy-config
+
+gateway:
+  enabled: true
+  name: envoy-gateway # Optional
+  gatewayClassName: envoy-gateway # Optional
+  annotations:
+    stage: fixture-testing
+
+  listeners:
+    - name: api-backend-https
+      protocol: HTTPS
+      port: 443
+      hostname: api.mydomain.com
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: api-mydomain-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+      extraSpec:
+        addresses:
+          - type: IPAddress
+            value: 10.1.2.3
+
+  extraSpec: # Optional. Setup additional spec fields for the Gateway object
+    addresses:
+      - type: IPAddress
+        value: 10.1.2.3
