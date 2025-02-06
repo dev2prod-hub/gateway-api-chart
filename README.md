@@ -8,10 +8,13 @@ _Stop reinventing Ingress controllers. Start using the Kubernetes-native success
 
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
+- **CRD management** (optional installation with version pinning)
 - **GatewayClass** templates (cloud-agnostic or provider-specific)
 - **Gateway** declarations with TLS/HTTPS best practices
 - **HTTPRoute** configurations with path-based routing
-- **CRD management** (optional installation with version pinning)
+- **GRPCRoute** configurations with service-based routing
+- **TCPRoute** configurations with port-based routing
+- **UDPRoute** configurations with port-based routing
 
 Designed to be used either:
 - **As your main chart** for API gateway deployment
@@ -22,9 +25,13 @@ Designed to be used either:
 # Add repository
 helm repo add gateway-api https://charts.dev2prod.xyz/
 
-# Install with production profile
+# Install gateway-api with production profile
 helm install my-gateway gateway-api/gateway-api \
-  --version 1.2.0
+  --version 0.1.0
+
+# Install gateway-api-routes with production profile
+helm install my-gateway gateway-api/gateway-api-routes \
+  --version 0.1.0
 ```
 
 ## Features 📦
