@@ -1,0 +1,21 @@
+global:
+  labels:
+    part-of: "gateway-api"
+
+crds:
+  enabled: enabled
+  mode: "standard"
+
+gatewayClass:
+  enabled: true
+  name: "my-gatewayclass"
+  labels:
+    demo: "gateway-api"
+  annotations: {}
+#    example.com/annotation: "example"
+
+  controller: "example.com/my-gateway-controller"
+  parametersRef:
+    group: "example.com"
+    kind: "MyGatewayParameters"
+    name: "default"

@@ -1,0 +1,7 @@
+{{- if .Values.crds.enabled }}
+{{- $crdsPath := printf "crds/%s" .Values.crds.mode -}}
+{{- range $path, $_ := .Files.Glob (printf "%s/*.yaml" $crdsPath) }}
+---
+{{ $.Files.Get $path }}
+{{- end }}
+{{- end }}

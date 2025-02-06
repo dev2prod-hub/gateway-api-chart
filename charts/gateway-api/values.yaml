@@ -1,1 +1,9 @@
-# Default configuration values
+global: {}
+#  labels:
+#    part-of: "gateway-api"
+
+crds:
+  enabled: false  # Set to false to disable CRD installation
+  mode: "standard"  # Options: "standard" or "experimental"
+
+gatewayClass: {}

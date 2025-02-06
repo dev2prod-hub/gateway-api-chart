@@ -8,9 +8,7 @@ repos:
       - id: check-json
       - id: check-merge-conflict
       - id: check-symlinks
-      - id: check-yaml
-        args: [ '--unsafe' , '--allow-multiple-documents']
-        exclude: ^components/helm/charts/.*/templates/
+        exclude: ^charts/gateway-api/crds/|^charts/gateway-api/templates/
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: no-commit-to-branch

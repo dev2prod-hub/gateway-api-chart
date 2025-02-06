@@ -1,0 +1,3 @@
+[submodule "charts/gateway-api/temp"]
+	path = charts/gateway-api/temp
+	url = https://github.com/kubernetes-sigs/gateway-api.git
