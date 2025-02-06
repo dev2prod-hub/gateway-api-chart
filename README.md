@@ -11,7 +11,7 @@ _Stop reinventing Ingress controllers. Start using the Kubernetes-native success
 
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
-- **CRD management** (optional installation with version pinning)
+- **CRD management** (an optional installation)
 - **GatewayClass** templates (cloud-agnostic or provider-specific)
 - **Gateway** declarations with TLS/HTTPS best practices
 - **HTTPRoute** configurations with path-based routing
