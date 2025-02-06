@@ -1,0 +1,24 @@
+apiVersion: v2
+name: gateway-api-routes
+description: A Helm chart for deploying Kubernetes Gateway routes. Part of the Gateway API charts.
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+home: https://github.com/dev2prod-hub/gateway-api-chart
+sources:
+  - https://github.com/dev2prod-hub/gateway-api-chart
+  - https://github.com/kubernetes-sigs/gateway-api
+keywords:
+  - gateway-api-routes
+  - networking
+  - Kubernetes
+  - ingress
+maintainers:
+  - name: dev2prod
+    email: k@kazakov.xyz
+    url: https://dev2prod.xyz
+  - name: Kirill Kazakov
+    email: k@kazakov.xyz
+    url: https://kazakov.xyz
+icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+dependencies: []  # Optional dependencies if applicable

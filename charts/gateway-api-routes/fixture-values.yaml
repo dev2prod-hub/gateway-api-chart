@@ -1,0 +1,25 @@
+httpRoute:
+  enabled: true
+  items:
+  - name: http-filter-redirect
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: http
+    hostnames:
+    - redirect.example
+    rules:
+    - filters:
+      - type: RequestRedirect
+        requestRedirect:
+          scheme: https
+          statusCode: 301
+  - name: https-route
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: https
+    hostnames:
+    - redirect.example
+    rules:
+    - backendRefs:
+      - name: example-svc
+        port: 80
