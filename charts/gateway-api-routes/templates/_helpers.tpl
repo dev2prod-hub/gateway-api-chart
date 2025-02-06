@@ -51,19 +51,3 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{ toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}
-
-{{/*
-Default value for the httpRoute backendRefs to avoid setup manul serviceName
-*/}}
-{{- define "default.httpRouteBackendRefs" -}}
-{{- if .Values.httpRoute.enabled -}}
-- backendRefs:
-  - kind: Service
-    name: {{ include "fullname" . }}
-    port: 80
-  matches:
-  - path:
-      type: PathPrefix
-      value: /
-{{- end }}
-{{- end }}
