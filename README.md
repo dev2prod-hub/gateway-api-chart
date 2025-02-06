@@ -1,7 +1,7 @@
 # Gateway API Helm Chart 🚪⚡
 
-[![CI](https://github.com/dev2prod-hub/gateway-api-helm/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-helm/actions)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api)](https://artifacthub.io/packages/search?repo=gateway-api)
+[![CI](https://github.com/dev2prod-hub/gateway-api-helm/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-helm/actions)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
 **Production-ready Helm templates for standardized Kubernetes L7 traffic management using [Gateway API](https://gateway-api.sigs.k8s.io/)** -
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._

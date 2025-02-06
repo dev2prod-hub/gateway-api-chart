@@ -99,3 +99,4 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_URL: "https://charts.dev2prod.xyz"
+          CR_SKIP_EXISTING: "true"
