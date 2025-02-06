@@ -1,82 +1,110 @@
 # Gateway API Helm Chart 🚪⚡
 
-[![CI](https://github.com/dev2prod-hub/gateway-api-helm/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-helm/actions)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api)](https://artifacthub.io/packages/search?repo=gateway-api)
+[![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-**Production-ready Helm templates for standardized Kubernetes L7 traffic management using [Gateway API](https://gateway-api.sigs.k8s.io/)** -  
+Replace ingress to the next level with Gateway API Helm Chart.
+**Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
 
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
+- **CRD management** (optional installation with version pinning)
 - **GatewayClass** templates (cloud-agnostic or provider-specific)
 - **Gateway** declarations with TLS/HTTPS best practices
 - **HTTPRoute** configurations with path-based routing
-- **CRD management** (optional installation with version pinning)
+- **GRPCRoute** configurations with service-based routing
+- **TCPRoute** configurations with port-based routing
+- **UDPRoute** configurations with port-based routing
 
 Designed to be used either:
 - **As your main chart** for API gateway deployment
 - **As a dependency/subchart** in larger applications needing routing
 
 ## Quick Start 🚀
-```bash
-# Add repository
-helm repo add gateway-api https://charts.dev2prod.xyz/
 
-# Install with production profile
-helm install my-gateway gateway-api/gateway-api \
-  --version 1.2.0 \
-  --set profile=production
+### Add repository
+
+```bash
+helm repo add dev2prod https://charts.dev2prod.xyz/
+helm repo update
+helm repo search dev2prod
+```
+
+### To skip CRD installation, use the following command:
+
+```bash
+helm install my-gateway dev2prod/gateway-api \
+  --version 0.1.0 \
+  --skip-crds
+```
+
+Install gateway-api with CRDs
+```bash
+helm install my-gateway dev2prod/gateway-api \
+  --version 0.1.0
+````
+
+### Install gateway-api-routes
+```bash
+helm install routes dev2prod/gateway-api-routes \
+  --version 0.1.0
 ```
 
 ## Features 📦
-✔️ **CRD Management** (v1.0+ Gateway API versions)  
-✔️ **Pre-configured Listeners** (HTTP/HTTPS, TLS termination)  
-✔️ **Multi-cloud Profiles** (AWS ALB, GCP GLB, Azure AGIC)  
-✔️ **RBAC-ready** ServiceAccount & Role bindings  
-✔️ **Version-safe** upgrades (Helm hooks for CRD changes)
+✔️ **CRD Management** (an original CRDs from the kubernetes-sigs without any changes)
+✔️ **Split to 2 charts** as a GW API main chart and routes chart
 
 ## Configuration Example 🔧
+
+### gateway-api
+
 ```yaml
 # values.yaml
-profile: aws
+gatewayClass:
+  name: envoy-gateway
+  controller: "application-networking.k8s.aws/gateway-controller"
 
-gatewayClasses:
-  - name: amazon-lb
-    controller: "application-networking.k8s.aws/gateway-controller"
-
-gateways:
-  - name: main-gateway
-    listeners:
-      - protocol: HTTPS
-        port: 443
-        tls:
-          mode: Terminate
-          certificateRefs: [acme-cert]
+gateway:
+  name: envoy-gateway
+  listeners:
+  - protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: mydomain-com-tls
+        kind: Secret
 ```
+### gateway-api-routes
 
-## Usage as Subchart 🧩
 ```yaml
-# parent-chart/Chart.yaml
-dependencies:
-  - name: gateway-api
-    version: "~1.2.0"
-    repository: "https://charts.dev2prod.xyz/"
-    condition: gatewayApi.enabled
+httpRoute:
+  enabled: true
+  items:
+  - name: http-filter-redirect
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: http
+    hostnames:
+    - redirect.example
+    rules:
+    - filters:
+      - type: RequestRedirect
+        requestRedirect:
+          scheme: https
+          statusCode: 301
+  - name: https-route
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: https
+    hostnames:
+    - redirect.example
+    rules:
+    - backendRefs:
+      - name: example-svc
+        port: 80
 ```
-
-## Development Setup 💻
-```bash
-# Test with Kind cluster
-kind create cluster
-helm dependency update
-helm install --dry-run --debug ./charts/gateway-api
-```
-
-## Compatibility ✅
-| Kubernetes Version | Gateway API Version   |
-|--------------------|-----------------------|
-| 1.25+              | v1.0.0                |
-| 1.23+              | v0.8.0 (experimental) |
 
 ---
 
@@ -86,7 +114,6 @@ helm install --dry-run --debug ./charts/gateway-api
 
 🔗 **Related Projects**:
 - [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)
-- [Istio Gateway API Support](https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/)
 
 ---
 
