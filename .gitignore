@@ -1,0 +1,24 @@
+# IDE
+.idea
+.vscode
+
+# OS
+.DS_Store
+
+# terraform
+.terraform
+terraform.tfstate
+.terraform.lock.hcl
+*.tfstate
+
+# sensetive data
+#.sops.yaml
+terraform-outputs.yaml
+*.secret.*
+*pem
+*pem.*
+!*pem.sops
+!*pub.sops
+
+# other
+/tmp

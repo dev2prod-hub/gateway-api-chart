@@ -1,0 +1,15 @@
+repos:
+  - repo: git@github.com:pre-commit/pre-commit-hooks.git
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: [ '--maxkb=3000' ]
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+        exclude: ^charts/gateway-api/crds/|^charts/gateway-api/templates/
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: no-commit-to-branch
+      - id: trailing-whitespace

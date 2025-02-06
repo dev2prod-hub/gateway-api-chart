@@ -1,0 +1,21 @@
+{{- if .Values.tcpRoute.enabled -}}
+{{- range .Values.tcpRoute.items }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: {{ .name | default (include "gateway-api-routes.fullname" $) | quote }}
+  labels:
+    {{- include "gateway-api-routes.labels" $ | nindent 4 }}
+  {{- with .annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .parentRefs }}
+  parentRefs:
+  {{- toYaml . | nindent 4 -}}
+  {{- end }}
+  rules:
+  {{- toYaml . | nindent 4 }}
+---
+{{- end }}
+{{- end }}
