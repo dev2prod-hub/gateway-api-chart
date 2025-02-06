@@ -34,20 +34,20 @@ helm install my-gateway gateway-api/gateway-api \
 ## Configuration Example 🔧
 ```yaml
 # values.yaml
-profile: aws
+gatewayClass:
+  name: envoy-gateway
+  controller: "application-networking.k8s.aws/gateway-controller"
 
-gatewayClasses:
-  - name: amazon-lb
-    controller: "application-networking.k8s.aws/gateway-controller"
-
-gateways:
-  - name: main-gateway
-    listeners:
-      - protocol: HTTPS
-        port: 443
-        tls:
-          mode: Terminate
-          certificateRefs: [acme-cert]
+gateway:
+  name: envoy-gateway
+  listeners:
+  - protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: mydomain-com-tls
+        kind: Secret
 ```
 
 This chart deploys the Gateway API on a Kubernetes cluster using the Helm package manager.

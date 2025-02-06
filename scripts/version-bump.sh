@@ -2,7 +2,6 @@
 
 set -euo pipefail
 ENABLE_BUILD_VER=${ENABLE_BUILD_VER:-false}
-
 # Function to display usage
 usage() {
   printf "Usage: %s [major|minor|patch|pre-release] [pre-release-label (optional)]\n" "$0"
@@ -88,6 +87,14 @@ update_version_file() {
   printf "Updated VERSION file.\n"
 }
 
+# Helm chart version bump
+helm_chart_version_bump() {
+  new_version=${new_version:-$1}
+  chart_dir=${chart_dir:-charts/gateway-api}
+  printf "Bumping version in Helm chart %s to %s\n" "$chart_dir" "$new_version"
+  sed -i "s/version: .*/version: $new_version/" "${chart_dir}/Chart.yaml"
+}
+
 # Function to commit and tag changes
 commit_and_tag_changes() {
   git add VERSION
@@ -124,6 +131,7 @@ main() {
   printf "New version: %s\n" "$new_version"
 
   update_version_file
+  helm_chart_version_bump "$new_version"
   commit_and_tag_changes
   check_git_state
 
