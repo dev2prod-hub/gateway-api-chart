@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gateway-api
-description: A Helm chart for deploying Kubernetes Gateway API
+description: Kubernetes Gateway API. See more values in the fixture-values.yaml
 type: application
 version: 0.1.1
 appVersion: 1.0.0
