@@ -3,6 +3,8 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
+[charts.dev2prod.xyz](https://charts.dev2prod.xyz/)
+
 Replace ingress to the next level with Gateway API Helm Chart.
 **Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
