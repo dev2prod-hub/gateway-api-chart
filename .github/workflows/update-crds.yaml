@@ -1,0 +1,30 @@
+name: Update Gateway API CRDs
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Weekly check
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Gateway API version (e.g., v1.2.1)'
+        required: true
+
+jobs:
+  update-crds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: |
+          echo "VERSION=${INPUT_VERSION:-$(curl -s https://api.github.com/repos/kubernetes-sigs/gateway-api/releases/latest | jq -r .tag_name)}" >> $GITHUB_ENV
+
+      - name: Run update script
+        run: ./scripts/update-crds.sh
+
+      - name: Create PR if changes
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "Update CRDs to ${VERSION}"
+          title: "CRD Update: Gateway API ${VERSION}"
+          body: "Automated update from https://github.com/kubernetes-sigs/gateway-api/releases/tag/${VERSION}"
+          branch: "crd-update-${VERSION}"

@@ -8,10 +8,13 @@ _Stop reinventing Ingress controllers. Start using the Kubernetes-native success
 
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
+- **CRD management** (optional installation with version pinning)
 - **GatewayClass** templates (cloud-agnostic or provider-specific)
 - **Gateway** declarations with TLS/HTTPS best practices
 - **HTTPRoute** configurations with path-based routing
-- **CRD management** (optional installation with version pinning)
+- **GRPCRoute** configurations with service-based routing
+- **TCPRoute** configurations with port-based routing
+- **UDPRoute** configurations with port-based routing
 
 Designed to be used either:
 - **As your main chart** for API gateway deployment
@@ -22,61 +25,37 @@ Designed to be used either:
 # Add repository
 helm repo add gateway-api https://charts.dev2prod.xyz/
 
-# Install with production profile
+# Install gateway-api with production profile
 helm install my-gateway gateway-api/gateway-api \
-  --version 1.2.0 \
-  --set profile=production
+  --version 0.1.0
+
+# Install gateway-api-routes with production profile
+helm install my-gateway gateway-api/gateway-api-routes \
+  --version 0.1.0
 ```
 
 ## Features 📦
 ✔️ **CRD Management** (v1.0+ Gateway API versions)
-✔️ **Pre-configured Listeners** (HTTP/HTTPS, TLS termination)
-✔️ **Multi-cloud Profiles** (AWS ALB, GCP GLB, Azure AGIC)
-✔️ **RBAC-ready** ServiceAccount & Role bindings
-✔️ **Version-safe** upgrades (Helm hooks for CRD changes)
+✔️ **GatewayClass** templates (Envoy, etc.)
 
 ## Configuration Example 🔧
 ```yaml
 # values.yaml
-profile: aws
+gatewayClass:
+  name: envoy-gateway
+  controller: "application-networking.k8s.aws/gateway-controller"
 
-gatewayClasses:
-  - name: amazon-lb
-    controller: "application-networking.k8s.aws/gateway-controller"
-
-gateways:
-  - name: main-gateway
-    listeners:
-      - protocol: HTTPS
-        port: 443
-        tls:
-          mode: Terminate
-          certificateRefs: [acme-cert]
+gateway:
+  name: envoy-gateway
+  listeners:
+  - protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: mydomain-com-tls
+        kind: Secret
 ```
-
-## Usage as Subchart 🧩
-```yaml
-# parent-chart/Chart.yaml
-dependencies:
-  - name: gateway-api
-    version: "~1.2.0"
-    repository: "https://charts.dev2prod.xyz/"
-    condition: gatewayApi.enabled
-```
-
-## Development Setup 💻
-```bash
-# Test with Kind cluster
-kind create cluster
-helm dependency update
-helm install --dry-run --debug ./charts/gateway-api
-```
-
-## Compatibility ✅
-| Kubernetes Version | Gateway API Version   |
-|--------------------|-----------------------|
-| 1.25+              | v1.0.0                |
-| 1.23+              | v0.8.0 (experimental) |
 
 ---
 
@@ -86,7 +65,6 @@ helm install --dry-run --debug ./charts/gateway-api
 
 🔗 **Related Projects**:
 - [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)
-- [Istio Gateway API Support](https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/)
 
 ---
 

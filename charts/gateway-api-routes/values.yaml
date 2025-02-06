@@ -1,0 +1,29 @@
+global: {}
+
+httpRoute:
+  enabled: true
+  items: {}
+#  - parentRefs:
+#    - name: example-gateway
+#    hostnames:
+#    - "foo.example.com"
+#    rules:
+#    - matches:
+#      - path:
+#          type: PathPrefix
+#          value: /login
+#      backendRefs:
+#      - name: foo-svc
+#        port: 8080
+
+grpcRoute:
+  enabled: true
+  items: []
+
+tcpRoute:
+  enabled: true
+  items: []
+
+udpRoute:
+  enabled: true
+  items: []

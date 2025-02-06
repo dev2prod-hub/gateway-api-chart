@@ -1,0 +1,100 @@
+name: Lint, Test, and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  HELM_VERSION: "3.12.0"
+  KUBERNETES_VERSIONS: "1.31"
+
+concurrency: release-helm
+
+jobs:
+#  lint-and-unit:
+#    name: Lint & Unit Tests
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Helm
+#        uses: azure/setup-helm@v4
+#        with:
+#          version: ${{ env.HELM_VERSION }}
+#
+#      - name: Lint Chart
+#        run: |
+#          for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
+#            helm lint $chart --strict
+#          done
+#       TBD: Implement on the next iteration
+#      - name: Install unittest plugin
+#        run: helm plugin install https://github.com/quintush/helm-unittest
+#
+#      - name: Run Unit Tests
+#        run: |
+#          for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
+#            helm unittest --helm3 -f tests/unit/*.yaml $chart
+#          done
+#  TBD: Implement on the next iteration
+#  integration:
+#    name: Integration (k8s ${{ matrix.k8s-version }})
+#    needs: lint-and-unit
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        k8s-version: ${{ env.KUBERNETES_VERSIONS }}
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#
+#      - name: Create Kind Cluster
+#        uses: helm/kind-action@v1
+#        with:
+#          kubernetes-version: "v${{ matrix.k8s-version }}"
+#          config: ./tests/kind-configs/cluster.yaml
+#
+#      - name: Install Chart with CRDs
+#        run: |
+#          helm upgrade --install gateway-api ./charts/gateway-api \
+#            --namespace gateway-system \
+#            --create-namespace \
+#            --wait \
+#            --timeout 5m
+#
+#      - name: Validate Deployment
+#        run: |
+#          kubectl -n gateway-system get all
+#          kubectl get crd gateways.gateway.networking.k8s.io
+#          kubectl get gatewayclasses
+#
+#      - name: Run Integration Tests
+#        if: always()
+#        run: |
+#          bats tests/integration/gateway-tests.bats
+
+  chart-releaser:
+    name: Publish Chart
+    # if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+#    needs: [lint-and-unit]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
