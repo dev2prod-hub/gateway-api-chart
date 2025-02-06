@@ -2,10 +2,6 @@ global:
   labels:
     part-of: "gateway-api"
 
-crds:
-  enabled: enabled
-  mode: "standard"
-
 gatewayClass:
   enabled: true
   name: envoy-gateway # Optional

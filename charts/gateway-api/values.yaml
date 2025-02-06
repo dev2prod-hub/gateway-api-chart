@@ -2,10 +2,6 @@ global: {}
 #  labels:
 #    part-of: "gateway-api"
 
-crds:
-  enabled: false  # Set to false to disable CRD installation
-  mode: "standard"  # Options: "standard" or "experimental"
-
 gatewayClass:
   enabled: true
   controllerName: "gateway.envoyproxy.io/gatewayclass-controller"

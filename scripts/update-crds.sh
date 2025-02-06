@@ -12,7 +12,7 @@ trap 'rm -rf "$WORK_DIR"' EXIT
 
 # Download and extract CRDs
 curl -sL "https://github.com/kubernetes-sigs/gateway-api/archive/refs/tags/${VERSION}.tar.gz" | \
-  tar -xz -C "$WORK_DIR" --strip-components=3 "gateway-api-${VERSION#v}/config/crd/"
+  tar -xz -C "$WORK_DIR" --strip-components=3 "gateway-api-${VERSION#v}/config/crd/experimental"
 
 # Update local CRDs
 rsync -av --delete --exclude kustomization.yaml "$WORK_DIR/" "$TARGET_DIR/"
