@@ -15,3 +15,15 @@ httpRoute:
 #      backendRefs:
 #      - name: foo-svc
 #        port: 8080
+
+grpcRoute:
+  enabled: true
+  items: []
+
+tcpRoute:
+  enabled: true
+  items: []
+
+udpRoute:
+  enabled: true
+  items: []

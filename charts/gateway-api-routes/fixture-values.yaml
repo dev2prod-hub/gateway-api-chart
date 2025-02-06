@@ -23,3 +23,38 @@ httpRoute:
     - backendRefs:
       - name: example-svc
         port: 80
+
+grpcRoute:
+  enabled: true
+  items:
+    - name: grpc-example
+      parentRefs:
+        - name: grpc-gateway
+      hostnames:
+        - grpc.example.com
+      rules:
+        - backendRefs:
+            - name: grpc-backend
+              port: 50051
+
+tcpRoute:
+  enabled: true
+  items:
+    - name: tcp-example
+      parentRefs:
+        - name: tcp-gateway
+      rules:
+        - backendRefs:
+            - name: tcp-backend
+              port: 9000
+
+udpRoute:
+  enabled: true
+  items:
+    - name: udp-example
+      parentRefs:
+        - name: udp-gateway
+      rules:
+        - backendRefs:
+            - name: udp-backend
+              port: 3000
