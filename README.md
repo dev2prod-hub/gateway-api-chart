@@ -57,4 +57,15 @@ gateway:
         kind: Secret
 ```
 
-This chart deploys the Gateway API on a Kubernetes cluster using the Helm package manager.
+---
+
+📚 **Official References**:
+- [Gateway API Concepts](https://gateway-api.sigs.k8s.io/concepts/)
+- [Migration from Ingress](https://gateway-api.sigs.k8s.io/guides/migration/)
+
+🔗 **Related Projects**:
+- [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)
+
+---
+
+_Maintained with ❤️ by Dev2Prod. Licensed under [Apache 2.0](LICENSE)._
