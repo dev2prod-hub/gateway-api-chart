@@ -1,2 +1,2 @@
 #!/bin/bash
-helm-docs -t ./docs/USER_GUIDE.md
+helm-docs -c ./charts -t ./docs/USER_GUIDE.md
