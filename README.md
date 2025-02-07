@@ -5,6 +5,7 @@
 
 Helm chart repo: [charts.dev2prod.xyz](https://charts.dev2prod.xyz/)
 Gir source: [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart)
+Artifact Hub: [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
 Replace ingress to the next level with Gateway API Helm Chart.
 **Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
