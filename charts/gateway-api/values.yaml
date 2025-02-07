@@ -1,28 +1,38 @@
 # -- Global Configuration for labels, etc.
-global: {}
-#  labels:
-#    part-of: "gateway-api"
+global:
+  labels:
+    part-of: "gateway-api"
 
 # -- Gateway Class Configuration
 gatewayClass:
+  # -- Enable GatewayClass. You can install any components without dependencies
   enabled: true
+  # -- Gateway Class name. Default: helm release name.
+  name: envoy-gateway
   # -- Controller reference
   controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
 
 # -- Gateway API Configuration
 gateway:
+  # -- Enable Gateway API
   enabled: true
-  # -- Define listeners in any format according an original Gateway API spec
+  # -- Gateway name. Default: helm release name
+  name: envoy-gateway
+  # -- Gateway Class name. Reference to the GatewayClass object. Default: helm release name.
+  gatewayClassName: envoy-gateway
+  # -- Define listeners. Use any format according to the original Gateway API spec.
   listeners:
+    # -- Listener for HTTP
     - name: prod-web
       protocol: HTTP
       port: 80
-#    - name: prod-web-https
-#      hostname: mydomain.com
-#      port: 443
-#      protocol: HTTPS
-#      tls:
-#        mode: Terminate
-#        certificateRefs:
-#        - name: mydomain-com-tls
-#          kind: Secret
+    # -- Listener for HTTPS
+    - name: prod-web-https
+      hostname: mydomain.com
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - name: mydomain-com-tls
+          kind: Secret

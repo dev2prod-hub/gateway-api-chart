@@ -1,0 +1,12 @@
+global: {}
+
+gatewayClass:
+  enabled: true
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+
+gateway:
+  enabled: true
+  listeners:
+    - name: prod-web
+      protocol: HTTP
+      port: 80
