@@ -3,6 +3,33 @@ entries:
   gateway-api:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-02-07T10:44:32.253755403Z"
+    description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes
+      Gateway API.
+    digest: b37d35de99958c0fb025753ae45a382cc56d19c123d17a29f25f590bac65d44a
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-0.1.3-alpha.3/gateway-api-0.1.3-alpha.3.tgz
+    version: 0.1.3-alpha.3
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-02-07T10:35:27.866567582Z"
     description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes
       Gateway API.
@@ -217,6 +244,33 @@ entries:
     - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-0.1.0-alpha.2/gateway-api-0.1.0-alpha.2.tgz
     version: 0.1.0-alpha.2
   gateway-api-routes:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-02-07T10:44:32.486497469Z"
+    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
+      your ingress to the native Kubernetes Gateway API.
+    digest: 076e2250c3f7d5019c0ed8e876a17b517090713cad0a2e6d431d7b3c896dc274
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
+    version: 0.1.3-alpha.3
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2025-02-07T10:35:27.956990675Z"
@@ -436,4 +490,4 @@ entries:
     urls:
     - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.0-alpha.2/gateway-api-routes-0.1.0-alpha.2.tgz
     version: 0.1.0-alpha.2
-generated: "2025-02-07T10:35:27.95710653Z"
+generated: "2025-02-07T10:44:32.486636479Z"
