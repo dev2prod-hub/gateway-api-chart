@@ -98,6 +98,7 @@ helm_chart_version_bump() {
 # Function to commit and tag changes
 commit_and_tag_changes() {
   git add VERSION
+  git add charts/
   git commit -m "Bump version to $new_version"
   printf "Committed the version bump.\n"
   git tag -a "v$new_version" -m "Release v$new_version"
@@ -131,7 +132,10 @@ main() {
   printf "New version: %s\n" "$new_version"
 
   update_version_file
-  helm_chart_version_bump "$new_version"
+  source scripts/generate-docs.sh
+  source scripts/helm-bump.sh "$new_version" "gateway-api"
+  source scripts/helm-bump.sh "$new_version" "gateway-api-routes"
+
   commit_and_tag_changes
   check_git_state
 
