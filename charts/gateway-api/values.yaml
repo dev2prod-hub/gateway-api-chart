@@ -1,13 +1,18 @@
+# -- Global Configuration for labels, etc.
 global: {}
 #  labels:
 #    part-of: "gateway-api"
 
+# -- Gateway Class Configuration
 gatewayClass:
   enabled: true
+  # -- Controller reference
   controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
 
+# -- Gateway API Configuration
 gateway:
   enabled: true
+  # -- Define listeners in any format according an original Gateway API spec
   listeners:
     - name: prod-web
       protocol: HTTP

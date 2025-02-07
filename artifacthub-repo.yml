@@ -1,0 +1,6 @@
+repositoryID: e4392d7e-d557-4ab5-8fed-0a432f03eb6e
+owners: # (optional, used to claim repository ownership)
+  - name: dev2prod
+    email: k@kazakov.xyz
+  - name: Kirill Kazakov
+    email: k@kazakov.xyz

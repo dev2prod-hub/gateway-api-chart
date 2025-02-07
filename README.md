@@ -1,9 +1,10 @@
 # Gateway API Helm Chart 🚪⚡
 
-[![CI](https://github.com/dev2prod-hub/gateway-api-helm/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-helm/actions)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api)](https://artifacthub.io/packages/search?repo=gateway-api)
+[![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-**Production-ready Helm templates for standardized Kubernetes L7 traffic management using [Gateway API](https://gateway-api.sigs.k8s.io/)** -
+Replace ingress to the next level with Gateway API Helm Chart.
+**Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
 
 ## Why This Chart? 🌟
@@ -21,24 +22,43 @@ Designed to be used either:
 - **As a dependency/subchart** in larger applications needing routing
 
 ## Quick Start 🚀
+
+### Add repository
+
 ```bash
-# Add repository
-helm repo add gateway-api https://charts.dev2prod.xyz/
+helm repo add dev2prod https://charts.dev2prod.xyz/
+helm repo update
+helm repo search dev2prod
+```
 
-# Install gateway-api with production profile
-helm install my-gateway gateway-api/gateway-api \
+### To skip CRD installation, use the following command:
+
+```bash
+helm install my-gateway dev2prod/gateway-api \
+  --version 0.1.0 \
+  --skip-crds
+```
+
+Install gateway-api with CRDs
+```bash
+helm install my-gateway dev2prod/gateway-api \
   --version 0.1.0
+````
 
-# Install gateway-api-routes with production profile
-helm install my-gateway gateway-api/gateway-api-routes \
+### Install gateway-api-routes
+```bash
+helm install routes dev2prod/gateway-api-routes \
   --version 0.1.0
 ```
 
 ## Features 📦
-✔️ **CRD Management** (v1.0+ Gateway API versions)
-✔️ **GatewayClass** templates (Envoy, etc.)
+✔️ **CRD Management** (an original CRDs from the kubernetes-sigs without any changes)
+✔️ **Split to 2 charts** as a GW API main chart and routes chart
 
 ## Configuration Example 🔧
+
+### gateway-api
+
 ```yaml
 # values.yaml
 gatewayClass:
@@ -55,6 +75,35 @@ gateway:
       certificateRefs:
       - name: mydomain-com-tls
         kind: Secret
+```
+### gateway-api-routes
+
+```yaml
+httpRoute:
+  enabled: true
+  items:
+  - name: http-filter-redirect
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: http
+    hostnames:
+    - redirect.example
+    rules:
+    - filters:
+      - type: RequestRedirect
+        requestRedirect:
+          scheme: https
+          statusCode: 301
+  - name: https-route
+    parentRefs:
+    - name: redirect-gateway
+      sectionName: https
+    hostnames:
+    - redirect.example
+    rules:
+    - backendRefs:
+      - name: example-svc
+        port: 80
 ```
 
 ---

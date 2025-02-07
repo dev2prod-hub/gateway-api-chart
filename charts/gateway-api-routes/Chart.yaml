@@ -2,7 +2,7 @@ apiVersion: v2
 name: gateway-api-routes
 description: A Helm chart for deploying Kubernetes Gateway routes. Part of the Gateway API charts.
 type: application
-version: 0.1.0-alpha.2
+version: 0.1.2
 appVersion: 1.0.0
 home: https://github.com/dev2prod-hub/gateway-api-chart
 sources:
