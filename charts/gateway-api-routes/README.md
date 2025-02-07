@@ -1,10 +1,10 @@
 # gateway-api-routes
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.1.3-alpha.1](https://img.shields.io/badge/Version-0.1.3--alpha.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
-A Helm chart for deploying Kubernetes Gateway routes. Part of the Gateway API charts.
+Kubernetes Gateway routes. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
 
-**Homepage:** <https://github.com/dev2prod-hub/gateway-api-chart>
+**Homepage:** <https://charts.dev2prod.xyz/>
 
 ## Maintainers
 
@@ -16,7 +16,6 @@ A Helm chart for deploying Kubernetes Gateway routes. Part of the Gateway API ch
 ## Source Code
 
 * <https://github.com/dev2prod-hub/gateway-api-chart>
-* <https://github.com/kubernetes-sigs/gateway-api>
 
 ## Values
 
