@@ -34,7 +34,7 @@ spec:
       {{- end }}
     {{- end }}
     {{- with .extraSpec }}
-    {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
