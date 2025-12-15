@@ -22,7 +22,7 @@ jobs:
         run: ./scripts/update-crds.sh
 
       - name: Create PR if changes
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "Update CRDs to ${VERSION}"
           title: "CRD Update: Gateway API ${VERSION}"
