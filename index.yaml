@@ -3,10 +3,10 @@ entries:
   gateway-api:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-11-24T21:26:42.153611535Z"
+    created: "2025-12-15T21:17:46.324192134Z"
     description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes
       Gateway API.
-    digest: c33a7d582066d196d13d217c47903bbc9b41ac60667b888dfb910114535ec940
+    digest: d6dc7814168aab9dba09b5759f6db03b175fd21f162f68c35cfab320652013cf
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -88,6 +88,33 @@ entries:
     description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes
       Gateway API.
     digest: 40a9075cc345f98aa26508150263264662fc7f7743d12d34a4f9e9ccbee979a1
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-0.1.4-alpha.1/gateway-api-0.1.4-alpha.1.tgz
+    version: 0.1.4-alpha.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-11-24T21:26:42.153611535Z"
+    description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes
+      Gateway API.
+    digest: c33a7d582066d196d13d217c47903bbc9b41ac60667b888dfb910114535ec940
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -381,10 +408,10 @@ entries:
   gateway-api-routes:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-11-24T21:26:42.304327101Z"
+    created: "2025-12-15T21:17:46.521997051Z"
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
-    digest: d3889cc55004335a9eabef1b38b8136cae2bfb3d992da403b959cbdd300332ea
+    digest: 96e99feb3d993cbcc97f5cbc824031f3b34b1ea040ed3069b80d6417da26a67e
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -520,6 +547,33 @@ entries:
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
     digest: 722cd6641ed990c832185063784b25aac96566398689ad280667695f82998b19
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
+    version: 0.1.3-alpha.3
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-11-24T21:26:42.304327101Z"
+    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
+      your ingress to the native Kubernetes Gateway API.
+    digest: d3889cc55004335a9eabef1b38b8136cae2bfb3d992da403b959cbdd300332ea
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -760,4 +814,4 @@ entries:
     urls:
     - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.0-alpha.2/gateway-api-routes-0.1.0-alpha.2.tgz
     version: 0.1.0-alpha.2
-generated: "2025-11-24T21:26:42.304627852Z"
+generated: "2025-12-15T21:17:46.52233928Z"
