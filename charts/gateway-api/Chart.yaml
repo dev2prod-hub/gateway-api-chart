@@ -2,7 +2,7 @@ apiVersion: v2
 name: gateway-api
 description: Kubernetes Gateway API. Replace your ingress to the native Kubernetes Gateway API.
 type: application
-version: 0.1.4-alpha.1
+version: 0.2.0
 appVersion: 1.0.0
 home: http://charts.cdnn.host/
 sources:
@@ -15,7 +15,7 @@ keywords:
 maintainers:
   - name: dev2prod
     email: k@kazakov.xyz
-    url: https://dev2prod.xyz
+    url: https://cdnn.cloud
   - name: Kirill Kazakov
     email: k@kazakov.xyz
     url: https://kazakov.xyz

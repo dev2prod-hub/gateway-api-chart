@@ -10,7 +10,7 @@ Kubernetes Gateway API. Replace your ingress to the native Kubernetes Gateway AP
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| dev2prod | <k@kazakov.xyz> | <https://dev2prod.xyz> |
+| dev2prod | <k@kazakov.xyz> | <https://cdnn.cloud> |
 | Kirill Kazakov | <k@kazakov.xyz> | <https://kazakov.xyz> |
 
 ## Source Code
