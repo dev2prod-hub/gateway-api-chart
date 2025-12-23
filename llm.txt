@@ -15,7 +15,7 @@ charts/
   gateway-api/          # Chart version 1.0.0
     crds/experimental/  # Original kubernetes-sigs CRDs (unchanged, using experimental for maximum features)
     templates/          # GatewayClass, Gateway
-  gateway-api-routes/   # Chart version 1.0.0
+  gateway-api-routes/   # Chart version 1.0.0 (updated to match CRD v1.4.1)
     templates/          # HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
 ```
 
@@ -55,9 +55,59 @@ helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
 - Doesn't include the controller - you need a Gateway API provider separately
 - Examples in `examples/` for cloud providers and features
 
+## Common Patterns & Examples
+
+### Gateway Listener Patterns
+- **HTTP**: `protocol: HTTP, port: 80`
+- **HTTPS with TLS**: `protocol: HTTPS, port: 443, tls.mode: Terminate, tls.certificateRefs`
+- **TCP**: `protocol: TCP, port: 3306`
+- **UDP**: `protocol: UDP, port: 53`
+
+### HTTPRoute Patterns
+- Path-based routing: `rules[].matches[].path`
+- Hostname matching: `hostnames[]`
+- Backend references: `rules[].backendRefs[]`
+- Filters: `RequestRedirect`, `URLRewrite`, `RequestHeaderModifier`
+
+### TLS Configuration
+- **Terminate**: TLS termination at gateway, requires certificateRefs
+- **Passthrough**: TLS passthrough to backend
+- Certificate references: `kind: Secret` or `kind: Certificate`
+
+## Helm Template Best Practices
+
+- Always use `{{-` for whitespace control in templates
+- Quote string values: `{{ .Values.name | quote }}`
+- Check `.Values.*.enabled` before rendering resources
+- Use `with` blocks for optional nested values
+- Provide defaults: `{{ .Values.name | default "default-name" }}`
+- Use `include` for reusable template functions
+
+## Validation Commands
+
+```bash
+# Template validation
+helm template . --debug
+
+# Lint check
+helm lint .
+
+# Dry-run apply
+helm template . | kubectl apply --dry-run=client -f -
+
+# Schema validation
+helm schema validate values.yaml
+```
+
 ## Repo Info
 
 - GitHub: `dev2prod-hub/gateway-api-chart`
 - Helm repo: `http://charts.cdnn.host/`
 - Version: `1.0.0` (see VERSION file)
 - License: Apache 2.0
+
+## References
+
+- Gateway API Spec: https://gateway-api.sigs.k8s.io/
+- Gateway API v1.4.1: https://gateway-api.sigs.k8s.io/v1.4.1/
+- Helm Best Practices: https://helm.sh/docs/chart_best_practices/

@@ -2,7 +2,7 @@ global: {}
 
 httpRoute:
   enabled: true
-  items: {}
+  items: []
 #  - parentRefs:
 #    - name: example-gateway
 #    hostnames:

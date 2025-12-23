@@ -114,8 +114,8 @@ httpRoute:
 ---
 
 📚 **Official References**:
-- [Gateway API Concepts](https://gateway-api.sigs.k8s.io/concepts/)
-- [Migration from Ingress](https://gateway-api.sigs.k8s.io/guides/migration/)
+- [Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
+- [Gateway API Guides](https://gateway-api.sigs.k8s.io/guides/)
 
 🔗 **Related Projects**:
 - [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)

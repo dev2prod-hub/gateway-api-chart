@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Gateway API Routes Helm Chart Values",
+  "description": "Values schema for gateway-api-routes Helm chart",
+  "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global configuration",
+      "additionalProperties": true
+    },
+    "httpRoute": {
+      "type": "object",
+      "description": "HTTPRoute configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable HTTPRoute",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "description": "List of HTTPRoute resources to create",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the HTTPRoute resource"
+              },
+              "parentRefs": {
+                "type": "array",
+                "description": "Parent references for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "hostnames": {
+                "type": "array",
+                "description": "Hostnames for the route",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "rules": {
+                "type": "array",
+                "description": "Rules for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "labels": {
+                "type": "object",
+                "description": "Additional labels",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "annotations": {
+                "type": "object",
+                "description": "Additional annotations",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "grpcRoute": {
+      "type": "object",
+      "description": "GRPCRoute configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable GRPCRoute",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "description": "List of GRPCRoute resources to create",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the GRPCRoute resource"
+              },
+              "parentRefs": {
+                "type": "array",
+                "description": "Parent references for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "hostnames": {
+                "type": "array",
+                "description": "Hostnames for the route",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "rules": {
+                "type": "array",
+                "description": "Rules for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "labels": {
+                "type": "object",
+                "description": "Additional labels",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "annotations": {
+                "type": "object",
+                "description": "Additional annotations",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "tcpRoute": {
+      "type": "object",
+      "description": "TCPRoute configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable TCPRoute",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "description": "List of TCPRoute resources to create",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the TCPRoute resource"
+              },
+              "parentRefs": {
+                "type": "array",
+                "description": "Parent references for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "rules": {
+                "type": "array",
+                "description": "Rules for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "labels": {
+                "type": "object",
+                "description": "Additional labels",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "annotations": {
+                "type": "object",
+                "description": "Additional annotations",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "udpRoute": {
+      "type": "object",
+      "description": "UDPRoute configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable UDPRoute",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "description": "List of UDPRoute resources to create",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the UDPRoute resource"
+              },
+              "parentRefs": {
+                "type": "array",
+                "description": "Parent references for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "rules": {
+                "type": "array",
+                "description": "Rules for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "labels": {
+                "type": "object",
+                "description": "Additional labels",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "annotations": {
+                "type": "object",
+                "description": "Additional annotations",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["name"]
+          }
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the name of the chart"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the full name of the chart"
+    }
+  },
+  "additionalProperties": false
+}
