@@ -140,6 +140,17 @@ test_template "GatewayClass disabled" "" "--set gatewayClass.enabled=false"
 # Test 9: Both disabled (should still render, just empty)
 test_template "Both disabled" "" "--set gateway.enabled=false --set gatewayClass.enabled=false"
 
+# Test 10: Schema validation (if schema test script exists)
+if [ -f "$SCRIPT_DIR/test_schema_validation.sh" ]; then
+    echo ""
+    echo "Running schema validation tests..."
+    if bash "$SCRIPT_DIR/test_schema_validation.sh" > /dev/null 2>&1; then
+        print_test "Schema validation tests" "PASS"
+    else
+        print_test "Schema validation tests" "FAIL"
+    fi
+fi
+
 # Summary
 echo ""
 echo "=================================================="

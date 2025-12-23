@@ -80,7 +80,60 @@ helm unittest charts/gateway-api -f tests/unit/test_gateway.yaml
 - Labels and metadata
 - TLS configuration
 
-### 3. Manual Testing Commands
+### 3. Schema Validation Tests
+
+Schema validation tests verify that invalid values are properly caught by the schema.
+
+**Run schema validation tests:**
+```bash
+# From project root
+./tests/integration/test_schema_validation.sh
+```
+
+**What it tests:**
+- Invalid protocol values
+- Invalid port ranges
+- Missing required fields
+- Invalid TLS configurations
+- Type mismatches (string vs integer, object vs array)
+- Valid values acceptance
+
+**Expected output:**
+```
+Running schema validation tests...
+==================================================
+
+Testing gateway-api chart schema validation...
+
+✓ Invalid protocol value
+✓ Invalid port (too high)
+✓ Invalid port (too low)
+✓ Missing required field: name
+✓ Missing required field: port
+✓ Invalid TLS mode
+✓ Invalid certificateRef kind
+✓ Invalid enabled type (string instead of boolean)
+✓ Invalid port type (string instead of integer)
+✓ Valid default values
+✓ Valid fixture values
+
+Testing gateway-api-routes chart schema validation...
+
+✓ Invalid httpRoute.items type (object instead of array)
+✓ Missing required name in route item
+✓ Invalid route enabled type
+✓ Valid routes default values
+✓ Valid routes fixture values
+
+==================================================
+Schema Validation Test Summary:
+Passed: 16
+Failed: 0
+```
+
+**See detailed guide:** `tests/SCHEMA_TESTING.md`
+
+### 4. Manual Testing Commands
 
 #### Helm Lint
 ```bash
@@ -134,8 +187,11 @@ grep "bundle-version" charts/gateway-api/crds/experimental/*.yaml | head -1
 # Integration tests
 ./tests/integration/test_integration.sh
 
-# Lint
-helm lint charts/gateway-api
+# Schema validation tests
+./tests/integration/test_schema_validation.sh
+
+# Lint (includes schema validation with --strict)
+helm lint charts/gateway-api --strict
 
 # Template validation
 helm template test-release charts/gateway-api > /dev/null && echo "✓ Template valid"
