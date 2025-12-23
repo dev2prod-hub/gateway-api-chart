@@ -4,7 +4,7 @@
 
 Kubernetes Gateway API. Replace your ingress to the native Kubernetes Gateway API.
 
-**Homepage:** <https://charts.dev2prod.xyz/>
+**Homepage:** <http://charts.cdnn.host/>
 
 ## Maintainers
 

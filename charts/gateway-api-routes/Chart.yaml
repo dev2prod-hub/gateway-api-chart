@@ -4,7 +4,7 @@ description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace 
 type: application
 version: 0.1.3-alpha.3
 appVersion: 1.0.0
-home: https://charts.dev2prod.xyz/
+home: http://charts.cdnn.host/
 sources:
   - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
 keywords:
@@ -20,4 +20,4 @@ maintainers:
     email: k@kazakov.xyz
     url: https://kazakov.xyz
 icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
-dependencies: []  # Optional dependencies if applicable
+dependencies: [] # Optional dependencies if applicable
