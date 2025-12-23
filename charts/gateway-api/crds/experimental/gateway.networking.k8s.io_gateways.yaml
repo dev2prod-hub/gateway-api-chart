@@ -707,7 +707,7 @@ spec:
                           the Gateway SHOULD return a 421.
                         * If the current Listener (selected by SNI matching during ClientHello)
                           does not match the Host:
-                            * If another Listener does match the Host, the Gateway SHOULD return a
+                            * If another Listener does match the Host the Gateway SHOULD return a
                               421.
                             * If no other Listener matches the Host, the Gateway MUST return a
                               404.
@@ -947,30 +947,19 @@ spec:
                     properties:
                       clientCertificateRef:
                         description: |-
-                          ClientCertificateRef references an object that contains a client certificate
-                          and its associated private key. It can reference standard Kubernetes resources,
-                          i.e., Secret, or implementation-specific custom resources.
+                          ClientCertificateRef is a reference to an object that contains a Client
+                          Certificate and the associated private key.
 
-                          A ClientCertificateRef is considered invalid if:
+                          References to a resource in different namespace are invalid UNLESS there
+                          is a ReferenceGrant in the target namespace that allows the certificate
+                          to be attached. If a ReferenceGrant does not allow this reference, the
+                          "ResolvedRefs" condition MUST be set to False for this listener with the
+                          "RefNotPermitted" reason.
 
-                          * It refers to a resource that cannot be resolved (e.g., the referenced resource
-                            does not exist) or is misconfigured (e.g., a Secret does not contain the keys
-                            named `tls.crt` and `tls.key`). In this case, the `ResolvedRefs` condition
-                            on the Gateway MUST be set to False with the Reason `InvalidClientCertificateRef`
-                            and the Message of the Condition MUST indicate why the reference is invalid.
+                          ClientCertificateRef can reference to standard Kubernetes resources, i.e.
+                          Secret, or implementation-specific custom resources.
 
-                          * It refers to a resource in another namespace UNLESS there is a ReferenceGrant
-                            in the target namespace that allows the certificate to be attached.
-                            If a ReferenceGrant does not allow this reference, the `ResolvedRefs` condition
-                            on the Gateway MUST be set to False with the Reason `RefNotPermitted`.
-
-                          Implementations MAY choose to perform further validation of the certificate
-                          content (e.g., checking expiry or enforcing specific formats). In such cases,
-                          an implementation-specific Reason and Message MUST be set.
-
-                          Support: Core - Reference to a Kubernetes TLS Secret (with the type `kubernetes.io/tls`).
-                          Support: Implementation-specific - Other resource kinds or Secrets with a
-                          different type (e.g., `Opaque`).
+                          Support: Core
                         properties:
                           group:
                             default: ""
@@ -1374,21 +1363,6 @@ spec:
                 maxItems: 16
                 type: array
                 x-kubernetes-list-type: atomic
-              attachedListeners:
-                description: |-
-                  AttachedListeners represents the total number of ListenerSets that have been
-                  successfully attached to this Gateway.
-
-                  A ListenerSet is successfully attached to a Gateway
-                  when all the following conditions are met :
-                  - The ListenerSet is selected by the Gateway's AllowedListeners field
-                  - The ListenerSet has a valid ParentRef selecting the Gateway
-                  - The ListenerSet's status has the condition "Accepted: true"
-
-                  Uses for this field include troubleshooting AttachedListeners attachment and
-                  measuring blast radius/impact of changes to a Gateway.
-                format: int32
-                type: integer
               conditions:
                 default:
                 - lastTransitionTime: "1970-01-01T00:00:00Z"
@@ -1493,11 +1467,8 @@ spec:
                         attachment semantics can be found in the documentation on the various
                         Route kinds ParentRefs fields). Listener or Route status does not impact
                         successful attachment, i.e. the AttachedRoutes field count MUST be set
-                        for Listeners, even if the Accepted condition of an individual Listener is set
-                        to "False". The AttachedRoutes number represents the number of Routes with
-                        the Accepted condition set to "True" that have been attached to this Listener.
-                        Routes with any other value for the Accepted condition MUST NOT be included
-                        in this count.
+                        for Listeners with condition Accepted: false and MUST count successfully
+                        attached Routes that may themselves have Accepted: false conditions.
 
                         Uses for this field include troubleshooting Route attachment and
                         measuring blast radius/impact of changes to a Listener.
@@ -1576,7 +1547,7 @@ spec:
                     supportedKinds:
                       description: |-
                         SupportedKinds is the list indicating the Kinds supported by this
-                        listener. This MUST represent the kinds supported by an implementation for
+                        listener. This MUST represent the kinds an implementation supports for
                         that Listener configuration.
 
                         If kinds are specified in Spec that are not supported, they MUST NOT
@@ -2313,7 +2284,7 @@ spec:
                           the Gateway SHOULD return a 421.
                         * If the current Listener (selected by SNI matching during ClientHello)
                           does not match the Host:
-                            * If another Listener does match the Host, the Gateway SHOULD return a
+                            * If another Listener does match the Host the Gateway SHOULD return a
                               421.
                             * If no other Listener matches the Host, the Gateway MUST return a
                               404.
@@ -2553,30 +2524,19 @@ spec:
                     properties:
                       clientCertificateRef:
                         description: |-
-                          ClientCertificateRef references an object that contains a client certificate
-                          and its associated private key. It can reference standard Kubernetes resources,
-                          i.e., Secret, or implementation-specific custom resources.
+                          ClientCertificateRef is a reference to an object that contains a Client
+                          Certificate and the associated private key.
 
-                          A ClientCertificateRef is considered invalid if:
+                          References to a resource in different namespace are invalid UNLESS there
+                          is a ReferenceGrant in the target namespace that allows the certificate
+                          to be attached. If a ReferenceGrant does not allow this reference, the
+                          "ResolvedRefs" condition MUST be set to False for this listener with the
+                          "RefNotPermitted" reason.
 
-                          * It refers to a resource that cannot be resolved (e.g., the referenced resource
-                            does not exist) or is misconfigured (e.g., a Secret does not contain the keys
-                            named `tls.crt` and `tls.key`). In this case, the `ResolvedRefs` condition
-                            on the Gateway MUST be set to False with the Reason `InvalidClientCertificateRef`
-                            and the Message of the Condition MUST indicate why the reference is invalid.
+                          ClientCertificateRef can reference to standard Kubernetes resources, i.e.
+                          Secret, or implementation-specific custom resources.
 
-                          * It refers to a resource in another namespace UNLESS there is a ReferenceGrant
-                            in the target namespace that allows the certificate to be attached.
-                            If a ReferenceGrant does not allow this reference, the `ResolvedRefs` condition
-                            on the Gateway MUST be set to False with the Reason `RefNotPermitted`.
-
-                          Implementations MAY choose to perform further validation of the certificate
-                          content (e.g., checking expiry or enforcing specific formats). In such cases,
-                          an implementation-specific Reason and Message MUST be set.
-
-                          Support: Core - Reference to a Kubernetes TLS Secret (with the type `kubernetes.io/tls`).
-                          Support: Implementation-specific - Other resource kinds or Secrets with a
-                          different type (e.g., `Opaque`).
+                          Support: Core
                         properties:
                           group:
                             default: ""
@@ -2980,21 +2940,6 @@ spec:
                 maxItems: 16
                 type: array
                 x-kubernetes-list-type: atomic
-              attachedListeners:
-                description: |-
-                  AttachedListeners represents the total number of ListenerSets that have been
-                  successfully attached to this Gateway.
-
-                  A ListenerSet is successfully attached to a Gateway
-                  when all the following conditions are met :
-                  - The ListenerSet is selected by the Gateway's AllowedListeners field
-                  - The ListenerSet has a valid ParentRef selecting the Gateway
-                  - The ListenerSet's status has the condition "Accepted: true"
-
-                  Uses for this field include troubleshooting AttachedListeners attachment and
-                  measuring blast radius/impact of changes to a Gateway.
-                format: int32
-                type: integer
               conditions:
                 default:
                 - lastTransitionTime: "1970-01-01T00:00:00Z"
@@ -3099,11 +3044,8 @@ spec:
                         attachment semantics can be found in the documentation on the various
                         Route kinds ParentRefs fields). Listener or Route status does not impact
                         successful attachment, i.e. the AttachedRoutes field count MUST be set
-                        for Listeners, even if the Accepted condition of an individual Listener is set
-                        to "False". The AttachedRoutes number represents the number of Routes with
-                        the Accepted condition set to "True" that have been attached to this Listener.
-                        Routes with any other value for the Accepted condition MUST NOT be included
-                        in this count.
+                        for Listeners with condition Accepted: false and MUST count successfully
+                        attached Routes that may themselves have Accepted: false conditions.
 
                         Uses for this field include troubleshooting Route attachment and
                         measuring blast radius/impact of changes to a Listener.
@@ -3182,7 +3124,7 @@ spec:
                     supportedKinds:
                       description: |-
                         SupportedKinds is the list indicating the Kinds supported by this
-                        listener. This MUST represent the kinds supported by an implementation for
+                        listener. This MUST represent the kinds an implementation supports for
                         that Listener configuration.
 
                         If kinds are specified in Spec that are not supported, they MUST NOT

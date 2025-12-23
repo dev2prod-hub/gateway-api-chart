@@ -545,14 +545,10 @@ spec:
                                             pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                             type: string
                                           value:
-                                            description: |-
-                                              Value is the value of HTTP Header to be matched.
-
-                                              Must consist of printable US-ASCII characters, optionally separated
-                                              by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                            description: Value is the value of HTTP
+                                              Header to be matched.
                                             maxLength: 4096
                                             minLength: 1
-                                            pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                             type: string
                                         required:
                                         - name
@@ -624,14 +620,10 @@ spec:
                                             pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                             type: string
                                           value:
-                                            description: |-
-                                              Value is the value of HTTP Header to be matched.
-
-                                              Must consist of printable US-ASCII characters, optionally separated
-                                              by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                            description: Value is the value of HTTP
+                                              Header to be matched.
                                             maxLength: 4096
                                             minLength: 1
-                                            pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                             type: string
                                         required:
                                         - name
@@ -836,14 +828,10 @@ spec:
                                             pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                             type: string
                                           value:
-                                            description: |-
-                                              Value is the value of HTTP Header to be matched.
-
-                                              Must consist of printable US-ASCII characters, optionally separated
-                                              by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                            description: Value is the value of HTTP
+                                              Header to be matched.
                                             maxLength: 4096
                                             minLength: 1
-                                            pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                             type: string
                                         required:
                                         - name
@@ -915,14 +903,10 @@ spec:
                                             pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                             type: string
                                           value:
-                                            description: |-
-                                              Value is the value of HTTP Header to be matched.
-
-                                              Must consist of printable US-ASCII characters, optionally separated
-                                              by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                            description: Value is the value of HTTP
+                                              Header to be matched.
                                             maxLength: 4096
                                             minLength: 1
-                                            pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                             type: string
                                         required:
                                         - name
@@ -1213,14 +1197,10 @@ spec:
                                       pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                       type: string
                                     value:
-                                      description: |-
-                                        Value is the value of HTTP Header to be matched.
-
-                                        Must consist of printable US-ASCII characters, optionally separated
-                                        by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                      description: Value is the value of HTTP Header
+                                        to be matched.
                                       maxLength: 4096
                                       minLength: 1
-                                      pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                       type: string
                                   required:
                                   - name
@@ -1291,14 +1271,10 @@ spec:
                                       pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                       type: string
                                     value:
-                                      description: |-
-                                        Value is the value of HTTP Header to be matched.
-
-                                        Must consist of printable US-ASCII characters, optionally separated
-                                        by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                      description: Value is the value of HTTP Header
+                                        to be matched.
                                       maxLength: 4096
                                       minLength: 1
-                                      pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                       type: string
                                   required:
                                   - name
@@ -1502,14 +1478,10 @@ spec:
                                       pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                       type: string
                                     value:
-                                      description: |-
-                                        Value is the value of HTTP Header to be matched.
-
-                                        Must consist of printable US-ASCII characters, optionally separated
-                                        by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                      description: Value is the value of HTTP Header
+                                        to be matched.
                                       maxLength: 4096
                                       minLength: 1
-                                      pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                       type: string
                                   required:
                                   - name
@@ -1580,14 +1552,10 @@ spec:
                                       pattern: ^[A-Za-z0-9!#$%&'*+\-.^_\x60|~]+$
                                       type: string
                                     value:
-                                      description: |-
-                                        Value is the value of HTTP Header to be matched.
-
-                                        Must consist of printable US-ASCII characters, optionally separated
-                                        by single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2
+                                      description: Value is the value of HTTP Header
+                                        to be matched.
                                       maxLength: 4096
                                       minLength: 1
-                                      pattern: ^[!-~]+([\t ]?[!-~]+)*$
                                       type: string
                                   required:
                                   - name
@@ -1926,7 +1894,7 @@ spec:
                           default: Cookie
                           description: |-
                             Type defines the type of session persistence such as through
-                            the use of a header or cookie. Defaults to cookie based session
+                            the use a header or cookie. Defaults to cookie based session
                             persistence.
 
                             Support: Core for "Cookie" type
@@ -2033,7 +2001,7 @@ spec:
 
                         * The Route refers to a nonexistent parent.
                         * The Route is of a type that the controller does not support.
-                        * The Route is in a namespace to which the controller does not have access.
+                        * The Route is in a namespace the controller does not have access to.
                       items:
                         description: Condition contains details for one aspect of
                           the current state of this API Resource.
