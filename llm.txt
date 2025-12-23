@@ -12,10 +12,10 @@ Two Helm charts:
 
 ```
 charts/
-  gateway-api/          # Chart version 0.1.4-alpha.1
-    crds/experimental/  # Original kubernetes-sigs CRDs (unchanged)
+  gateway-api/          # Chart version 1.0.0
+    crds/experimental/  # Original kubernetes-sigs CRDs (unchanged, using experimental for maximum features)
     templates/          # GatewayClass, Gateway
-  gateway-api-routes/   # Chart version 0.1.3-alpha.3
+  gateway-api-routes/   # Chart version 1.0.0
     templates/          # HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
 ```
 
@@ -23,13 +23,13 @@ charts/
 
 ```bash
 helm repo add dev2prod http://charts.cdnn.host/
-helm install my-gateway dev2prod/gateway-api --version 0.1.0
-helm install routes dev2prod/gateway-api-routes --version 0.1.0
+helm install my-gateway dev2prod/gateway-api --version 1.0.0
+helm install routes dev2prod/gateway-api-routes --version 1.0.0
 ```
 
 Skip CRDs if already installed:
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 0.1.0 --skip-crds
+helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
 ```
 
 ## Configuration
@@ -48,6 +48,8 @@ helm install my-gateway dev2prod/gateway-api --version 0.1.0 --skip-crds
 ## Key Points
 
 - CRDs are original from kubernetes-sigs, no modifications
+- **CRD Version**: v1.4.1 (experimental channel) - last updated in commit f43056c1
+- Using experimental CRDs for maximum feature support (includes TCPRoute, TLSRoute, UDPRoute, and experimental features)
 - Charts are separate - infrastructure vs routes
 - Works with any Gateway API provider (Envoy, AWS ALB, GKE, AKS, etc.)
 - Doesn't include the controller - you need a Gateway API provider separately
@@ -57,5 +59,5 @@ helm install my-gateway dev2prod/gateway-api --version 0.1.0 --skip-crds
 
 - GitHub: `dev2prod-hub/gateway-api-chart`
 - Helm repo: `http://charts.cdnn.host/`
-- Version: `0.1.3-alpha.3` (see VERSION file)
+- Version: `1.0.0` (see VERSION file)
 - License: Apache 2.0

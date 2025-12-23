@@ -39,24 +39,25 @@ helm repo search dev2prod
 
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 0.1.0 \
+  --version 1.0.0 \
   --skip-crds
 ```
 
 Install gateway-api with CRDs
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 0.1.0
-````
+  --version 1.0.0
+```
 
 ### Install gateway-api-routes
 ```bash
 helm install routes dev2prod/gateway-api-routes \
-  --version 0.1.0
+  --version 1.0.0
 ```
 
 ## Features 📦
-✔️ **CRD Management** (an original CRDs from the kubernetes-sigs without any changes)
+✔️ **CRD Management** (original CRDs from kubernetes-sigs without any changes)
+✔️ **CRD Version**: v1.4.1 (experimental channel) - includes TCPRoute, TLSRoute, UDPRoute, and experimental features
 ✔️ **Split to 2 charts** as a GW API main chart and routes chart
 
 ## Configuration Example 🔧
