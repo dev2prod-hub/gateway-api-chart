@@ -1,0 +1,42 @@
+# Cursor Rules for Gateway API Helm Chart
+
+## Project Context
+This is a Helm chart repository for Kubernetes Gateway API - the successor to Ingress.
+
+## Key Principles
+- Use Helm 3 best practices
+- Follow Kubernetes Gateway API v1.4.1 specifications
+- Maintain separation between infrastructure (gateway-api) and routes (gateway-api-routes)
+- Keep CRDs original from kubernetes-sigs without modifications
+- Use experimental CRDs for maximum feature support
+
+## Code Style
+- YAML files: 2 spaces indentation
+- Helm templates: Use `{{-` for whitespace control
+- Always quote string values in templates: `{{ .Values.name | quote }}`
+- Use `include` for reusable template functions
+- Follow Helm naming conventions: `chart-name.fullname`, `chart-name.labels`
+
+## File Structure
+- `charts/gateway-api/`: GatewayClass and Gateway resources
+- `charts/gateway-api-routes/`: HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
+- `crds/experimental/`: Original CRDs from kubernetes-sigs
+- `examples/`: Cloud provider and feature examples
+- `docs/`: Documentation
+
+## Common Patterns
+- Gateway listeners support: protocol, port, hostname, TLS config
+- Routes support: parentRefs, hostnames, rules with backendRefs
+- Always check `.Values.*.enabled` before rendering resources
+- Use `with` blocks for optional nested values
+- Provide sensible defaults using `default` function
+
+## Testing
+- Use `helm template` for validation
+- Test with `values.schema.json` validation
+- Check examples in `examples/` directory
+
+## Documentation
+- Update README.md for user-facing changes
+- Update llm.txt for AI context
+- Keep CHANGELOG.md updated

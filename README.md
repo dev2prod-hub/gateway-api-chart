@@ -3,7 +3,7 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-* Helm chart repo: [charts.dev2prod.xyz](https://charts.dev2prod.xyz/)
+* Helm chart repo: [charts.cdnn.cloud](https://charts.cdnn.host/)
 * Gir source: [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart)
 * Artifact Hub: [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
@@ -30,7 +30,7 @@ Designed to be used either:
 ### Add repository
 
 ```bash
-helm repo add dev2prod https://charts.dev2prod.xyz/
+helm repo add dev2prod https://charts.cdnn.host/
 helm repo update
 helm repo search dev2prod
 ```
@@ -39,24 +39,25 @@ helm repo search dev2prod
 
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 0.1.0 \
+  --version 1.0.0 \
   --skip-crds
 ```
 
 Install gateway-api with CRDs
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 0.1.0
-````
+  --version 1.0.0
+```
 
 ### Install gateway-api-routes
 ```bash
 helm install routes dev2prod/gateway-api-routes \
-  --version 0.1.0
+  --version 1.0.0
 ```
 
 ## Features 📦
-✔️ **CRD Management** (an original CRDs from the kubernetes-sigs without any changes)
+✔️ **CRD Management** (original CRDs from kubernetes-sigs without any changes)
+✔️ **CRD Version**: v1.4.1 (experimental channel) - includes TCPRoute, TLSRoute, UDPRoute, and experimental features
 ✔️ **Split to 2 charts** as a GW API main chart and routes chart
 
 ## Configuration Example 🔧
@@ -113,8 +114,8 @@ httpRoute:
 ---
 
 📚 **Official References**:
-- [Gateway API Concepts](https://gateway-api.sigs.k8s.io/concepts/)
-- [Migration from Ingress](https://gateway-api.sigs.k8s.io/guides/migration/)
+- [Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
+- [Gateway API Guides](https://gateway-api.sigs.k8s.io/guides/)
 
 🔗 **Related Projects**:
 - [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)

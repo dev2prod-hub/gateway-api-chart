@@ -1,0 +1,113 @@
+# Gateway API Helm Chart
+
+Helm charts for Kubernetes Gateway API. This repo provides Helm charts for Gateway API resources - the successor to Ingress.
+
+## What This Is
+
+Two Helm charts:
+- `gateway-api`: GatewayClass and Gateway resources, optional CRD installation
+- `gateway-api-routes`: HTTPRoute, GRPCRoute, TCPRoute, UDPRoute resources
+
+## Structure
+
+```
+charts/
+  gateway-api/          # Chart version 1.0.0
+    crds/experimental/  # Original kubernetes-sigs CRDs (unchanged, using experimental for maximum features)
+    templates/          # GatewayClass, Gateway
+  gateway-api-routes/   # Chart version 1.0.0 (updated to match CRD v1.4.1)
+    templates/          # HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
+```
+
+## Installation
+
+```bash
+helm repo add dev2prod https://charts.cdnn.host/
+helm install my-gateway dev2prod/gateway-api --version 1.0.0
+helm install routes dev2prod/gateway-api-routes --version 1.0.0
+```
+
+Skip CRDs if already installed:
+```bash
+helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+```
+
+## Configuration
+
+**gateway-api values.yaml:**
+- `gatewayClass.enabled`, `gatewayClass.name`, `gatewayClass.controllerName`
+- `gateway.enabled`, `gateway.name`, `gateway.gatewayClassName`
+- `gateway.listeners[]` - protocol, port, hostname, tls config
+
+**gateway-api-routes values.yaml:**
+- `httpRoute.enabled`, `httpRoute.items[]`
+- `grpcRoute.enabled`, `grpcRoute.items[]`
+- `tcpRoute.enabled`, `tcpRoute.items[]`
+- `udpRoute.enabled`, `udpRoute.items[]`
+
+## Key Points
+
+- CRDs are original from kubernetes-sigs, no modifications
+- **CRD Version**: v1.4.1 (experimental channel) - last updated in commit f43056c1
+- Using experimental CRDs for maximum feature support (includes TCPRoute, TLSRoute, UDPRoute, and experimental features)
+- Charts are separate - infrastructure vs routes
+- Works with any Gateway API provider (Envoy, AWS ALB, GKE, AKS, etc.)
+- Doesn't include the controller - you need a Gateway API provider separately
+- Examples in `examples/` for cloud providers and features
+
+## Common Patterns & Examples
+
+### Gateway Listener Patterns
+- **HTTP**: `protocol: HTTP, port: 80`
+- **HTTPS with TLS**: `protocol: HTTPS, port: 443, tls.mode: Terminate, tls.certificateRefs`
+- **TCP**: `protocol: TCP, port: 3306`
+- **UDP**: `protocol: UDP, port: 53`
+
+### HTTPRoute Patterns
+- Path-based routing: `rules[].matches[].path`
+- Hostname matching: `hostnames[]`
+- Backend references: `rules[].backendRefs[]`
+- Filters: `RequestRedirect`, `URLRewrite`, `RequestHeaderModifier`
+
+### TLS Configuration
+- **Terminate**: TLS termination at gateway, requires certificateRefs
+- **Passthrough**: TLS passthrough to backend
+- Certificate references: `kind: Secret` or `kind: Certificate`
+
+## Helm Template Best Practices
+
+- Always use `{{-` for whitespace control in templates
+- Quote string values: `{{ .Values.name | quote }}`
+- Check `.Values.*.enabled` before rendering resources
+- Use `with` blocks for optional nested values
+- Provide defaults: `{{ .Values.name | default "default-name" }}`
+- Use `include` for reusable template functions
+
+## Validation Commands
+
+```bash
+# Template validation
+helm template . --debug
+
+# Lint check
+helm lint .
+
+# Dry-run apply
+helm template . | kubectl apply --dry-run=client -f -
+
+# Schema validation
+helm schema validate values.yaml
+```
+
+## Repo Info
+
+- GitHub: `dev2prod-hub/gateway-api-chart`
+- Helm repo: `https://charts.cdnn.host/`
+- Version: `1.0.0` (see VERSION file)
+- License: Apache 2.0
+
+## References
+
+- Gateway API Spec: https://gateway-api.sigs.k8s.io/
+- Gateway API v1.4.1: https://gateway-api.sigs.k8s.io/v1.4.1/
+- Helm Best Practices: https://helm.sh/docs/chart_best_practices/

@@ -1,5 +1,5 @@
 {{- if .Values.gatewayClass.enabled }}
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: {{ .Values.gatewayClass.name | default  (include "gateway-api.fullname" .) | quote }}
@@ -9,7 +9,8 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- with .Values.gatewayClass.annotations }}
-  annotations: {{ . | toYaml | nindent 6 }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.gatewayClass.description }}
