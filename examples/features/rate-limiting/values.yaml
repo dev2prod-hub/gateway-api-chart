@@ -1,1 +1,45 @@
-# rate-limiting Configuration
+# Rate Limiting Example
+# This example demonstrates Gateway API configuration for rate limiting
+# Note: Rate limiting is typically configured via HTTPRoute filters or provider-specific annotations
+
+global:
+  labels:
+    part-of: "gateway-api"
+    feature: "rate-limiting"
+
+gatewayClass:
+  enabled: true
+  name: ratelimit-gatewayclass
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+  description: "GatewayClass with rate limiting capabilities"
+
+gateway:
+  enabled: true
+  name: ratelimit-gateway
+  gatewayClassName: ratelimit-gatewayclass
+  listeners:
+    # HTTP listener
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    # HTTPS listener
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "api.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: api-example-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+  # Annotations for rate limiting (provider-specific)
+  annotations:
+    # Example for Envoy Gateway
+    gateway.envoyproxy.io/rate-limit-enabled: "true"
+    gateway.envoyproxy.io/rate-limit-requests-per-second: "100"
