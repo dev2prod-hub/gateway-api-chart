@@ -4,7 +4,7 @@
 
 Kubernetes Gateway API. Replace your ingress to the native Kubernetes Gateway API.
 
-**Homepage:** <http://charts.cdnn.host/>
+**Homepage:** <https://charts.cdnn.host/>
 
 **CRD Version:** v1.4.1 (experimental channel) from kubernetes-sigs/gateway-api
 

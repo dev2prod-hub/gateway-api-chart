@@ -4,7 +4,7 @@ description: Kubernetes Gateway API. Replace your ingress to the native Kubernet
 type: application
 version: 1.0.0
 appVersion: 1.0.0
-home: http://charts.cdnn.host/
+home: https://charts.cdnn.host/
 sources:
   - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api
 keywords:

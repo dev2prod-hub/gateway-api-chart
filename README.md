@@ -3,7 +3,7 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-* Helm chart repo: [charts.cdnn.cloud](http://charts.cdnn.host/)
+* Helm chart repo: [charts.cdnn.cloud](https://charts.cdnn.host/)
 * Gir source: [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart)
 * Artifact Hub: [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
@@ -30,7 +30,7 @@ Designed to be used either:
 ### Add repository
 
 ```bash
-helm repo add dev2prod http://charts.cdnn.host/
+helm repo add dev2prod https://charts.cdnn.host/
 helm repo update
 helm repo search dev2prod
 ```

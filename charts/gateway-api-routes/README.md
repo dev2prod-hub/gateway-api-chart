@@ -4,7 +4,7 @@
 
 Kubernetes Gateway routes. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
 
-**Homepage:** <http://charts.cdnn.host/>
+**Homepage:** <https://charts.cdnn.host/>
 
 ## Maintainers
 
