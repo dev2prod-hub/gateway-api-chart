@@ -1,1 +1,39 @@
-# aks-agic Example
+# Azure Kubernetes Service (AKS) with Application Gateway Ingress Controller (AGIC) Example
+# This example configures Gateway API for use with AKS AGIC
+
+global:
+  labels:
+    part-of: "gateway-api"
+    provider: "aks-agic"
+
+gatewayClass:
+  enabled: true
+  name: azure-gatewayclass
+  controllerName: "azure.com/application-gateway"
+  description: "Azure Application Gateway GatewayClass for AKS"
+
+gateway:
+  enabled: true
+  name: azure-gateway
+  gatewayClassName: azure-gatewayclass
+  listeners:
+    # HTTP listener
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    # HTTPS listener with TLS termination
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "app.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: app-example-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All

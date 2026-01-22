@@ -1,1 +1,39 @@
-# aws-alb Example
+# AWS Application Load Balancer (ALB) Example
+# This example configures Gateway API for use with AWS ALB Controller
+
+global:
+  labels:
+    part-of: "gateway-api"
+    provider: "aws-alb"
+
+gatewayClass:
+  enabled: true
+  name: aws-alb-gatewayclass
+  controllerName: "application-networking.k8s.aws/gateway-controller"
+  description: "AWS ALB GatewayClass for Application Load Balancer"
+
+gateway:
+  enabled: true
+  name: aws-alb-gateway
+  gatewayClassName: aws-alb-gatewayclass
+  listeners:
+    # HTTP listener - ALB will handle HTTP to HTTPS redirect
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    # HTTPS listener with TLS termination
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: example-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All

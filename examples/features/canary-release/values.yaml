@@ -1,1 +1,44 @@
-# canary-release Configuration
+# Canary Release Example
+# This example demonstrates how to configure Gateway API for canary deployments
+# Note: This requires HTTPRoute resources from gateway-api-routes chart
+
+global:
+  labels:
+    part-of: "gateway-api"
+    feature: "canary-release"
+
+gatewayClass:
+  enabled: true
+  name: canary-gatewayclass
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+  description: "GatewayClass for canary release deployments"
+
+gateway:
+  enabled: true
+  name: canary-gateway
+  gatewayClassName: canary-gatewayclass
+  listeners:
+    # HTTP listener for canary traffic
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    # HTTPS listener for canary traffic
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "canary.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: canary-example-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+  # Labels for canary identification
+  labels:
+    deployment-type: "canary"
+    environment: "staging"

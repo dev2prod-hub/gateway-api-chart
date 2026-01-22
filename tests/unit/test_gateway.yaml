@@ -1,1 +1,111 @@
-# Unit tests
+# Unit tests for gateway-api chart
+# These tests verify that the chart templates render correctly
+
+suite: test gateway-api chart
+templates:
+  - templates/gateway.yaml
+  - templates/gatewayclass.yaml
+tests:
+  # Test 1: Default values - Gateway and GatewayClass should be created
+  - it: should create Gateway and GatewayClass with default values
+    set:
+      gateway.enabled: true
+      gatewayClass.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: Gateway
+      - isKind:
+          of: GatewayClass
+      - equal:
+          path: metadata.name
+          value: envoy-gateway
+      - equal:
+          path: spec.gatewayClassName
+          value: envoy-gateway
+      - equal:
+          path: spec.controllerName
+          value: gateway.envoyproxy.io/gatewayclass-controller
+
+  # Test 2: GatewayClass disabled - only Gateway should be created
+  - it: should create only Gateway when GatewayClass is disabled
+    set:
+      gateway.enabled: true
+      gatewayClass.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Gateway
+
+  # Test 3: Gateway disabled - only GatewayClass should be created
+  - it: should create only GatewayClass when Gateway is disabled
+    set:
+      gateway.enabled: false
+      gatewayClass.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: GatewayClass
+
+  # Test 4: Custom names
+  - it: should use custom names when provided
+    set:
+      gateway.name: my-custom-gateway
+      gatewayClass.name: my-custom-gatewayclass
+      gateway.gatewayClassName: my-custom-gatewayclass
+    asserts:
+      - equal:
+          path: metadata.name
+          value: my-custom-gateway
+      - equal:
+          path: spec.gatewayClassName
+          value: my-custom-gatewayclass
+
+  # Test 5: API version should be v1
+  - it: should use gateway.networking.k8s.io/v1 API version
+    set:
+      gateway.enabled: true
+      gatewayClass.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 2
+      - contains:
+          path: apiVersion
+          content: gateway.networking.k8s.io/v1
+
+  # Test 6: Labels should be applied
+  - it: should apply standard Kubernetes labels
+    set:
+      gateway.enabled: true
+    asserts:
+      - exists:
+          path: metadata.labels.helm.sh/chart
+      - exists:
+          path: metadata.labels.app.kubernetes.io/name
+      - exists:
+          path: metadata.labels.app.kubernetes.io/instance
+      - exists:
+          path: metadata.labels.app.kubernetes.io/managed-by
+
+  # Test 7: TLS configuration
+  - it: should configure TLS when provided
+    set:
+      gateway.enabled: true
+      gateway.listeners:
+        - name: https
+          protocol: HTTPS
+          port: 443
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: test-tls
+                kind: Secret
+    asserts:
+      - equal:
+          path: spec.listeners[0].tls.mode
+          value: Terminate
+      - exists:
+          path: spec.listeners[0].tls.certificateRefs

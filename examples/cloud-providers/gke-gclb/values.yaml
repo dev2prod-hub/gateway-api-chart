@@ -1,1 +1,44 @@
-# gke-gclb Example
+# Google Kubernetes Engine (GKE) with Google Cloud Load Balancer Example
+# This example configures Gateway API for use with GKE Gateway Controller
+
+global:
+  labels:
+    part-of: "gateway-api"
+    provider: "gke-gclb"
+
+gatewayClass:
+  enabled: true
+  name: gke-gatewayclass
+  controllerName: "networking.gke.io/gateway"
+  description: "GKE GatewayClass for Google Cloud Load Balancer"
+
+gateway:
+  enabled: true
+  name: gke-gateway
+  gatewayClassName: gke-gatewayclass
+  listeners:
+    # HTTP listener
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    # HTTPS listener with TLS termination
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "api.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: api-example-com-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+  # GKE-specific: Address configuration
+  extraSpec:
+    addresses:
+      - type: NamedAddress
+        value: gke-gateway-ip
