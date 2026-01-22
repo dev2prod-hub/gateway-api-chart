@@ -25,7 +25,7 @@ Kubernetes Gateway routes. Part of the Gateway API charts. Replace your ingress 
 | grpcRoute.enabled | bool | `true` |  |
 | grpcRoute.items | list | `[]` |  |
 | httpRoute.enabled | bool | `true` |  |
-| httpRoute.items | object | `{}` |  |
+| httpRoute.items | list | `[]` |  |
 | tcpRoute.enabled | bool | `true` |  |
 | tcpRoute.items | list | `[]` |  |
 | udpRoute.enabled | bool | `true` |  |
