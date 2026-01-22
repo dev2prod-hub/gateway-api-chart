@@ -1,1 +1,46 @@
-# mutual-tls Configuration
+# Mutual TLS (mTLS) Example
+# This example demonstrates Gateway API configuration for mutual TLS authentication
+# Note: mTLS configuration is typically handled at the Gateway API provider level
+
+global:
+  labels:
+    part-of: "gateway-api"
+    feature: "mutual-tls"
+
+gatewayClass:
+  enabled: true
+  name: mtls-gatewayclass
+  controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+  description: "GatewayClass for mutual TLS authentication"
+
+gateway:
+  enabled: true
+  name: mtls-gateway
+  gatewayClassName: mtls-gatewayclass
+  listeners:
+    # HTTPS listener with TLS passthrough for mTLS
+    - name: https-mtls
+      protocol: HTTPS
+      port: 443
+      hostname: "secure.example.com"
+      tls:
+        mode: Passthrough  # Passthrough mode for mTLS
+      allowedRoutes:
+        namespaces:
+          from: All
+    # Alternative: Terminate mode with client certificate validation
+    - name: https-terminate
+      protocol: HTTPS
+      port: 8443
+      hostname: "api.example.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: api-example-com-tls
+            kind: Secret
+        # Note: Provider-specific mTLS configuration via options
+        # is handled at the Gateway API provider level
+        # Example: options: { clientCertificateMode: Require }
+      allowedRoutes:
+        namespaces:
+          from: All

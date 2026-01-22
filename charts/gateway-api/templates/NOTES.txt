@@ -1,0 +1,28 @@
+1. Get the application URL by running these commands:
+{{- if .Values.gateway.enabled }}
+{{- range .Values.gateway.listeners }}
+{{- if .hostname }}
+  Gateway Listener "{{ .name }}" is available at:
+    Protocol: {{ .protocol }}
+    Port: {{ .port }}
+    Hostname: {{ .hostname }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+2. Verify Gateway and GatewayClass status:
+  kubectl get gatewayclass
+  kubectl get gateway
+
+3. Check Gateway API CRDs are installed:
+  kubectl get crd | grep gateway.networking.k8s.io
+
+{{- if .Values.gatewayClass.enabled }}
+4. GatewayClass "{{ .Values.gatewayClass.name | default (include "gateway-api.fullname" .) }}" has been created.
+{{- end }}
+
+{{- if .Values.gateway.enabled }}
+5. Gateway "{{ .Values.gateway.name | default (include "gateway-api.fullname" .) }}" has been created.
+{{- end }}
+
+For more information, visit: https://gateway-api.sigs.k8s.io/

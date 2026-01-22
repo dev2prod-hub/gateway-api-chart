@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Gateway API Helm Chart Values",
+  "description": "Values schema for gateway-api Helm chart",
+  "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global configuration for labels, etc.",
+      "properties": {
+        "labels": {
+          "type": "object",
+          "description": "Global labels to apply to all resources",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "gatewayClass": {
+      "type": "object",
+      "description": "Gateway Class Configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable GatewayClass. You can install any components without dependencies",
+          "default": true
+        },
+        "name": {
+          "type": "string",
+          "description": "Gateway Class name. Default: helm release name."
+        },
+        "controllerName": {
+          "type": "string",
+          "description": "Controller reference",
+          "default": "gateway.envoyproxy.io/gatewayclass-controller"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description helps describe a GatewayClass with more details"
+        },
+        "parametersRef": {
+          "type": "object",
+          "description": "ParametersRef is a reference to a resource that contains the configuration parameters corresponding to the GatewayClass"
+        },
+        "labels": {
+          "type": "object",
+          "description": "Additional labels for GatewayClass",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Additional annotations for GatewayClass",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "gateway": {
+      "type": "object",
+      "description": "Gateway API Configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable Gateway API",
+          "default": true
+        },
+        "name": {
+          "type": "string",
+          "description": "Gateway name. Default: helm release name"
+        },
+        "gatewayClassName": {
+          "type": "string",
+          "description": "Gateway Class name. Reference to the GatewayClass object. Default: helm release name."
+        },
+        "listeners": {
+          "type": "array",
+          "description": "Define listeners. Use any format according to the original Gateway API spec.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Listener name"
+              },
+              "protocol": {
+                "type": "string",
+                "enum": ["HTTP", "HTTPS", "TLS", "TCP", "UDP"],
+                "description": "Protocol for the listener"
+              },
+              "port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535,
+                "description": "Port number for the listener"
+              },
+              "hostname": {
+                "type": "string",
+                "description": "Hostname for the listener"
+              },
+              "allowedRoutes": {
+                "type": "object",
+                "description": "AllowedRoutes defines the types of routes that may be bound to this Gateway's listener"
+              },
+              "tls": {
+                "type": "object",
+                "description": "TLS configuration for the listener",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "enum": ["Terminate", "Passthrough"],
+                    "description": "TLS mode"
+                  },
+                  "certificateRefs": {
+                    "type": "array",
+                    "description": "Certificate references",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": ["Secret"]
+                        }
+                      },
+                      "required": ["name", "kind"]
+                    }
+                  },
+                  "options": {
+                    "type": ["object", "null"],
+                    "description": "TLS options (provider-specific)"
+                  }
+                }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the listener"
+              }
+            },
+            "required": ["name", "protocol", "port"]
+          }
+        },
+        "labels": {
+          "type": "object",
+          "description": "Additional labels for Gateway",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Additional annotations for Gateway",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "extraSpec": {
+          "type": "object",
+          "description": "Additional spec fields for the Gateway object"
+        }
+      },
+      "required": ["enabled"],
+      "additionalProperties": false
+    },
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the name of the chart"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the full name of the chart"
+    },
+    "annotations": {
+      "type": "object",
+      "description": "Global annotations",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}
