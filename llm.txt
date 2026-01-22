@@ -101,6 +101,7 @@ helm schema validate values.yaml
 
 ## Repo Info
 
+- **Project docs index:** `docs/index.md` — Master entry point for architecture, dev/deploy guides, source tree
 - GitHub: `dev2prod-hub/gateway-api-chart`
 - Helm repo: `https://charts.cdnn.host/`
 - Version: `1.0.0` (see VERSION file)
