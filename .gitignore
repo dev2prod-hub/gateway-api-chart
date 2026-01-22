@@ -22,3 +22,9 @@ terraform-outputs.yaml
 
 # other
 /tmp
+
+# BMAD workflow files (local development)
+_bmad/
+.agent
+.claude
+.cursor

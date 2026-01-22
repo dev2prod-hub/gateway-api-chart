@@ -11,5 +11,7 @@ repos:
         exclude: ^charts/gateway-api/crds/|^charts/gateway-api/templates/
       - id: detect-private-key
       - id: end-of-file-fixer
+        exclude: ^_bmad/|^.agent$|^.claude$|^.cursor|^.github/*.md$
       - id: no-commit-to-branch
       - id: trailing-whitespace
+        exclude: ^_bmad/|^.agent$|^.claude$|^.cursor|^.github/*.md$
