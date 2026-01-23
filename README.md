@@ -11,6 +11,50 @@ Replace ingress to the next level with Gateway API Helm Chart.
 **Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
 
+## Gateway API Resource Model
+
+The Gateway API follows a role-oriented design with three layers:
+
+![Gateway API Resource Model](https://gateway-api.sigs.k8s.io/images/resource-model.png)
+
+**Source:** [Kubernetes Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
+
+## Chart Architecture 🏗️
+
+This repository provides **two separate Helm charts** that align with the Gateway API resource model:
+
+### 1. `gateway-api` - Infrastructure Layer
+
+**Purpose:** Manages the infrastructure layer of Gateway API.
+
+**What it installs:**
+- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.4.1, experimental channel)
+- **GatewayClass** - Defines the type of gateway controller (e.g., Envoy, AWS ALB, GKE, AKS)
+- **Gateway** - Declares the actual gateway instance with listeners, TLS configuration, and network settings
+
+**When to use:** Install this chart once per cluster or namespace to set up the gateway infrastructure. Typically managed by cluster operators or infrastructure teams.
+
+### 2. `gateway-api-routes` - Routing Layer
+
+**Purpose:** Manages the routing layer of Gateway API.
+
+**What it installs:**
+- **HTTPRoute** - HTTP traffic routing rules
+- **GRPCRoute** - gRPC traffic routing rules
+- **TCPRoute** - TCP traffic routing rules
+- **UDPRoute** - UDP traffic routing rules
+
+**When to use:** Install this chart per application or team to define routing rules. Routes reference Gateways via `parentRefs`. Typically managed by application developers.
+
+### Why Two Charts? 🤔
+
+This separation provides:
+
+1. **Role-oriented design** - Matches Gateway API's three-layer model (Infrastructure Provider → Cluster Operator → Application Developer)
+2. **Independent lifecycle** - Infrastructure changes (GatewayClass, Gateway) don't require redeploying routes
+3. **Multi-tenancy** - Multiple teams can deploy routes independently while sharing the same Gateway infrastructure
+4. **Flexibility** - Use `gateway-api` as a dependency in infrastructure charts, and `gateway-api-routes` in application charts
+
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
 - **CRD management** (an optional installation)
@@ -122,4 +166,15 @@ httpRoute:
 
 ---
 
-_Maintained with ❤️ by Dev2Prod. Licensed under [Apache 2.0](LICENSE)._
+## Maintainer 👤
+
+This is a personal project maintained by:
+
+**Kirill Kazakov** - Full Stack DevOps and Magician
+
+- **Website:** [kazakov.xyz](https://kazakov.xyz/)
+- **Email:** k@kazakov.xyz
+
+---
+
+_Maintained with ❤️ by [Kirill Kazakov](https://kazakov.xyz/). Licensed under [Apache 2.0](LICENSE)._

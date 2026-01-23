@@ -62,13 +62,23 @@
                 "additionalProperties": {
                   "type": "string"
                 }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the HTTPRoute",
+                "additionalProperties": true
               }
             },
-            "required": ["name"]
+            "required": [
+              "name"
+            ],
+            "additionalProperties": true
           }
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "grpcRoute": {
@@ -124,13 +134,23 @@
                 "additionalProperties": {
                   "type": "string"
                 }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the GRPCRoute",
+                "additionalProperties": true
               }
             },
-            "required": ["name"]
+            "required": [
+              "name"
+            ],
+            "additionalProperties": true
           }
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "tcpRoute": {
@@ -179,13 +199,23 @@
                 "additionalProperties": {
                   "type": "string"
                 }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the TCPRoute",
+                "additionalProperties": true
               }
             },
-            "required": ["name"]
+            "required": [
+              "name"
+            ],
+            "additionalProperties": true
           }
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "udpRoute": {
@@ -234,13 +264,23 @@
                 "additionalProperties": {
                   "type": "string"
                 }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the UDPRoute",
+                "additionalProperties": true
               }
             },
-            "required": ["name"]
+            "required": [
+              "name"
+            ],
+            "additionalProperties": true
           }
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "nameOverride": {

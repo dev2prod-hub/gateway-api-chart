@@ -16,6 +16,12 @@ gatewayClass:
     group: gateway.envoyproxy.io
     kind: EnvoyProxy
     name: proxy-config
+    namespace: envoy-gateway-system
+  infrastructure: # Optional. v1.4.1+ experimental
+    labels:
+      infra: envoy
+    annotations:
+      infra: envoy
 
 gateway:
   enabled: true
@@ -23,6 +29,16 @@ gateway:
   gatewayClassName: envoy-gateway # Optional
   annotations:
     stage: fixture-testing
+  infrastructure: # Optional. v1.4.1+ experimental
+    labels:
+      infra: envoy-gw
+    annotations:
+      infra: envoy-gw
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: GatewayInfrastructureConfig
+      name: gw-infra-config
+      namespace: envoy-gateway-system
 
   listeners:
     - name: api-backend-https
@@ -33,6 +49,8 @@ gateway:
         mode: Terminate
         certificateRefs:
           - name: api-mydomain-com-tls
+            kind: Certificate # v1.4.1 support
+          - name: api-mydomain-com-secret
             kind: Secret
       allowedRoutes:
         namespaces:

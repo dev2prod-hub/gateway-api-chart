@@ -1,33 +1,46 @@
 httpRoute:
   enabled: true
   items:
-  - name: http-filter-redirect
-    parentRefs:
-    - name: redirect-gateway
-      sectionName: http
-    hostnames:
-    - redirect.example
-    rules:
-    - filters:
-      - type: RequestRedirect
-        requestRedirect:
-          scheme: https
-          statusCode: 301
-  - name: https-route
-    parentRefs:
-    - name: redirect-gateway
-      sectionName: https
-    hostnames:
-    - redirect.example
-    rules:
-    - backendRefs:
-      - name: example-svc
-        port: 80
+    - name: http-filter-redirect
+      labels:
+        app.kubernetes.io/component: redirect
+        environment: test
+      annotations:
+        gateway.example.com/description: "HTTP to HTTPS redirect"
+      parentRefs:
+        - name: redirect-gateway
+          sectionName: http
+      hostnames:
+        - redirect.example
+      rules:
+        - filters:
+            - type: RequestRedirect
+              requestRedirect:
+                scheme: https
+                statusCode: 301
+    - name: https-route
+      labels:
+        app.kubernetes.io/component: backend
+      parentRefs:
+        - name: redirect-gateway
+          sectionName: https
+      hostnames:
+        - redirect.example
+      rules:
+        - backendRefs:
+            - name: example-svc
+              port: 80
+      extraSpec:
+        timeout: 5s
 
 grpcRoute:
   enabled: true
   items:
     - name: grpc-example
+      labels:
+        app.kubernetes.io/component: grpc
+      annotations:
+        gateway.example.com/protocol: "grpc"
       parentRefs:
         - name: grpc-gateway
       hostnames:
@@ -41,6 +54,8 @@ tcpRoute:
   enabled: true
   items:
     - name: tcp-example
+      labels:
+        app.kubernetes.io/component: tcp
       parentRefs:
         - name: tcp-gateway
       rules:
@@ -52,6 +67,8 @@ udpRoute:
   enabled: true
   items:
     - name: udp-example
+      labels:
+        app.kubernetes.io/component: udp
       parentRefs:
         - name: udp-gateway
       rules:
