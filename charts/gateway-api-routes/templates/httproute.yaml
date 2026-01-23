@@ -27,5 +27,8 @@ spec:
   rules:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .extraSpec }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
 {{- end }}
 {{- end }}
