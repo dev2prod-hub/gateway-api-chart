@@ -132,9 +132,9 @@ main() {
   printf "New version: %s\n" "$new_version"
 
   update_version_file
-  source scripts/generate-docs.sh
   source scripts/helm-bump.sh "$new_version" "gateway-api"
   source scripts/helm-bump.sh "$new_version" "gateway-api-routes"
+  source scripts/generate-docs.sh
 
   commit_and_tag_changes
   check_git_state

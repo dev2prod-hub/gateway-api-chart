@@ -42,7 +42,26 @@
         },
         "parametersRef": {
           "type": "object",
-          "description": "ParametersRef is a reference to a resource that contains the configuration parameters corresponding to the GatewayClass"
+          "description": "ParametersRef is a reference to a resource that contains the configuration parameters corresponding to the GatewayClass",
+          "properties": {
+            "group": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "group",
+            "kind",
+            "name"
+          ]
         },
         "labels": {
           "type": "object",
@@ -57,9 +76,30 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "infrastructure": {
+          "type": "object",
+          "description": "Infrastructure defines infrastructure level attributes about this GatewayClass.",
+          "properties": {
+            "labels": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "annotations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "gateway": {
@@ -91,7 +131,13 @@
               },
               "protocol": {
                 "type": "string",
-                "enum": ["HTTP", "HTTPS", "TLS", "TCP", "UDP"],
+                "enum": [
+                  "HTTP",
+                  "HTTPS",
+                  "TLS",
+                  "TCP",
+                  "UDP"
+                ],
                 "description": "Protocol for the listener"
               },
               "port": {
@@ -114,7 +160,10 @@
                 "properties": {
                   "mode": {
                     "type": "string",
-                    "enum": ["Terminate", "Passthrough"],
+                    "enum": [
+                      "Terminate",
+                      "Passthrough"
+                    ],
                     "description": "TLS mode"
                   },
                   "certificateRefs": {
@@ -128,25 +177,84 @@
                         },
                         "kind": {
                           "type": "string",
-                          "enum": ["Secret"]
+                          "enum": [
+                            "Secret",
+                            "Certificate"
+                          ]
                         }
                       },
-                      "required": ["name", "kind"]
+                      "required": [
+                        "name",
+                        "kind"
+                      ]
                     }
                   },
                   "options": {
-                    "type": ["object", "null"],
-                    "description": "TLS options (provider-specific)"
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "TLS options (provider-specific)",
+                    "additionalProperties": true
                   }
                 }
               },
               "extraSpec": {
                 "type": "object",
-                "description": "Additional spec fields for the listener"
+                "description": "Additional spec fields for the listener",
+                "additionalProperties": true
               }
             },
-            "required": ["name", "protocol", "port"]
+            "required": [
+              "name",
+              "protocol",
+              "port"
+            ]
           }
+        },
+        "infrastructure": {
+          "type": "object",
+          "description": "Infrastructure defines infrastructure level attributes about this Gateway instance.",
+          "properties": {
+            "labels": {
+              "type": "object",
+              "description": "Labels to apply to infrastructure resources",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "annotations": {
+              "type": "object",
+              "description": "Annotations to apply to infrastructure resources",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "parametersRef": {
+              "type": "object",
+              "description": "ParametersRef is a reference to a resource that contains secondary configuration parameters",
+              "properties": {
+                "group": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "namespace": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "group",
+                "kind",
+                "name"
+              ]
+            }
+          },
+          "additionalProperties": false
         },
         "labels": {
           "type": "object",
@@ -164,10 +272,13 @@
         },
         "extraSpec": {
           "type": "object",
-          "description": "Additional spec fields for the Gateway object"
+          "description": "Additional spec fields for the Gateway object",
+          "additionalProperties": true
         }
       },
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false
     },
     "nameOverride": {

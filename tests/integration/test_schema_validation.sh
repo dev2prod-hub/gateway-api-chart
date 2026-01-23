@@ -209,10 +209,62 @@ gateway:
 EOF
 test_schema_rejects "Invalid port type (string instead of integer)" "$CHART_DIR" "$TEST_DIR/invalid-port-type.yaml" ""
 
-# Test 10: Valid values should pass
+# Test 10: Valid v1.4.1 values (infrastructure, Certificate kind)
+cat > "$TEST_DIR/valid-v1-4-1.yaml" << 'EOF'
+gateway:
+  infrastructure:
+    labels:
+      managed-by: bmad
+    parametersRef:
+      group: example.com
+      kind: Config
+      name: my-cfg
+      namespace: default
+  listeners:
+    - name: test
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: test-cert
+            kind: Certificate
+      extraSpec:
+        customField: value
+EOF
+test_schema_accepts "Valid v1.4.1 values (infrastructure, Certificate kind)" "$CHART_DIR" "$TEST_DIR/valid-v1-4-1.yaml"
+
+# Test 11: Invalid infrastructure (additional properties)
+cat > "$TEST_DIR/invalid-infra.yaml" << 'EOF'
+gateway:
+  infrastructure:
+    unknownField: value
+EOF
+test_schema_rejects "Invalid infrastructure (unknown field)" "$CHART_DIR" "$TEST_DIR/invalid-infra.yaml" "additionalProperties"
+
+# Test 12: Missing required parametersRef fields
+cat > "$TEST_DIR/missing-params.yaml" << 'EOF'
+gateway:
+  infrastructure:
+    parametersRef:
+      name: test
+EOF
+test_schema_rejects "Missing required parametersRef fields" "$CHART_DIR" "$TEST_DIR/missing-params.yaml" "missing properties"
+
+# Test 13: Valid routes with v1.4.1 features
+cat > "$TEST_DIR/valid-routes-v1-4-1.yaml" << 'EOF'
+httpRoute:
+  items:
+    - name: test
+      extraSpec:
+        filter: Custom
+EOF
+test_schema_accepts "Valid routes with v1.4.1 extraSpec" "$ROUTES_CHART_DIR" "$TEST_DIR/valid-routes-v1-4-1.yaml"
+
+# Test 14: Valid default values should pass
 test_schema_accepts "Valid default values" "$CHART_DIR"
 
-# Test 11: Valid values with fixture
+# Test 15: Valid values with fixture
 if [ -f "$CHART_DIR/fixture-values.yaml" ]; then
     test_schema_accepts "Valid fixture values" "$CHART_DIR" "$CHART_DIR/fixture-values.yaml"
 fi
@@ -224,7 +276,7 @@ echo ""
 echo "Testing gateway-api-routes chart schema validation..."
 echo ""
 
-# Test 12: Invalid httpRoute.items type (object instead of array)
+# Test 16: Invalid httpRoute.items type (object instead of array)
 cat > "$TEST_DIR/invalid-httproute-items.yaml" << 'EOF'
 httpRoute:
   enabled: true
@@ -232,7 +284,7 @@ httpRoute:
 EOF
 test_schema_rejects "Invalid httpRoute.items type (object instead of array)" "$ROUTES_CHART_DIR" "$TEST_DIR/invalid-httproute-items.yaml" "got object, want array"
 
-# Test 13: Missing required name in route item
+# Test 17: Missing required name in route item
 cat > "$TEST_DIR/missing-route-name.yaml" << 'EOF'
 httpRoute:
   enabled: true
@@ -242,7 +294,7 @@ httpRoute:
 EOF
 test_schema_rejects "Missing required name in route item" "$ROUTES_CHART_DIR" "$TEST_DIR/missing-route-name.yaml" "missing properties"
 
-# Test 14: Invalid enabled type for route
+# Test 18: Invalid enabled type for route
 cat > "$TEST_DIR/invalid-route-enabled.yaml" << 'EOF'
 httpRoute:
   enabled: "yes"
@@ -250,10 +302,10 @@ httpRoute:
 EOF
 test_schema_rejects "Invalid route enabled type" "$ROUTES_CHART_DIR" "$TEST_DIR/invalid-route-enabled.yaml" ""
 
-# Test 15: Valid routes values should pass
+# Test 19: Valid routes values should pass
 test_schema_accepts "Valid routes default values" "$ROUTES_CHART_DIR"
 
-# Test 16: Valid routes with fixture
+# Test 20: Valid routes with fixture
 if [ -f "$ROUTES_CHART_DIR/fixture-values.yaml" ]; then
     test_schema_accepts "Valid routes fixture values" "$ROUTES_CHART_DIR" "$ROUTES_CHART_DIR/fixture-values.yaml"
 fi
