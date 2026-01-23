@@ -1,0 +1,13 @@
+installation:
+  version: 6.0.0-alpha.23
+  installDate: 2026-01-22T21:27:36.725Z
+  lastUpdated: 2026-01-22T21:27:36.725Z
+modules:
+  - core
+  - bmb
+  - bmm
+ides:
+  - claude-code
+  - cursor
+  - github-copilot
+  - antigravity
