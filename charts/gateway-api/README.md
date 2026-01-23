@@ -6,6 +6,14 @@ Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the nativ
 
 **Homepage:** <https://charts.cdnn.host/>
 
+## Gateway API Resource Model
+
+The Gateway API follows a role-oriented design with three layers:
+
+![Gateway API Resource Model](https://gateway-api.sigs.k8s.io/images/resource-model.png)
+
+**Source:** [Kubernetes Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
+
 ## Chart Purpose
 
 This chart manages the **infrastructure layer** of Gateway API:
