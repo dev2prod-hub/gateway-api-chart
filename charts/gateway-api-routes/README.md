@@ -2,9 +2,24 @@
 
 ![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
-Kubernetes Gateway routes. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
+Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
 
 **Homepage:** <https://charts.cdnn.host/>
+
+## Chart Purpose
+
+This chart manages the **routing layer** of Gateway API:
+
+- **HTTPRoute** - HTTP traffic routing rules
+- **GRPCRoute** - gRPC traffic routing rules
+- **TCPRoute** - TCP traffic routing rules
+- **UDPRoute** - UDP traffic routing rules
+
+**When to use:** Install this chart per application or team to define routing rules. Routes reference Gateways via `parentRefs`. Typically managed by application developers.
+
+**Prerequisites:** Requires a Gateway to be installed (use the [`gateway-api`](../gateway-api/) chart for GatewayClass and Gateway resources).
+
+For more information about Gateway API architecture, see the [official Gateway API documentation](https://gateway-api.sigs.k8s.io/).
 
 ## Maintainers
 

@@ -2,9 +2,23 @@
 
 ![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
-Kubernetes Gateway API. Replace your ingress to the native Kubernetes Gateway API.
+Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the native Kubernetes Gateway API.
 
 **Homepage:** <https://charts.cdnn.host/>
+
+## Chart Purpose
+
+This chart manages the **infrastructure layer** of Gateway API:
+
+- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.4.1, experimental channel)
+- **GatewayClass** - Defines the type of gateway controller (e.g., Envoy, AWS ALB, GKE, AKS)
+- **Gateway** - Declares the actual gateway instance with listeners, TLS configuration, and network settings
+
+**When to use:** Install this chart once per cluster or namespace to set up the gateway infrastructure. Typically managed by cluster operators or infrastructure teams.
+
+**Related chart:** For routing rules (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute), use the [`gateway-api-routes`](../gateway-api-routes/) chart.
+
+For more information about Gateway API architecture, see the [official Gateway API documentation](https://gateway-api.sigs.k8s.io/).
 
 ## Maintainers
 

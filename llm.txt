@@ -4,9 +4,21 @@ Helm charts for Kubernetes Gateway API. This repo provides Helm charts for Gatew
 
 ## What This Is
 
-Two Helm charts:
-- `gateway-api`: GatewayClass and Gateway resources, optional CRD installation
-- `gateway-api-routes`: HTTPRoute, GRPCRoute, TCPRoute, UDPRoute resources
+Two separate Helm charts aligned with Gateway API's role-oriented resource model:
+
+**1. `gateway-api` - Infrastructure Layer:**
+- **Purpose:** Manages infrastructure layer (CRDs, GatewayClass, Gateway)
+- **Installs:** CRDs (optional, original from kubernetes-sigs), GatewayClass, Gateway
+- **Managed by:** Cluster operators / infrastructure teams
+- **Use case:** Install once per cluster/namespace to set up gateway infrastructure
+
+**2. `gateway-api-routes` - Routing Layer:**
+- **Purpose:** Manages routing layer (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute)
+- **Installs:** HTTPRoute, GRPCRoute, TCPRoute, UDPRoute resources
+- **Managed by:** Application developers / teams
+- **Use case:** Install per application/team to define routing rules (routes reference Gateways via parentRefs)
+
+**Why two charts:** Matches Gateway API's three-layer model, enables independent lifecycle, multi-tenancy, and flexibility (infrastructure vs application concerns).
 
 ## Structure
 
