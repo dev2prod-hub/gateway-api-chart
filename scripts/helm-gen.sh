@@ -56,6 +56,9 @@ else
   printf "Extra Values did not found: %s\n###\n" "$extra_values"
 fi
 
+printf "Validating helm chart values for %s...\n" "$HELM_CHART_NAME"
+helm lint "$HELM_CHART" ${VALUES} --strict
+
 helm template "$HELM_CHART" \
   --create-namespace \
   --namespace "$ns" \

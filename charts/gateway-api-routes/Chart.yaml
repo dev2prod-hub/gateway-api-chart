@@ -1,8 +1,8 @@
 apiVersion: v2
 name: gateway-api-routes
-description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
+description: Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
 type: application
-version: 1.0.1
+version: 1.0.4
 appVersion: 1.0.0
 home: https://charts.cdnn.host/
 sources:

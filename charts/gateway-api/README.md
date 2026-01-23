@@ -1,10 +1,18 @@
 # gateway-api
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.0.4](https://img.shields.io/badge/Version-1.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the native Kubernetes Gateway API.
 
 **Homepage:** <https://charts.cdnn.host/>
+
+## Gateway API Resource Model
+
+The Gateway API follows a role-oriented design with three layers:
+
+![Gateway API Resource Model](https://gateway-api.sigs.k8s.io/images/resource-model.png)
+
+**Source:** [Kubernetes Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
 
 ## Chart Purpose
 
