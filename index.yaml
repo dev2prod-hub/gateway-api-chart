@@ -3,6 +3,33 @@ entries:
   gateway-api:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-01-23T16:25:28.224676835Z"
+    description: Kubernetes Gateway API - Infrastructure Layer. Replace your ingress
+      to the native Kubernetes Gateway API.
+    digest: 96ff866d7b4cd31683a4d00e7b3fd7c5a3c247c8d0d864066e7a86c4253ec326
+    home: https://charts.cdnn.host/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://cdnn.cloud
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-1.0.4/gateway-api-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-01-23T15:54:09.485894978Z"
     description: Kubernetes Gateway API - Infrastructure Layer. Replace your ingress
       to the native Kubernetes Gateway API.
@@ -543,6 +570,33 @@ entries:
   gateway-api-routes:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-01-23T16:25:28.447532365Z"
+    description: Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts.
+      Replace your ingress to the native Kubernetes Gateway API.
+    digest: cabbddb8942a7886098f64a1e4ea02bc31cb41b0d40d8c55aba874ad4c0fee7f
+    home: https://charts.cdnn.host/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://cdnn.cloud
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-1.0.4/gateway-api-routes-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-01-23T15:54:09.71861514Z"
     description: Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts.
       Replace your ingress to the native Kubernetes Gateway API.
@@ -624,64 +678,37 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-23T09:19:56.279983495Z"
+    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
+      your ingress to the native Kubernetes Gateway API.
+    digest: 6d9249787b28e0b20cb4f0ca9f85be8031bf7636df5af29327363f4f0eb3b42a
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
+    version: 0.1.3-alpha.3
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-02-07T10:55:11.736324002Z"
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
     digest: ff5d34157cd2211511b183288b0fe85793726d0875dcf0fdb6adfaa21e9ff3dc
-    home: https://charts.dev2prod.xyz/
-    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
-    keywords:
-    - gateway-api-routes
-    - networking
-    - Kubernetes
-    - ingress
-    maintainers:
-    - email: k@kazakov.xyz
-      name: dev2prod
-      url: https://dev2prod.xyz
-    - email: k@kazakov.xyz
-      name: Kirill Kazakov
-      url: https://kazakov.xyz
-    name: gateway-api-routes
-    sources:
-    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
-    type: application
-    urls:
-    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
-    version: 0.1.3-alpha.3
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2025-02-13T22:11:21.755838888Z"
-    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
-      your ingress to the native Kubernetes Gateway API.
-    digest: c2944df7d4ad7e415f9a61ac749c873dbfd8a5a833f8f733ce3358d62435a070
-    home: https://charts.dev2prod.xyz/
-    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
-    keywords:
-    - gateway-api-routes
-    - networking
-    - Kubernetes
-    - ingress
-    maintainers:
-    - email: k@kazakov.xyz
-      name: dev2prod
-      url: https://dev2prod.xyz
-    - email: k@kazakov.xyz
-      name: Kirill Kazakov
-      url: https://kazakov.xyz
-    name: gateway-api-routes
-    sources:
-    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
-    type: application
-    urls:
-    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
-    version: 0.1.3-alpha.3
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2025-12-23T09:20:14.68755246Z"
-    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
-      your ingress to the native Kubernetes Gateway API.
-    digest: d948e7d33f13e117015cafd1a2f10450beb516b50bcbef10c0e013d74d9133a5
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -813,10 +840,10 @@ entries:
     version: 0.1.3-alpha.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-23T09:19:56.279983495Z"
+    created: "2025-02-13T22:11:21.755838888Z"
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
-    digest: 6d9249787b28e0b20cb4f0ca9f85be8031bf7636df5af29327363f4f0eb3b42a
+    digest: c2944df7d4ad7e415f9a61ac749c873dbfd8a5a833f8f733ce3358d62435a070
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -844,6 +871,33 @@ entries:
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
     digest: 076e2250c3f7d5019c0ed8e876a17b517090713cad0a2e6d431d7b3c896dc274
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.3-alpha.3/gateway-api-routes-0.1.3-alpha.3.tgz
+    version: 0.1.3-alpha.3
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-23T09:20:14.68755246Z"
+    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
+      your ingress to the native Kubernetes Gateway API.
+    digest: d948e7d33f13e117015cafd1a2f10450beb516b50bcbef10c0e013d74d9133a5
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -922,33 +976,6 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-02-07T10:28:42.711637109Z"
-    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
-      your ingress to the native Kubernetes Gateway API.
-    digest: c7006a544e326e737baf2b0e359f9f53fb3d369bd3dcb568636e483e01445246
-    home: https://charts.dev2prod.xyz/
-    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
-    keywords:
-    - gateway-api-routes
-    - networking
-    - Kubernetes
-    - ingress
-    maintainers:
-    - email: k@kazakov.xyz
-      name: dev2prod
-      url: https://dev2prod.xyz
-    - email: k@kazakov.xyz
-      name: Kirill Kazakov
-      url: https://kazakov.xyz
-    name: gateway-api-routes
-    sources:
-    - https://github.com/dev2prod-hub/gateway-api-chart
-    type: application
-    urls:
-    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.2-alpha.2/gateway-api-routes-0.1.2-alpha.2.tgz
-    version: 0.1.2-alpha.2
-  - apiVersion: v2
-    appVersion: 1.0.0
     created: "2025-02-07T10:22:11.754293606Z"
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
@@ -980,6 +1007,33 @@ entries:
     description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
       your ingress to the native Kubernetes Gateway API.
     digest: e5ae2a840f041fbac8584f694b3f7b122820157f77d5574a8b4a70cf58b0e90d
+    home: https://charts.dev2prod.xyz/
+    icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
+    keywords:
+    - gateway-api-routes
+    - networking
+    - Kubernetes
+    - ingress
+    maintainers:
+    - email: k@kazakov.xyz
+      name: dev2prod
+      url: https://dev2prod.xyz
+    - email: k@kazakov.xyz
+      name: Kirill Kazakov
+      url: https://kazakov.xyz
+    name: gateway-api-routes
+    sources:
+    - https://github.com/dev2prod-hub/gateway-api-chart
+    type: application
+    urls:
+    - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.2-alpha.2/gateway-api-routes-0.1.2-alpha.2.tgz
+    version: 0.1.2-alpha.2
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-02-07T10:28:42.711637109Z"
+    description: Kubernetes Gateway routes. Part of the Gateway API charts. Replace
+      your ingress to the native Kubernetes Gateway API.
+    digest: c7006a544e326e737baf2b0e359f9f53fb3d369bd3dcb568636e483e01445246
     home: https://charts.dev2prod.xyz/
     icon: https://avatars.githubusercontent.com/u/191972069?s=96&v=4
     keywords:
@@ -1084,4 +1138,4 @@ entries:
     urls:
     - https://github.com/dev2prod-hub/gateway-api-chart/releases/download/gateway-api-routes-0.1.0-alpha.2/gateway-api-routes-0.1.0-alpha.2.tgz
     version: 0.1.0-alpha.2
-generated: "2026-01-23T15:54:09.71890951Z"
+generated: "2026-01-23T16:25:28.447959157Z"
