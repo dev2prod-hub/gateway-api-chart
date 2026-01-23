@@ -3,7 +3,7 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-* Helm chart repo: [charts.cdnn.host](https://charts.cdnn.host/)
+* Helm chart repo: [charts.cdnn.cloud](https://charts.cdnn.host/)
 * Git source: [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart)
 * Artifact Hub: [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
@@ -158,12 +158,23 @@ httpRoute:
 ---
 
 📚 **Official References**:
-- [Gateway API Concepts](https://gateway-api.sigs.k8s.io/concepts/)
-- [Migration from Ingress](https://gateway-api.sigs.k8s.io/guides/migration/)
+- [Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
+- [Gateway API Guides](https://gateway-api.sigs.k8s.io/guides/)
 
 🔗 **Related Projects**:
 - [Gateway API Providers](https://gateway-api.sigs.k8s.io/implementations/)
 
 ---
 
-_Maintained with ❤️ by Dev2Prod. Licensed under [Apache 2.0](LICENSE)._
+## Maintainer 👤
+
+This is a personal project maintained by:
+
+**Kirill Kazakov** - Full Stack DevOps and Magician
+
+- **Website:** [kazakov.xyz](https://kazakov.xyz/)
+- **Email:** k@kazakov.xyz
+
+---
+
+_Maintained with ❤️ by [Kirill Kazakov](https://kazakov.xyz/). Licensed under [Apache 2.0](LICENSE)._
