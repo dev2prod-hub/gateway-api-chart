@@ -264,7 +264,7 @@ test_schema_accepts "Valid routes with v1.4.1 extraSpec" "$ROUTES_CHART_DIR" "$T
 # Test 14: Valid default values should pass
 test_schema_accepts "Valid default values" "$CHART_DIR"
 
-# Test 11: Valid values with fixture
+# Test 15: Valid values with fixture
 if [ -f "$CHART_DIR/fixture-values.yaml" ]; then
     test_schema_accepts "Valid fixture values" "$CHART_DIR" "$CHART_DIR/fixture-values.yaml"
 fi
@@ -276,7 +276,7 @@ echo ""
 echo "Testing gateway-api-routes chart schema validation..."
 echo ""
 
-# Test 12: Invalid httpRoute.items type (object instead of array)
+# Test 16: Invalid httpRoute.items type (object instead of array)
 cat > "$TEST_DIR/invalid-httproute-items.yaml" << 'EOF'
 httpRoute:
   enabled: true
@@ -284,7 +284,7 @@ httpRoute:
 EOF
 test_schema_rejects "Invalid httpRoute.items type (object instead of array)" "$ROUTES_CHART_DIR" "$TEST_DIR/invalid-httproute-items.yaml" "got object, want array"
 
-# Test 13: Missing required name in route item
+# Test 17: Missing required name in route item
 cat > "$TEST_DIR/missing-route-name.yaml" << 'EOF'
 httpRoute:
   enabled: true
@@ -294,7 +294,7 @@ httpRoute:
 EOF
 test_schema_rejects "Missing required name in route item" "$ROUTES_CHART_DIR" "$TEST_DIR/missing-route-name.yaml" "missing properties"
 
-# Test 14: Invalid enabled type for route
+# Test 18: Invalid enabled type for route
 cat > "$TEST_DIR/invalid-route-enabled.yaml" << 'EOF'
 httpRoute:
   enabled: "yes"
@@ -302,10 +302,10 @@ httpRoute:
 EOF
 test_schema_rejects "Invalid route enabled type" "$ROUTES_CHART_DIR" "$TEST_DIR/invalid-route-enabled.yaml" ""
 
-# Test 15: Valid routes values should pass
+# Test 19: Valid routes values should pass
 test_schema_accepts "Valid routes default values" "$ROUTES_CHART_DIR"
 
-# Test 16: Valid routes with fixture
+# Test 20: Valid routes with fixture
 if [ -f "$ROUTES_CHART_DIR/fixture-values.yaml" ]; then
     test_schema_accepts "Valid routes fixture values" "$ROUTES_CHART_DIR" "$ROUTES_CHART_DIR/fixture-values.yaml"
 fi

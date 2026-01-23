@@ -32,7 +32,6 @@ print_test() {
 }
 
 # Function to test helm template rendering
-# Function to test helm template rendering
 test_template() {
     local test_name="$1"
     local chart_path="$2"
