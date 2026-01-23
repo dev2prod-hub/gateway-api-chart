@@ -30,6 +30,8 @@ httpRoute:
         - backendRefs:
             - name: example-svc
               port: 80
+      extraSpec:
+        timeout: 5s
 
 grpcRoute:
   enabled: true
