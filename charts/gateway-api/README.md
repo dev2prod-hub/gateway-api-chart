@@ -6,6 +6,18 @@ Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the nativ
 
 **Homepage:** <https://charts.cdnn.host/>
 
+## Install
+
+Add the Helm repository and install this chart:
+
+```bash
+helm repo add dev2prod https://charts.cdnn.host/
+helm repo update
+helm install my-gateway dev2prod/gateway-api
+```
+
+See [charts.cdnn.host](https://charts.cdnn.host/) for all Gateway API Helm charts.
+
 ## Gateway API Resource Model
 
 The Gateway API follows a role-oriented design with three layers:
