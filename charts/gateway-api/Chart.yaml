@@ -9,6 +9,9 @@ sources:
   - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api
 keywords:
   - gateway-api
+  - gateway api helm chart
+  - helm
+  - helm chart
   - networking
   - Kubernetes
   - ingress
