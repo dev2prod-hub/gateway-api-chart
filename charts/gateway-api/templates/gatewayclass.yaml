@@ -21,4 +21,15 @@ spec:
   parametersRef:
     {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .Values.gatewayClass.infrastructure }}
+  infrastructure:
+    {{- with .labels }}
+    labels:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  {{- end }}
 {{- end }}
