@@ -6,7 +6,7 @@
 # and validate the generated manifest using the kubectl-validate command
 # https://github.com/kubernetes-sigs/kubectl-validate
 ####
-set -eo pipefail
+set -euo pipefail
 
 K8S_VALIDATE_ENABLED="${K8S_VALIDATE_ENABLED:-false}"
 # Function to check if the kubectl-validate and HELM command is installed

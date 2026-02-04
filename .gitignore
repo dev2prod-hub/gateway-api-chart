@@ -23,9 +23,14 @@ terraform-outputs.yaml
 # other
 /tmp
 
+# Generated from README.md (single source of truth)
+/static/index.html
+
 # BMAD workflow files (local development)
 _bmad/
 .agent
 .claude
 .cursor
 .gemini
+.codex
+_bmad-output/

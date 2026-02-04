@@ -76,15 +76,15 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 | Job             | Triggers     | Steps                                                                 |
 |-----------------|-------------|-----------------------------------------------------------------------|
 | Lint & Unit     | Push/PR to main | Checkout → Setup Helm → `helm lint` for each chart in `./charts` |
-| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://charts.cdnn.cloud`       |
+| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://charts.cdnn.host` (gh-pages) |
 
-- **Helm version:** 3.12.0 (workflow env).
+- **Helm version:** 3.18.0 (workflow env; 3.18+ required for helm-unittest plugin).
 - **Unit / integration:** Referenced in `tests/README.md`; some steps (unittest, Kind-based integration) are commented in the workflow for later use.
 
 ### Chart Releaser
 
 - **Action:** `helm/chart-releaser-action@v1.7.0`
-- **Publish URL:** `https://charts.cdnn.cloud`
+- **Publish URL:** `https://charts.cdnn.host` (gh-pages)
 - **Skip existing:** `CR_SKIP_EXISTING: "true"`
 - **Permissions:** `contents: write` for release artifacts.
 

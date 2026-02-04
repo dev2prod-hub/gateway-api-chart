@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 env:
-  HELM_VERSION: "3.12.0"
+  # 3.18+ required for helm-unittest plugin (platformHooks in plugin.yaml)
+  HELM_VERSION: "3.18.0"
   KUBERNETES_VERSIONS: "1.31"
 
 concurrency: release-helm
@@ -30,15 +31,19 @@ jobs:
           for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
             helm lint $chart --strict
           done
-  #       TBD: Implement on the next iteration
-  #      - name: Install unittest plugin
-  #        run: helm plugin install https://github.com/quintush/helm-unittest
-  #
-  #      - name: Run Unit Tests
-  #        run: |
-  #          for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
-  #            helm unittest --helm3 -f tests/unit/*.yaml $chart
-  #          done
+
+      - name: Run Integration Tests
+        run: ./tests/integration/test_integration.sh
+
+      - name: Run Schema Validation Tests
+        run: ./tests/integration/test_schema_validation.sh
+
+      - name: Install unittest plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest
+
+      - name: Run Unit Tests
+        run: helm unittest ./charts/gateway-api -f tests/unit/test_gateway.yaml
+
   #  TBD: Implement on the next iteration
   #  integration:
   #    name: Integration (k8s ${{ matrix.k8s-version }})
@@ -94,9 +99,27 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Generate index.html from README
+        run: ./scripts/generate-index.sh
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_URL: "https://charts.cdnn.cloud"
+          CR_URL: "https://charts.cdnn.host"
           CR_SKIP_EXISTING: "true"
+
+      - name: Deploy index.html for SEO
+        run: |
+          cp static/index.html /tmp/seo-index.html
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || { echo "gh-pages not yet created, skipping index.html deploy"; exit 0; }
+          cp /tmp/seo-index.html index.html
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(gh-pages): add SEO index.html"
+            git push origin gh-pages
+          fi

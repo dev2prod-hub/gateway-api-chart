@@ -141,12 +141,13 @@ test_crds_present "CRDs are present: gateway-api" "$CHART_DIR"
 # Test 6: Test with all examples
 echo ""
 echo "Testing example configurations..."
+( shopt -s nullglob 2>/dev/null || true
 for example in "$PROJECT_ROOT/examples/cloud-providers"/*/values.yaml "$PROJECT_ROOT/examples/features"/*/values.yaml; do
     if [ -f "$example" ]; then
         example_name=$(basename "$(dirname "$example")")
         test_template "Example: $example_name" "$CHART_DIR" "$example"
     fi
-done
+done )
 
 # Test 7: Gateway disabled
 test_template "Gateway disabled" "$CHART_DIR" "" "--set gateway.enabled=false"

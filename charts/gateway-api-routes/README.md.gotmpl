@@ -6,6 +6,18 @@
 
 {{ template "chart.homepageLine" . }}
 
+## Install
+
+Add the Helm repository and install this chart:
+
+```bash
+helm repo add dev2prod https://charts.cdnn.host/
+helm repo update
+helm install routes dev2prod/gateway-api-routes
+```
+
+Requires a Gateway to be installed (use [`gateway-api`](../gateway-api/) chart). See [charts.cdnn.host](https://charts.cdnn.host/) for all Gateway API Helm charts.
+
 ## Gateway API Resource Model
 
 The Gateway API follows a role-oriented design with three layers:
