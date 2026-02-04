@@ -41,7 +41,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.global.labels }}
+{{- if and .Values.global .Values.global.labels }}
 {{ toYaml .Values.global.labels }}
 {{- end }}
 {{- end }}

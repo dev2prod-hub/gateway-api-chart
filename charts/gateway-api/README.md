@@ -1,10 +1,22 @@
 # gateway-api
 
-![Version: 1.0.4](https://img.shields.io/badge/Version-1.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.0.5](https://img.shields.io/badge/Version-1.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the native Kubernetes Gateway API.
 
 **Homepage:** <https://charts.cdnn.host/>
+
+## Install
+
+Add the Helm repository and install this chart:
+
+```bash
+helm repo add dev2prod https://charts.cdnn.host/
+helm repo update
+helm install my-gateway dev2prod/gateway-api
+```
+
+See [charts.cdnn.host](https://charts.cdnn.host/) for all Gateway API Helm charts.
 
 ## Gateway API Resource Model
 

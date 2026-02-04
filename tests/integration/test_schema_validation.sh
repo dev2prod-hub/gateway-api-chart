@@ -91,6 +91,30 @@ test_schema_accepts() {
     fi
 }
 
+# Function to test that rendered manifest contains expected content (v1.4.1 template emission)
+test_rendered_contains() {
+    local test_name="$1"
+    local chart_dir="$2"
+    local values_file="$3"
+    local expected_pattern="$4"
+
+    local rendered
+    rendered=$(helm template test-release "$chart_dir" --values "$values_file" 2>&1)
+    local render_exit=$?
+    if [ $render_exit -ne 0 ]; then
+        print_test "$test_name (template failed)" "FAIL"
+        echo "$rendered" | tail -3
+        return 1
+    fi
+    if echo "$rendered" | grep -q "$expected_pattern"; then
+        print_test "$test_name" "PASS"
+        return 0
+    else
+        print_test "$test_name (missing in rendered output: $expected_pattern)" "FAIL"
+        return 1
+    fi
+}
+
 echo "Running schema validation tests..."
 echo "=================================================="
 echo ""
@@ -233,6 +257,9 @@ gateway:
         customField: value
 EOF
 test_schema_accepts "Valid v1.4.1 values (infrastructure, Certificate kind)" "$CHART_DIR" "$TEST_DIR/valid-v1-4-1.yaml"
+
+# Test 10b: Rendered Gateway manifest must contain infrastructure when provided (v1.4.1 emission)
+test_rendered_contains "Rendered Gateway contains spec.infrastructure" "$CHART_DIR" "$TEST_DIR/valid-v1-4-1.yaml" "infrastructure:"
 
 # Test 11: Invalid infrastructure (additional properties)
 cat > "$TEST_DIR/invalid-infra.yaml" << 'EOF'

@@ -13,6 +13,24 @@ metadata:
   {{- end }}
 spec:
   gatewayClassName: {{ .Values.gateway.gatewayClassName | default (include "gateway-api.fullname" .) | quote }}
+  {{- with .Values.gateway.infrastructure }}
+  infrastructure:
+    {{- with .labels }}
+    labels:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .parametersRef }}
+    parametersRef:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.gateway.extraSpec }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   listeners:
   {{- range .Values.gateway.listeners }}
   - name: {{ .name }}
