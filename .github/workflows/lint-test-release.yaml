@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 env:
-  HELM_VERSION: "3.12.0"
+  # 3.18+ required for helm-unittest plugin (platformHooks in plugin.yaml)
+  HELM_VERSION: "3.18.0"
   KUBERNETES_VERSIONS: "1.31"
 
 concurrency: release-helm
@@ -38,7 +39,7 @@ jobs:
         run: ./tests/integration/test_schema_validation.sh
 
       - name: Install unittest plugin
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
 
       - name: Run Unit Tests
         run: helm unittest ./charts/gateway-api -f tests/unit/test_gateway.yaml
