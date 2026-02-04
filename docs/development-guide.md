@@ -138,6 +138,17 @@ Fetches experimental CRDs from kubernetes-sigs and updates `charts/gateway-api/c
 
 Use the version scripts as documented (e.g. `scripts/version-bump.sh`, `scripts/helm-bump.sh`). Keep `VERSION` and `Chart.yaml` versions in sync.
 
+### gh-pages index.html (SEO)
+
+`static/index.html` is generated from `README.md` (single source of truth). CI runs `scripts/generate-index.sh` before deploying to gh-pages. To preview locally:
+
+```bash
+./scripts/generate-index.sh   # Requires: pandoc, or npx/marked, or python-markdown
+open static/index.html
+```
+
+Edit `README.md` only; do not edit `static/index.html` (it is gitignored and regenerated).
+
 ## Code and Chart Conventions
 
 - **YAML:** 2-space indentation.

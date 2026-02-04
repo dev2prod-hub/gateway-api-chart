@@ -99,6 +99,12 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Generate index.html from README
+        run: ./scripts/generate-index.sh
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
         env:

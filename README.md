@@ -3,7 +3,7 @@
 [![CI](https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg)](https://github.com/dev2prod-hub/gateway-api-chart/actions)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart)](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
-**Gateway API Helm Chart** — Kubernetes-native successor to Ingress. Install from **[https://charts.cdnn.host/](https://charts.cdnn.host/)** (gh-pages).
+**Gateway API Helm Chart** — install Kubernetes Gateway API (CRDs, GatewayClass, Gateway, HTTPRoute, GRPCRoute, TCPRoute, UDPRoute) via Helm. Kubernetes-native successor to Ingress.
 
 | Resource | URL |
 |----------|-----|
@@ -11,15 +11,15 @@
 | Git source | [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart) |
 | Artifact Hub | [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart) |
 
-Replace ingress to the next level with the Gateway API Helm chart.
-**Gateway API** is the successor to Ingress, providing a Kubernetes-native way to manage API gateways.
+Replace ingress with the **Gateway API Helm chart**. Gateway API is the Kubernetes-native successor to Ingress for managing API gateways and routing.
+
 _Stop reinventing Ingress controllers. Start using the Kubernetes-native successor._
 
 ## Gateway API Resource Model
 
 The Gateway API follows a role-oriented design with three layers:
 
-![Gateway API Resource Model](https://gateway-api.sigs.k8s.io/images/resource-model.png)
+![Gateway API Resource Model - Infrastructure Provider, Cluster Operator, Application Developer layers](https://gateway-api.sigs.k8s.io/images/resource-model.png)
 
 **Source:** [Kubernetes Gateway API Documentation](https://gateway-api.sigs.k8s.io/)
 
@@ -75,6 +75,8 @@ Designed to be used either:
 
 ## Quick Start 🚀
 
+Install the Gateway API Helm chart from [charts.cdnn.host](https://charts.cdnn.host/):
+
 ### Add repository
 
 ```bash
@@ -104,9 +106,9 @@ helm install routes dev2prod/gateway-api-routes \
 ```
 
 ## Features 📦
-✔️ **CRD Management** (original CRDs from kubernetes-sigs without any changes)
-✔️ **CRD Version**: v1.4.1 (experimental channel) - includes TCPRoute, TLSRoute, UDPRoute, and experimental features
-✔️ **Split to 2 charts** as a GW API main chart and routes chart
+✔️ **CRD Management** — Original CRDs from kubernetes-sigs (unchanged)
+✔️ **CRD Version** v1.4.1 (experimental) — TCPRoute, TLSRoute, UDPRoute, experimental features
+✔️ **Two Helm charts** — gateway-api (infra) and gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute)
 
 ## Configuration Example 🔧
 
