@@ -11,33 +11,249 @@
   <meta property="og:description" content="Install Kubernetes Gateway API via Helm. gateway-api and gateway-api-routes charts.">
   <meta property="og:url" content="https://charts.cdnn.host/">
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
-    h1 { margin-bottom: 0.5rem; }
-    code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 4px; }
-    pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; border-radius: 8px; }
-    a { color: #0969da; }
+    :root { --fg: #1f2328; --fg-muted: #656d76; --border: #d0d7de; --bg-code: #f6f8fa; --accent: #0969da; --bg: #ffffff; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #e6edf3; --fg-muted: #8b949e; --border: #30363d; --bg-code: #161b22; --accent: #58a6ff; --bg: #0d1117; } }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; color: var(--fg); background: var(--bg); max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    p { margin: 0.75rem 0; }
+    ul, ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+    li { margin: 0.25rem 0; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+    th { background: var(--bg-code); font-weight: 600; }
+    code { background: var(--bg-code); padding: 0.2em 0.4em; border-radius: 6px; font-size: 0.9em; }
+    pre { background: var(--bg-code); padding: 1rem; overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); font-size: 0.875rem; }
+    pre code { background: none; padding: 0; }
+    img { max-width: 100%; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .badges { margin: 0.5rem 0; }
+    .badges img { vertical-align: middle; margin-right: 0.5rem; }
+    blockquote { margin: 1rem 0; padding-left: 1rem; border-left: 4px solid var(--border); color: var(--fg-muted); }
   </style>
 </head>
 <body>
-  <h1>Gateway API Helm Chart</h1>
-  <p>Kubernetes Gateway API — the successor to Ingress. Install via Helm from <strong>https://charts.cdnn.host/</strong>.</p>
-
-  <h2>Quick Install</h2>
-  <pre><code>helm repo add dev2prod https://charts.cdnn.host/
-helm repo update
-helm install my-gateway dev2prod/gateway-api
-helm install routes dev2prod/gateway-api-routes</code></pre>
-
-  <h2>Charts</h2>
-  <ul>
-    <li><strong>gateway-api</strong> — GatewayClass, Gateway, CRDs (v1.4.1)</li>
-    <li><strong>gateway-api-routes</strong> — HTTPRoute, GRPCRoute, TCPRoute, UDPRoute</li>
-  </ul>
-
-  <p>
-    <a href="https://github.com/dev2prod-hub/gateway-api-chart">GitHub</a> ·
-    <a href="https://artifacthub.io/packages/search?repo=gateway-api-chart">Artifact Hub</a> ·
-    <a href="https://gateway-api.sigs.k8s.io/">Gateway API Docs</a>
-  </p>
+<h1 id="gateway-api-helm-chart-">Gateway API Helm Chart 🚪⚡</h1>
+<p><a
+href="https://github.com/dev2prod-hub/gateway-api-chart/actions"><img
+src="https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg"
+alt="CI" /></a> <a
+href="https://artifacthub.io/packages/search?repo=gateway-api-chart"><img
+src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/gateway-api-chart"
+alt="Artifact Hub" /></a></p>
+<p><strong>Gateway API Helm Chart</strong> — install Kubernetes Gateway
+API (CRDs, GatewayClass, Gateway, HTTPRoute, GRPCRoute, TCPRoute,
+UDPRoute) via Helm. Kubernetes-native successor to Ingress.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Helm chart repo</td>
+<td><a href="https://charts.cdnn.host/">charts.cdnn.host</a></td>
+</tr>
+<tr class="even">
+<td>Git source</td>
+<td><a
+href="https://github.com/dev2prod-hub/gateway-api-chart">github.com/dev2prod-hub/gateway-api-chart</a></td>
+</tr>
+<tr class="odd">
+<td>Artifact Hub</td>
+<td><a
+href="https://artifacthub.io/packages/search?repo=gateway-api-chart">artifacthub.io/packages/search?repo=gateway-api-chart</a></td>
+</tr>
+</tbody>
+</table>
+<p>Replace ingress with the <strong>Gateway API Helm chart</strong>.
+Gateway API is the Kubernetes-native successor to Ingress for managing
+API gateways and routing.</p>
+<p><em>Stop reinventing Ingress controllers. Start using the
+Kubernetes-native successor.</em></p>
+<h2 id="gateway-api-resource-model">Gateway API Resource Model</h2>
+<p>The Gateway API follows a role-oriented design with three layers:</p>
+<p><img src="https://gateway-api.sigs.k8s.io/images/resource-model.png"
+alt="Gateway API Resource Model - Infrastructure Provider, Cluster Operator, Application Developer layers" /></p>
+<p><strong>Source:</strong> <a
+href="https://gateway-api.sigs.k8s.io/">Kubernetes Gateway API
+Documentation</a></p>
+<h2 id="chart-architecture-️">Chart Architecture 🏗️</h2>
+<p>This repository provides <strong>two separate Helm charts</strong>
+that align with the Gateway API resource model:</p>
+<h3 id="1-gateway-api---infrastructure-layer">1.
+<code>gateway-api</code> - Infrastructure Layer</h3>
+<p><strong>Purpose:</strong> Manages the infrastructure layer of Gateway
+API.</p>
+<p><strong>What it installs:</strong></p>
+<ul>
+<li><strong>CRDs</strong> (optional) - Original Custom Resource
+Definitions from <a
+href="https://github.com/kubernetes-sigs/gateway-api">kubernetes-sigs/gateway-api</a>
+(v1.4.1, experimental channel)</li>
+<li><strong>GatewayClass</strong> - Defines the type of gateway
+controller (e.g., Envoy, AWS ALB, GKE, AKS)</li>
+<li><strong>Gateway</strong> - Declares the actual gateway instance with
+listeners, TLS configuration, and network settings</li>
+</ul>
+<p><strong>When to use:</strong> Install this chart once per cluster or
+namespace to set up the gateway infrastructure. Typically managed by
+cluster operators or infrastructure teams.</p>
+<h3 id="2-gateway-api-routes---routing-layer">2.
+<code>gateway-api-routes</code> - Routing Layer</h3>
+<p><strong>Purpose:</strong> Manages the routing layer of Gateway
+API.</p>
+<p><strong>What it installs:</strong></p>
+<ul>
+<li><strong>HTTPRoute</strong> - HTTP traffic routing rules</li>
+<li><strong>GRPCRoute</strong> - gRPC traffic routing rules</li>
+<li><strong>TCPRoute</strong> - TCP traffic routing rules</li>
+<li><strong>UDPRoute</strong> - UDP traffic routing rules</li>
+</ul>
+<p><strong>When to use:</strong> Install this chart per application or
+team to define routing rules. Routes reference Gateways via
+<code>parentRefs</code>. Typically managed by application
+developers.</p>
+<h3 id="why-two-charts-">Why Two Charts? 🤔</h3>
+<p>This separation provides:</p>
+<ol type="1">
+<li><strong>Role-oriented design</strong> - Matches Gateway API's
+three-layer model (Infrastructure Provider → Cluster Operator →
+Application Developer)</li>
+<li><strong>Independent lifecycle</strong> - Infrastructure changes
+(GatewayClass, Gateway) don't require redeploying routes</li>
+<li><strong>Multi-tenancy</strong> - Multiple teams can deploy routes
+independently while sharing the same Gateway infrastructure</li>
+<li><strong>Flexibility</strong> - Use <code>gateway-api</code> as a
+dependency in infrastructure charts, and <code>gateway-api-routes</code>
+in application charts</li>
+</ol>
+<h2 id="why-this-chart-">Why This Chart? 🌟</h2>
+<p>Provides opinionated yet flexible configurations for:</p>
+<ul>
+<li><strong>CRD management</strong> (an optional installation)</li>
+<li><strong>GatewayClass</strong> templates (cloud-agnostic or
+provider-specific)</li>
+<li><strong>Gateway</strong> declarations with TLS/HTTPS best
+practices</li>
+<li><strong>HTTPRoute</strong> configurations with path-based
+routing</li>
+<li><strong>GRPCRoute</strong> configurations with service-based
+routing</li>
+<li><strong>TCPRoute</strong> configurations with port-based
+routing</li>
+<li><strong>UDPRoute</strong> configurations with port-based
+routing</li>
+</ul>
+<p>Designed to be used either:</p>
+<ul>
+<li><strong>As your main chart</strong> for API gateway deployment</li>
+<li><strong>As a dependency/subchart</strong> in larger applications
+needing routing</li>
+</ul>
+<h2 id="quick-start-">Quick Start 🚀</h2>
+<p>Install the Gateway API Helm chart from <a
+href="https://charts.cdnn.host/">charts.cdnn.host</a>:</p>
+<h3 id="add-repository">Add repository</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo add dev2prod https://charts.cdnn.host/</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo update</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo search dev2prod</span></code></pre></div>
+<h3 id="to-skip-crd-installation-use-the-following-command">To skip CRD
+installation, use the following command:</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway dev2prod/gateway-api <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0 <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--skip-crds</span></span></code></pre></div>
+<p>Install gateway-api with CRDs</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway dev2prod/gateway-api <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0</span></code></pre></div>
+<h3 id="install-gateway-api-routes">Install gateway-api-routes</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install routes dev2prod/gateway-api-routes <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0</span></code></pre></div>
+<h2 id="features-">Features 📦</h2>
+<p>✔️ <strong>CRD Management</strong> — Original CRDs from
+kubernetes-sigs (unchanged) ✔️ <strong>CRD Version</strong> v1.4.1
+(experimental) — TCPRoute, TLSRoute, UDPRoute, experimental features ✔️
+<strong>Two Helm charts</strong> — gateway-api (infra) and
+gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute)</p>
+<h2 id="configuration-example-">Configuration Example 🔧</h2>
+<h3 id="gateway-api">gateway-api</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values.yaml</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gatewayClass</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy-gateway</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">controller</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;application-networking.k8s.aws/gateway-controller&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">gateway</span><span class="kw">:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy-gateway</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">listeners</span><span class="kw">:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">protocol</span><span class="kw">:</span><span class="at"> HTTPS</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">443</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tls</span><span class="kw">:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> Terminate</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">certificateRefs</span><span class="kw">:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mydomain-com-tls</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">kind</span><span class="kw">:</span><span class="at"> Secret</span></span></code></pre></div>
+<h3 id="gateway-api-routes">gateway-api-routes</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">httpRoute</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">items</span><span class="kw">:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> http-filter-redirect</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">parentRefs</span><span class="kw">:</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> redirect-gateway</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">sectionName</span><span class="kw">:</span><span class="at"> http</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">hostnames</span><span class="kw">:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> redirect.example</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">filters</span><span class="kw">:</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RequestRedirect</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">requestRedirect</span><span class="kw">:</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">scheme</span><span class="kw">:</span><span class="at"> https</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">statusCode</span><span class="kw">:</span><span class="at"> </span><span class="dv">301</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> https-route</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">parentRefs</span><span class="kw">:</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> redirect-gateway</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">sectionName</span><span class="kw">:</span><span class="at"> https</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">hostnames</span><span class="kw">:</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> redirect.example</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">backendRefs</span><span class="kw">:</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> example-svc</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<hr />
+<p>📚 <strong>Official References</strong>:</p>
+<ul>
+<li><a href="https://gateway-api.sigs.k8s.io/">Gateway API
+Documentation</a></li>
+<li><a href="https://gateway-api.sigs.k8s.io/guides/">Gateway API
+Guides</a></li>
+</ul>
+<p>🔗 <strong>Related Projects</strong>:</p>
+<ul>
+<li><a href="https://gateway-api.sigs.k8s.io/implementations/">Gateway
+API Providers</a></li>
+</ul>
+<hr />
+<h2 id="maintainer-">Maintainer 👤</h2>
+<p>This is a personal project maintained by:</p>
+<p><strong>Kirill Kazakov</strong> - Full Stack DevOps and Magician</p>
+<ul>
+<li><strong>Website:</strong> <a
+href="https://kazakov.xyz/">kazakov.xyz</a></li>
+<li><strong>Email:</strong> <a
+href="mailto:k@kazakov.xyz">k@kazakov.xyz</a></li>
+</ul>
+<hr />
+<p><em>Maintained with ❤️ by <a href="https://kazakov.xyz/">Kirill
+Kazakov</a>. Licensed under <a href="LICENSE">Apache 2.0</a>.</em></p>
 </body>
 </html>
