@@ -39,7 +39,7 @@ jobs:
         run: ./tests/integration/test_schema_validation.sh
 
       - name: Install unittest plugin
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest
 
       - name: Run Unit Tests
         run: helm unittest ./charts/gateway-api -f tests/unit/test_gateway.yaml
