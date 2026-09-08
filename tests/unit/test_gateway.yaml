@@ -1,60 +1,71 @@
-# Unit tests for gateway-api chart
-# These tests verify that the chart templates render correctly
+# Unit tests for the gateway-api chart.
+#
+# Note on structure: helm-unittest evaluates every assert against EACH template
+# listed in the suite, not against the combined set of rendered documents. So a
+# test that cares about one kind must scope itself with `template:`. The previous
+# version of this file assumed the opposite and never ran (the CI invocation
+# passed a path helm-unittest resolves relative to the chart directory, so zero
+# suites were collected and the step passed vacuously).
 
 suite: test gateway-api chart
 templates:
   - templates/gateway.yaml
   - templates/gatewayclass.yaml
 tests:
-  # Test 1: Default values - Gateway and GatewayClass should be created
-  - it: should create Gateway and GatewayClass with default values
-    set:
-      gateway.enabled: true
-      gatewayClass.enabled: true
+  - it: should render one Gateway with default values
+    template: templates/gateway.yaml
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - isKind:
           of: Gateway
-      - isKind:
-          of: GatewayClass
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
       - equal:
           path: metadata.name
           value: envoy-gateway
       - equal:
           path: spec.gatewayClassName
           value: envoy-gateway
-      - equal:
-          path: spec.controllerName
-          value: gateway.envoyproxy.io/gatewayclass-controller
 
-  # Test 2: GatewayClass disabled - only Gateway should be created
-  - it: should create only Gateway when GatewayClass is disabled
-    set:
-      gateway.enabled: true
-      gatewayClass.enabled: false
-    asserts:
-      - hasDocuments:
-          count: 1
-      - isKind:
-          of: Gateway
-
-  # Test 3: Gateway disabled - only GatewayClass should be created
-  - it: should create only GatewayClass when Gateway is disabled
-    set:
-      gateway.enabled: false
-      gatewayClass.enabled: true
+  - it: should render one GatewayClass with default values
+    template: templates/gatewayclass.yaml
     asserts:
       - hasDocuments:
           count: 1
       - isKind:
           of: GatewayClass
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+      - equal:
+          path: metadata.name
+          value: envoy-gateway
+      - equal:
+          path: spec.controllerName
+          value: gateway.envoyproxy.io/gatewayclass-controller
 
-  # Test 4: Custom names
-  - it: should use custom names when provided
+  - it: should render no GatewayClass when it is disabled
+    template: templates/gatewayclass.yaml
+    set:
+      gatewayClass.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should render no Gateway when it is disabled
+    template: templates/gateway.yaml
+    set:
+      gateway.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should use a custom Gateway name and class reference
+    template: templates/gateway.yaml
     set:
       gateway.name: my-custom-gateway
-      gatewayClass.name: my-custom-gatewayclass
       gateway.gatewayClassName: my-custom-gatewayclass
     asserts:
       - equal:
@@ -64,36 +75,57 @@ tests:
           path: spec.gatewayClassName
           value: my-custom-gatewayclass
 
-  # Test 5: API version should be v1
-  - it: should use gateway.networking.k8s.io/v1 API version
+  - it: should use a custom GatewayClass name
+    template: templates/gatewayclass.yaml
     set:
-      gateway.enabled: true
-      gatewayClass.enabled: true
+      gatewayClass.name: my-custom-gatewayclass
     asserts:
-      - hasDocuments:
-          count: 2
-      - contains:
-          path: apiVersion
-          content: gateway.networking.k8s.io/v1
+      - equal:
+          path: metadata.name
+          value: my-custom-gatewayclass
 
-  # Test 6: Labels should be applied
-  - it: should apply standard Kubernetes labels
+  # GatewayClass.spec accepts only controllerName, description and parametersRef.
+  # The chart used to emit spec.infrastructure here, which the API server silently
+  # pruned. This test keeps it from coming back.
+  - it: should not emit spec.infrastructure on GatewayClass
+    template: templates/gatewayclass.yaml
+    asserts:
+      - notExists:
+          path: spec.infrastructure
+
+  - it: should emit spec.infrastructure on Gateway when provided
+    template: templates/gateway.yaml
     set:
-      gateway.enabled: true
+      gateway.infrastructure:
+        labels:
+          infra: envoy
+    asserts:
+      - equal:
+          path: spec.infrastructure.labels.infra
+          value: envoy
+
+  - it: should apply standard Kubernetes labels to both objects
     asserts:
       - exists:
-          path: metadata.labels.helm.sh/chart
+          path: metadata.labels["helm.sh/chart"]
       - exists:
-          path: metadata.labels.app.kubernetes.io/name
+          path: metadata.labels["app.kubernetes.io/name"]
       - exists:
-          path: metadata.labels.app.kubernetes.io/instance
+          path: metadata.labels["app.kubernetes.io/instance"]
       - exists:
-          path: metadata.labels.app.kubernetes.io/managed-by
+          path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  # Test 7: TLS configuration
-  - it: should configure TLS when provided
+  # appVersion tracks the vendored Gateway API bundle, so this label is the only
+  # in-cluster signal of which CRD bundle the release expects.
+  - it: should stamp the Gateway API version as app.kubernetes.io/version
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: 1.6.2
+
+  - it: should configure TLS on a listener when provided
+    template: templates/gateway.yaml
     set:
-      gateway.enabled: true
       gateway.listeners:
         - name: https
           protocol: HTTPS

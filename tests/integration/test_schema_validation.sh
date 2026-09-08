@@ -91,7 +91,7 @@ test_schema_accepts() {
     fi
 }
 
-# Function to test that rendered manifest contains expected content (v1.4.1 template emission)
+# Function to test that a rendered manifest contains expected content
 test_rendered_contains() {
     local test_name="$1"
     local chart_dir="$2"
@@ -233,8 +233,8 @@ gateway:
 EOF
 test_schema_rejects "Invalid port type (string instead of integer)" "$CHART_DIR" "$TEST_DIR/invalid-port-type.yaml" ""
 
-# Test 10: Valid v1.4.1 values (infrastructure, Certificate kind)
-cat > "$TEST_DIR/valid-v1-4-1.yaml" << 'EOF'
+# Test 10: Valid gateway.infrastructure with a non-Secret certificateRef kind
+cat > "$TEST_DIR/valid-gateway-infrastructure.yaml" << 'EOF'
 gateway:
   infrastructure:
     labels:
@@ -256,10 +256,10 @@ gateway:
       extraSpec:
         customField: value
 EOF
-test_schema_accepts "Valid v1.4.1 values (infrastructure, Certificate kind)" "$CHART_DIR" "$TEST_DIR/valid-v1-4-1.yaml"
+test_schema_accepts "Valid gateway.infrastructure + Certificate certificateRef" "$CHART_DIR" "$TEST_DIR/valid-gateway-infrastructure.yaml"
 
-# Test 10b: Rendered Gateway manifest must contain infrastructure when provided (v1.4.1 emission)
-test_rendered_contains "Rendered Gateway contains spec.infrastructure" "$CHART_DIR" "$TEST_DIR/valid-v1-4-1.yaml" "infrastructure:"
+# Test 10b: Gateway.spec.infrastructure is a real API field and must be emitted
+test_rendered_contains "Rendered Gateway contains spec.infrastructure" "$CHART_DIR" "$TEST_DIR/valid-gateway-infrastructure.yaml" "infrastructure:"
 
 # Test 11: Invalid infrastructure (additional properties)
 cat > "$TEST_DIR/invalid-infra.yaml" << 'EOF'
@@ -278,15 +278,46 @@ gateway:
 EOF
 test_schema_rejects "Missing required parametersRef fields" "$CHART_DIR" "$TEST_DIR/missing-params.yaml" "missing properties"
 
-# Test 13: Valid routes with v1.4.1 features
-cat > "$TEST_DIR/valid-routes-v1-4-1.yaml" << 'EOF'
+# Test 13: Route extraSpec passthrough
+cat > "$TEST_DIR/valid-routes-extraspec.yaml" << 'EOF'
 httpRoute:
   items:
     - name: test
       extraSpec:
         filter: Custom
 EOF
-test_schema_accepts "Valid routes with v1.4.1 extraSpec" "$ROUTES_CHART_DIR" "$TEST_DIR/valid-routes-v1-4-1.yaml"
+test_schema_accepts "Valid route extraSpec passthrough" "$ROUTES_CHART_DIR" "$TEST_DIR/valid-routes-extraspec.yaml"
+
+# Test 13b: GatewayClass has no spec.infrastructure -- the API server used to prune
+# it silently while values.schema.json claimed it was valid. The schema must reject it.
+cat > "$TEST_DIR/invalid-gatewayclass-infra.yaml" << 'EOF'
+gatewayClass:
+  infrastructure:
+    labels:
+      infra: envoy
+EOF
+test_schema_rejects "GatewayClass.infrastructure is rejected (field does not exist in the API)" "$CHART_DIR" "$TEST_DIR/invalid-gatewayclass-infra.yaml" "additionalProperties"
+
+# Test 13c: TCPRoute/UDPRoute/TLSRoute must render at v1, not a deprecated alpha
+cat > "$TEST_DIR/valid-l4-routes.yaml" << 'EOF'
+tcpRoute:
+  items:
+    - name: tcp-test
+      parentRefs:
+        - name: gw
+udpRoute:
+  items:
+    - name: udp-test
+      parentRefs:
+        - name: gw
+tlsRoute:
+  items:
+    - name: tls-test
+      parentRefs:
+        - name: gw
+EOF
+test_schema_accepts "Valid TCP/UDP/TLS route items" "$ROUTES_CHART_DIR" "$TEST_DIR/valid-l4-routes.yaml"
+test_rendered_contains "L4 routes render at gateway.networking.k8s.io/v1" "$ROUTES_CHART_DIR" "$TEST_DIR/valid-l4-routes.yaml" "apiVersion: gateway.networking.k8s.io/v1"
 
 # Test 14: Valid default values should pass
 test_schema_accepts "Valid default values" "$CHART_DIR"
