@@ -4,7 +4,7 @@
 
 ## Executive Summary
 
-This project packages **Kubernetes Gateway API** (v1.4.1, experimental) as two Helm charts: **gateway-api** (infrastructure) and **gateway-api-routes** (routing). CRDs are original from kubernetes-sigs and live in the gateway-api chart. The design is provider-agnostic: no controller is shipped; users install a Gateway API implementation (Envoy, AWS ALB, GKE, AKS, etc.) and configure controller names via values.
+This project packages **Kubernetes Gateway API** (v1.6.2, experimental) as three Helm charts: **gateway-api** (infrastructure, experimental-channel CRDs), **gateway-api-routes** (routing) and **gateway-api-standard** (standard-channel CRDs only). CRDs are original from kubernetes-sigs, unmodified: the experimental channel in the gateway-api chart, the standard channel in gateway-api-standard. Install exactly one channel per cluster. The design is provider-agnostic: no controller is shipped; users install a Gateway API implementation (Envoy, AWS ALB, GKE, AKS, etc.) and configure controller names via values.
 
 ## Architecture Pattern
 
@@ -17,7 +17,7 @@ This project packages **Kubernetes Gateway API** (v1.4.1, experimental) as two H
 | Category     | Technology           | Role                                  |
 |-------------|----------------------|----------------------------------------|
 | Packaging   | Helm 3               | Chart format, templating, releases     |
-| Spec        | Kubernetes Gateway API v1.4.1 | CRDs and resource model    |
+| Spec        | Kubernetes Gateway API v1.6.2 | CRDs and resource model    |
 | CRD source  | kubernetes-sigs/gateway-api | Experimental channel CRDs   |
 | Validation  | JSON Schema          | values.schema.json per chart           |
 | CI/CD       | GitHub Actions       | Lint, test, chart-releaser             |
@@ -76,7 +76,12 @@ See [deployment-guide.md](./deployment-guide.md) for CI/CD and release process.
 - **Template validation:** `helm template` with default and fixture values; integration script runs all examples.
 - **Schema:** `values.schema.json` validates values; `test_schema_validation.sh` covers invalid and valid cases.
 - **Unit (optional):** helm-unittest in `tests/unit/`; referenced in `tests/README.md` (CI wiring TBD).
-- **Integration (optional):** Kind cluster + install + smoke checks; config in `tests/kind-configs/`; CI steps commented in workflow.
+- **Integration:** `tests/integration/test_integration.sh` (lint, render, CRD/channel checks) and
+  `test_schema_validation.sh` (values.schema.json), both cluster-free and run on every push and PR.
+- **CRD upgrade:** `tests/integration/test_crd_upgrade.sh` runs on a kind cluster (Kubernetes 1.31 and
+  1.37 in CI). It installs the previous CRD bundle, creates objects at the old alpha versions, then
+  replays exactly what Flux does -- server-side apply with forced conflicts -- and asserts the objects
+  survive and are patched in place rather than recreated. It refuses to run outside a kind cluster.
 
 ## Security and Configuration
 

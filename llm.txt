@@ -24,10 +24,11 @@ Two separate Helm charts aligned with Gateway API's role-oriented resource model
 
 ```
 charts/
-  gateway-api/          # Chart version 1.0.0
+  gateway-api/          # Gateway API CRDs (experimental) + Gateway/GatewayClass
     crds/experimental/  # Original kubernetes-sigs CRDs (unchanged, using experimental for maximum features)
     templates/          # GatewayClass, Gateway
-  gateway-api-routes/   # Chart version 1.0.0 (updated to match CRD v1.4.1)
+  gateway-api-routes/   # HTTPRoute/GRPCRoute/TCPRoute/TLSRoute/UDPRoute
+  gateway-api-standard/ # standard-channel CRDs only (alternative to the experimental set above)
     templates/          # HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
 ```
 
@@ -35,13 +36,13 @@ charts/
 
 ```bash
 helm repo add dev2prod https://charts.cdnn.host/
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install my-gateway dev2prod/gateway-api
+helm install routes dev2prod/gateway-api-routes
 ```
 
 Skip CRDs if already installed:
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+helm install my-gateway dev2prod/gateway-api --skip-crds
 ```
 
 ## Configuration
@@ -60,7 +61,7 @@ helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
 ## Key Points
 
 - CRDs are original from kubernetes-sigs, no modifications
-- **CRD Version**: v1.4.1 (experimental channel) - last updated in commit f43056c1
+- **CRD Version**: v1.6.2 (experimental channel); `appVersion` in Chart.yaml is the source of truth
 - Using experimental CRDs for maximum feature support (includes TCPRoute, TLSRoute, UDPRoute, and experimental features)
 - Charts are separate - infrastructure vs routes
 - Works with any Gateway API provider (Envoy, AWS ALB, GKE, AKS, etc.)
@@ -116,11 +117,11 @@ helm schema validate values.yaml
 - **Project docs index:** `docs/index.md` — Master entry point for architecture, dev/deploy guides, source tree
 - GitHub: `dev2prod-hub/gateway-api-chart`
 - Helm repo: `https://charts.cdnn.host/`
-- Version: `1.0.0` (see VERSION file)
+- Chart version: see the `VERSION` file; `appVersion` tracks the vendored Gateway API bundle
 - License: Apache 2.0
 
 ## References
 
 - Gateway API Spec: https://gateway-api.sigs.k8s.io/
-- Gateway API v1.4.1: https://gateway-api.sigs.k8s.io/v1.4.1/
+- Gateway API v1.6.2: https://gateway-api.sigs.k8s.io/
 - Helm Best Practices: https://helm.sh/docs/chart_best_practices/

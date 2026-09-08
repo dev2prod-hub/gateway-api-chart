@@ -5,7 +5,7 @@ This is a Helm chart repository for Kubernetes Gateway API - the successor to In
 
 ## Key Principles
 - Use Helm 3 best practices
-- Follow Kubernetes Gateway API v1.4.1 specifications
+- Follow Kubernetes Gateway API v1.6.2 specifications
 - Maintain separation between infrastructure (gateway-api) and routes (gateway-api-routes)
 - Keep CRDs original from kubernetes-sigs without modifications
 - Use experimental CRDs for maximum feature support

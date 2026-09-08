@@ -116,7 +116,7 @@ See `tests/README.md` for details.
 ```bash
 ./scripts/update-crds.sh
 # Or specific version:
-./scripts/update-crds.sh v1.4.1
+./scripts/update-crds.sh v1.6.2
 ```
 
 Fetches experimental CRDs from kubernetes-sigs and updates `charts/gateway-api/crds/experimental/`. Commit the changes separately.

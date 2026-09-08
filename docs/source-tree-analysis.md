@@ -25,7 +25,7 @@ gateway-api-chart/
 │   │   ├── .helmignore
 │   │   ├── Chart.yaml
 │   │   ├── crds/
-│   │   │   └── experimental/    # kubernetes-sigs CRDs (v1.4.1)
+│   │   │   └── experimental/    # kubernetes-sigs CRDs (v1.6.2)
 │   │   │       ├── gateway.networking.k8s.io_*.yaml
 │   │   │       └── gateway.networking.x-k8s.io_*.yaml
 │   │   ├── fixture-values.yaml  # Test fixtures
@@ -37,7 +37,8 @@ gateway-api-chart/
 │   │   │   └── NOTES.txt
 │   │   ├── values.schema.json
 │   │   └── values.yaml
-│   └── gateway-api-routes/      # HTTPRoute, GRPCRoute, TCPRoute, UDPRoute
+│   ├── gateway-api-routes/      # HTTPRoute, GRPCRoute, TCPRoute, TLSRoute, UDPRoute
+│   └── gateway-api-standard/    # standard-channel CRDs only, no templates
 │       ├── Chart.yaml
 │       ├── fixture-values.yaml
 │       ├── README.md
@@ -90,11 +91,10 @@ gateway-api-chart/
 │   ├── integration/
 │   │   ├── test_integration.sh
 │   │   └── test_schema_validation.sh
-│   ├── kind-configs/
 │   │   └── cluster.yaml
 │   └── unit/
 │       └── test_gateway.yaml    # helm-unittest
-├── VERSION                      # 1.0.0
+├── VERSION                      # chart version, single source of truth
 └── _bmad/                       # BMAD method (workflows, agents); gitignored in pre-commit
 ```
 
@@ -114,7 +114,7 @@ gateway-api-chart/
 
 ### `charts/gateway-api/crds/experimental/`
 
-**Purpose:** Original Kubernetes Gateway API CRDs (v1.4.1, experimental). Unchanged from upstream.
+**Purpose:** Original Kubernetes Gateway API CRDs (v1.6.2, experimental). Unchanged from upstream. The standard channel lives in the separate `gateway-api-standard` chart.
 **Contains:** GatewayClass, Gateway, *Route, ReferenceGrant, BackendTLSPolicy, etc.
 
 ### `examples/`
@@ -130,7 +130,7 @@ gateway-api-chart/
 ### `tests/`
 
 **Purpose:** Integration (template + example smoke), schema validation, optional unit (helm-unittest).
-**Contains:** `integration/` scripts, `kind-configs/`, `unit/` YAML.
+**Contains:** `integration/` scripts and `unit/` helm-unittest YAML.
 
 ### `docs/`
 
@@ -169,7 +169,7 @@ gateway-api-chart/
 - `charts/*/values.schema.json` — JSON Schema for values.
 - `artifacthub-repo.yml` — Artifact Hub repository config.
 - `.pre-commit-config.yaml` — Lint/hooks (excludes _bmad, .cursor).
-- `tests/kind-configs/cluster.yaml` — Kind cluster config for integration.
+- `tests/integration/test_crd_upgrade.sh` — CRD upgrade test; requires a kind cluster.
 
 ## Notes for Development
 

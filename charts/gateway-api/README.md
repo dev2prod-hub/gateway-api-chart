@@ -1,6 +1,6 @@
 # gateway-api
 
-![Version: 1.0.5](https://img.shields.io/badge/Version-1.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.2](https://img.shields.io/badge/AppVersion-1.6.2-informational?style=flat-square)
 
 Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the native Kubernetes Gateway API.
 
@@ -30,7 +30,7 @@ The Gateway API follows a role-oriented design with three layers:
 
 This chart manages the **infrastructure layer** of Gateway API:
 
-- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.4.1, experimental channel)
+- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (1.6.2, experimental channel)
 - **GatewayClass** - Defines the type of gateway controller (e.g., Envoy, AWS ALB, GKE, AKS)
 - **Gateway** - Declares the actual gateway instance with listeners, TLS configuration, and network settings
 

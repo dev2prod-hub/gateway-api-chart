@@ -30,7 +30,7 @@ The Gateway API follows a role-oriented design with three layers:
 
 This chart manages the **infrastructure layer** of Gateway API:
 
-- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.4.1, experimental channel)
+- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) ({{ template "chart.appVersion" . }}, experimental channel)
 - **GatewayClass** - Defines the type of gateway controller (e.g., Envoy, AWS ALB, GKE, AKS)
 - **Gateway** - Declares the actual gateway instance with listeners, TLS configuration, and network settings
 
