@@ -1,0 +1,61 @@
+name: Release Chart
+
+# Publishing runs ONLY from main after merge. It deliberately does not trigger on
+# pull_request: chart-releaser tags, publishes to charts.cdnn.host and pushes to
+# gh-pages, and consumers pick that up automatically -- for GitOps consumers that
+# means unattended cluster-scoped CRD changes. A publish must follow a merge, never
+# a proposal.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-helm-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  chart-releaser:
+    name: Publish Chart
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Generate index.html from README
+        run: ./scripts/generate-index.sh
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_URL: "https://charts.cdnn.host"
+          CR_SKIP_EXISTING: "true"
+
+      - name: Deploy index.html for SEO
+        run: |
+          cp static/index.html /tmp/seo-index.html
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || { echo "gh-pages not yet created, skipping index.html deploy"; exit 0; }
+          cp /tmp/seo-index.html index.html
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(gh-pages): add SEO index.html"
+            git push origin gh-pages
+          fi
