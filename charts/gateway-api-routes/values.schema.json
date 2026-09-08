@@ -218,6 +218,78 @@
       ],
       "additionalProperties": false
     },
+    "tlsRoute": {
+      "type": "object",
+      "description": "TLSRoute configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable TLSRoute",
+          "default": true
+        },
+        "items": {
+          "type": "array",
+          "description": "List of TLSRoute resources to create",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the TLSRoute resource"
+              },
+              "parentRefs": {
+                "type": "array",
+                "description": "Parent references for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "hostnames": {
+                "type": "array",
+                "description": "Hostnames for the route",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "rules": {
+                "type": "array",
+                "description": "Rules for the route",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "labels": {
+                "type": "object",
+                "description": "Additional labels",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "annotations": {
+                "type": "object",
+                "description": "Additional annotations",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "extraSpec": {
+                "type": "object",
+                "description": "Additional spec fields for the TLSRoute",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "additionalProperties": false
+    },
     "udpRoute": {
       "type": "object",
       "description": "UDPRoute configuration",

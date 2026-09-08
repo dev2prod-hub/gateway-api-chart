@@ -24,6 +24,10 @@ tcpRoute:
   enabled: true
   items: []
 
+tlsRoute:
+  enabled: true
+  items: []
+
 udpRoute:
   enabled: true
   items: []

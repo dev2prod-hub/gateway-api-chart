@@ -1,8 +1,8 @@
-{{- if .Values.udpRoute.enabled -}}
-{{- range .Values.udpRoute.items }}
+{{- if .Values.tlsRoute.enabled -}}
+{{- range .Values.tlsRoute.items }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
-kind: UDPRoute
+kind: TLSRoute
 metadata:
   name: {{ .name | default (include "gateway-api-routes.fullname" $) | quote }}
   labels:
@@ -17,6 +17,10 @@ metadata:
 spec:
   {{- with .parentRefs }}
   parentRefs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .hostnames }}
+  hostnames:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .rules }}
