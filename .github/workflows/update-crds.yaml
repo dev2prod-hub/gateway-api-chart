@@ -21,7 +21,9 @@ jobs:
       # With no argument the script advances at most ONE minor from the vendored
       # bundle, so an unattended run can never open a PR that crosses two of them.
       - name: Vendor CRDs
-        run: ./scripts/update-crds.sh "${{ inputs.version }}"
+        env:
+          VERSION: ${{ inputs.version }}
+        run: ./scripts/update-crds.sh "$VERSION"
 
       - name: Read vendored bundle version
         id: bundle

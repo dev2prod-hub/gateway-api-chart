@@ -58,6 +58,14 @@ if [[ -z "$VERSION" ]]; then
   echo "Vendored ${CURRENT} -> advancing one minor to ${VERSION}"
 fi
 
+# VERSION lands in a download URL, in tar member paths and in a sed expression
+# below -- validate the upstream tag shape now, before any of that, whichever
+# path (explicit argument or resolved-from-cron) produced it.
+if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "error: '${VERSION}' is not a valid Gateway API tag (expected vX.Y.Z)" >&2
+  exit 1
+fi
+
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
