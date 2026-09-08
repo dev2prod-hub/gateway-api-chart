@@ -46,8 +46,3 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 {{- end }}
 
-{{- define "gateway-api-routes.annotations" -}}
-{{- with .Values.annotations }}
-{{ toYaml . | nindent 2 }}
-{{- end }}
-{{- end }}

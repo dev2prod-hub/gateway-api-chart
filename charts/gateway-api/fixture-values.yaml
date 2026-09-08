@@ -17,11 +17,6 @@ gatewayClass:
     kind: EnvoyProxy
     name: proxy-config
     namespace: envoy-gateway-system
-  infrastructure: # Optional. v1.4.1+ experimental
-    labels:
-      infra: envoy
-    annotations:
-      infra: envoy
 
 gateway:
   enabled: true
@@ -29,7 +24,7 @@ gateway:
   gatewayClassName: envoy-gateway # Optional
   annotations:
     stage: fixture-testing
-  infrastructure: # Optional. v1.4.1+ experimental
+  infrastructure: # Optional. Standard channel
     labels:
       infra: envoy-gw
     annotations:
@@ -49,7 +44,7 @@ gateway:
         mode: Terminate
         certificateRefs:
           - name: api-mydomain-com-tls
-            kind: Certificate # v1.4.1 support
+            kind: Certificate # any object kind the implementation supports
           - name: api-mydomain-com-secret
             kind: Secret
       allowedRoutes:

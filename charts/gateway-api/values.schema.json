@@ -76,25 +76,6 @@
           "additionalProperties": {
             "type": "string"
           }
-        },
-        "infrastructure": {
-          "type": "object",
-          "description": "Infrastructure defines infrastructure level attributes about this GatewayClass.",
-          "properties": {
-            "labels": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            },
-            "annotations": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          },
-          "additionalProperties": false
         }
       },
       "required": [
@@ -288,13 +269,6 @@
     "fullnameOverride": {
       "type": "string",
       "description": "Override the full name of the chart"
-    },
-    "annotations": {
-      "type": "object",
-      "description": "Global annotations",
-      "additionalProperties": {
-        "type": "string"
-      }
     }
   },
   "additionalProperties": false
