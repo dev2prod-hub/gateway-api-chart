@@ -70,12 +70,18 @@ jobs:
       - name: Run Schema Validation Tests
         run: ./tests/integration/test_schema_validation.sh
 
-      # Helm 4 verifies plugin sources by default and git sources cannot be
-      # verified, so --verify=false is required there. Helm 3 accepts the flag too.
+      # Helm 4 verifies plugin sources by default and a git source cannot be
+      # verified, so --verify=false is required there. Helm 3 has no such flag at
+      # all -- passing it fails with `unknown flag: --verify` -- so it must be
+      # conditional on the major version, not passed unconditionally.
       - name: Install unittest plugin
         run: |
-          helm plugin install https://github.com/helm-unittest/helm-unittest \
-            --version "${HELM_UNITTEST_VERSION}" --verify=false
+          PLUGIN=https://github.com/helm-unittest/helm-unittest
+          if helm version --short | grep -q '^v3'; then
+            helm plugin install "$PLUGIN" --version "${HELM_UNITTEST_VERSION}"
+          else
+            helm plugin install "$PLUGIN" --version "${HELM_UNITTEST_VERSION}" --verify=false
+          fi
 
       # -f is resolved relative to the CHART directory, hence ../../. And
       # helm-unittest exits 0 when it collects no suites at all, so a wrong path

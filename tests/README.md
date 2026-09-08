@@ -64,8 +64,10 @@ Failed: 0
 Unit tests provide detailed assertions about specific template outputs.
 
 ```bash
-# Helm 4 verifies plugin sources by default and git sources cannot be verified.
+# Helm 4 verifies plugin sources by default and a git source cannot be verified:
 helm plugin install https://github.com/helm-unittest/helm-unittest --version 1.1.2 --verify=false
+# Helm 3 has no --verify flag; passing it fails with `unknown flag: --verify`:
+helm plugin install https://github.com/helm-unittest/helm-unittest --version 1.1.2
 
 # -f is resolved relative to the CHART directory, hence ../../
 helm unittest ./charts/gateway-api        -f ../../tests/unit/test_gateway.yaml
