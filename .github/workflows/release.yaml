@@ -1,0 +1,90 @@
+name: Release Chart
+
+# Publishing runs ONLY from main after merge, and ONLY once "Lint and Test" has
+# passed for that exact commit. main has no branch protection in this repo, so
+# without that second condition a push straight to main with a red lint/unit/
+# crd-upgrade run would still get chart-releaser to tag and publish it: it
+# deliberately does not trigger on pull_request, and (before this gate) it did
+# not depend on lint-test.yaml either -- chart-releaser tags, publishes to
+# charts.cdnn.host and pushes to gh-pages, and consumers pick that up
+# automatically, so for GitOps consumers a broken publish means an unattended
+# cluster-scoped CRD change. workflow_run fires on both success and failure, so
+# the job condition below checks conclusion explicitly -- do not drop that
+# check when touching this file.
+#
+# lint-test.yaml also triggers on pull_request, and for a fork PR GitHub
+# resolves it from the fork's head, not from main -- an attacker can gut the
+# job to a no-op while keeping the "Lint and Test" name, get a "success"
+# conclusion, and (since a fork's default branch is commonly also named
+# "main") satisfy head_branch == 'main' too, all while head_sha points at
+# their own commit (reachable from this repo via refs/pull/N/head). The
+# `event == 'push'` check rules out pull_request-triggered runs entirely, and
+# `head_repository.full_name == github.repository` rules out the run having
+# come from a fork even if some other push-triggering path existed. Neither
+# check is redundant with the other -- both must stay.
+on:
+  workflow_run:
+    workflows: ["Lint and Test"]
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  # workflow_run always reports head_branch as the bare branch name (e.g.
+  # "main"), while workflow_dispatch's github.ref is "refs/heads/main" -- left
+  # unnormalized, the two triggers land in different concurrency groups and a
+  # manual release can run in parallel with an automatic one, both pushing
+  # gh-pages and creating tags. Strip the refs/heads/ prefix so both triggers
+  # for the same branch share one group.
+  group: release-helm-${{ github.event.workflow_run.head_branch || github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  chart-releaser:
+    name: Publish Chart
+    if: |
+      github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' ||
+      github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # Publish exactly the commit that passed Lint and Test, not whatever
+          # main has advanced to by the time this job runs.
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Generate index.html from README
+        run: ./scripts/generate-index.sh
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_URL: "https://charts.cdnn.host"
+          CR_SKIP_EXISTING: "true"
+
+      - name: Deploy index.html for SEO
+        run: |
+          cp static/index.html /tmp/seo-index.html
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout gh-pages 2>/dev/null || { echo "gh-pages not yet created, skipping index.html deploy"; exit 0; }
+          cp /tmp/seo-index.html index.html
+          git add index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(gh-pages): add SEO index.html"
+            git push origin gh-pages
+          fi

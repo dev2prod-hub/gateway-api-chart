@@ -1,0 +1,184 @@
+# Unit tests for the gateway-api-routes chart.
+#
+# The point of this suite is the apiVersion assertions. TCPRoute and UDPRoute
+# graduated to v1 in Gateway API 1.6 and TLSRoute in 1.5; these tests fail loudly
+# if anything reverts a route template to a deprecated alpha version.
+
+suite: test gateway-api-routes chart
+templates:
+  - templates/httproute.yaml
+  - templates/grpcroute.yaml
+  - templates/tcproute.yaml
+  - templates/tlsroute.yaml
+  - templates/udproute.yaml
+tests:
+  # Every route type is empty by default, so a default render produces nothing.
+  - it: should render nothing with default values
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should render TCPRoute at gateway.networking.k8s.io/v1
+    template: templates/tcproute.yaml
+    set:
+      tcpRoute.items:
+        - name: my-tcp
+          parentRefs:
+            - name: my-gateway
+          rules:
+            - backendRefs:
+                - name: tcp-svc
+                  port: 9000
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: TCPRoute
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+      - equal:
+          path: metadata.name
+          value: my-tcp
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 9000
+
+  - it: should render UDPRoute at gateway.networking.k8s.io/v1
+    template: templates/udproute.yaml
+    set:
+      udpRoute.items:
+        - name: my-udp
+          parentRefs:
+            - name: my-gateway
+          rules:
+            - backendRefs:
+                - name: udp-svc
+                  port: 9001
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: UDPRoute
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+
+  - it: should render TLSRoute at gateway.networking.k8s.io/v1 with hostnames
+    template: templates/tlsroute.yaml
+    set:
+      tlsRoute.items:
+        - name: my-tls
+          parentRefs:
+            - name: my-gateway
+          hostnames:
+            - passthrough.example.com
+          rules:
+            - backendRefs:
+                - name: tls-svc
+                  port: 8443
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: TLSRoute
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+      - equal:
+          path: spec.hostnames[0]
+          value: passthrough.example.com
+
+  - it: should render HTTPRoute at gateway.networking.k8s.io/v1
+    template: templates/httproute.yaml
+    set:
+      httpRoute.items:
+        - name: my-http
+          parentRefs:
+            - name: my-gateway
+          rules:
+            - backendRefs:
+                - name: http-svc
+                  port: 8080
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HTTPRoute
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+
+  - it: should render GRPCRoute at gateway.networking.k8s.io/v1
+    template: templates/grpcroute.yaml
+    set:
+      grpcRoute.items:
+        - name: my-grpc
+          parentRefs:
+            - name: my-gateway
+          rules:
+            - backendRefs:
+                - name: grpc-svc
+                  port: 8081
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: GRPCRoute
+      - equal:
+          path: apiVersion
+          value: gateway.networking.k8s.io/v1
+
+  - it: should not render a disabled route type
+    template: templates/tcproute.yaml
+    set:
+      tcpRoute.enabled: false
+      tcpRoute.items:
+        - name: my-tcp
+          parentRefs:
+            - name: my-gateway
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should render multiple items of the same route type
+    template: templates/httproute.yaml
+    set:
+      httpRoute.items:
+        - name: first
+          parentRefs:
+            - name: my-gateway
+        - name: second
+          parentRefs:
+            - name: my-gateway
+    asserts:
+      - hasDocuments:
+          count: 2
+
+  - it: should merge extraSpec into the route spec
+    template: templates/httproute.yaml
+    set:
+      httpRoute.items:
+        - name: my-http
+          parentRefs:
+            - name: my-gateway
+          extraSpec:
+            hostnames:
+              - from-extra-spec.example.com
+    asserts:
+      - equal:
+          path: spec.hostnames[0]
+          value: from-extra-spec.example.com
+
+  - it: should apply standard Kubernetes labels
+    template: templates/httproute.yaml
+    set:
+      httpRoute.items:
+        - name: my-http
+          parentRefs:
+            - name: my-gateway
+    asserts:
+      - exists:
+          path: metadata.labels["helm.sh/chart"]
+      - exists:
+          path: metadata.labels["app.kubernetes.io/managed-by"]

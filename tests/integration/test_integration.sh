@@ -7,11 +7,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CHART_DIR="${PROJECT_ROOT}/charts/gateway-api"
+STANDARD_CHART_DIR="${PROJECT_ROOT}/charts/gateway-api-standard"
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Test counter
@@ -36,24 +36,27 @@ test_template() {
     local test_name="$1"
     local chart_path="$2"
     local values_file="${3:-}"
-    local extra_flags="${4:-}"
+    local extra_flags=()
+    if [ "$#" -gt 3 ]; then
+        extra_flags=("${@:4}")
+    fi
 
     if [ -n "$values_file" ] && [ -f "$values_file" ]; then
-        if helm template test-release "$chart_path" --values "$values_file" $extra_flags > /dev/null 2>&1; then
+        if helm template test-release "$chart_path" --values "$values_file" "${extra_flags[@]+"${extra_flags[@]}"}" > /dev/null 2>&1; then
             print_test "$test_name" "PASS"
             return 0
         else
             print_test "$test_name" "FAIL"
-            helm template test-release "$chart_path" --values "$values_file" $extra_flags 2>&1 | tail -5
+            helm template test-release "$chart_path" --values "$values_file" "${extra_flags[@]+"${extra_flags[@]}"}" 2>&1 | tail -5
             return 1
         fi
     else
-        if helm template test-release "$chart_path" $extra_flags > /dev/null 2>&1; then
+        if helm template test-release "$chart_path" "${extra_flags[@]+"${extra_flags[@]}"}" > /dev/null 2>&1; then
             print_test "$test_name" "PASS"
             return 0
         else
             print_test "$test_name" "FAIL"
-            helm template test-release "$chart_path" $extra_flags 2>&1 | tail -5
+            helm template test-release "$chart_path" "${extra_flags[@]+"${extra_flags[@]}"}" 2>&1 | tail -5
             return 1
         fi
     fi
@@ -112,10 +115,12 @@ echo ""
 # Test 1: Helm lint
 test_lint "Helm lint: gateway-api" "$CHART_DIR"
 test_lint "Helm lint: gateway-api-routes" "${PROJECT_ROOT}/charts/gateway-api-routes"
+test_lint "Helm lint: gateway-api-standard" "$STANDARD_CHART_DIR"
 
 # Test 2: Template rendering with default values
 test_template "Template rendering: gateway-api (default)" "$CHART_DIR"
 test_template "Template rendering: gateway-api-routes (default)" "${PROJECT_ROOT}/charts/gateway-api-routes"
+test_template "Template rendering: gateway-api-standard (default)" "$STANDARD_CHART_DIR"
 
 # Test 3: Template rendering with fixture values
 if [ -f "$CHART_DIR/fixture-values.yaml" ]; then
@@ -135,8 +140,39 @@ if [ -f "${PROJECT_ROOT}/charts/gateway-api-routes/fixture-values.yaml" ]; then
     fi
 fi
 
-# Test 5: CRDs present
+# Test 5: CRDs present, and the two channels stay in their own charts
 test_crds_present "CRDs are present: gateway-api" "$CHART_DIR"
+test_crds_present "CRDs are present: gateway-api-standard" "$STANDARD_CHART_DIR"
+
+# The channel annotation must match the chart. Two charts shipping the same CRD
+# name with different channels into one cluster would flap under a GitOps
+# controller that replaces CRDs on every reconcile.
+check_channel() {
+    local test_name="$1" chart_dir="$2" expected="$3" found
+    # Collect the distinct channel values across all vendored CRDs; there must be
+    # exactly one and it must be the expected channel.
+    found=$(grep -rho 'gateway.networking.k8s.io/channel: [a-z]*' "$chart_dir/crds" 2>/dev/null \
+            | sed 's/.*: //' | sort -u | tr '\n' ' ' | sed 's/ $//')
+    if [ "$found" = "$expected" ]; then
+        print_test "$test_name" "PASS"
+    else
+        print_test "$test_name (found: '${found}')" "FAIL"
+    fi
+}
+check_channel "gateway-api ships only the experimental channel" "$CHART_DIR" "experimental"
+check_channel "gateway-api-standard ships only the standard channel" "$STANDARD_CHART_DIR" "standard"
+
+# A non-CRD file under crds/ breaks helm lint and is silently dropped by Flux.
+for chart_dir in "$CHART_DIR" "$STANDARD_CHART_DIR"; do
+    chart_name=$(basename "$chart_dir")
+    stray=$(find "$chart_dir/crds" -type f ! -name '*.yaml' 2>/dev/null | wc -l | tr -d ' ')
+    non_crd=$(grep -rL "^kind: CustomResourceDefinition" "$chart_dir/crds" --include='*.yaml' 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$stray" = "0" ] && [ "$non_crd" = "0" ]; then
+        print_test "crds/ contains only CRD manifests: $chart_name" "PASS"
+    else
+        print_test "crds/ contains only CRD manifests: $chart_name ($stray stray, $non_crd non-CRD)" "FAIL"
+    fi
+done
 
 # Test 6: Test with all examples
 echo ""
@@ -150,13 +186,13 @@ for example in "$PROJECT_ROOT/examples/cloud-providers"/*/values.yaml "$PROJECT_
 done )
 
 # Test 7: Gateway disabled
-test_template "Gateway disabled" "$CHART_DIR" "" "--set gateway.enabled=false"
+test_template "Gateway disabled" "$CHART_DIR" "" --set gateway.enabled=false
 
 # Test 8: GatewayClass disabled
-test_template "GatewayClass disabled" "$CHART_DIR" "" "--set gatewayClass.enabled=false"
+test_template "GatewayClass disabled" "$CHART_DIR" "" --set gatewayClass.enabled=false
 
 # Test 9: Both disabled (should still render, just empty)
-test_template "Both disabled" "$CHART_DIR" "" "--set gateway.enabled=false --set gatewayClass.enabled=false"
+test_template "Both disabled" "$CHART_DIR" "" --set gateway.enabled=false --set gatewayClass.enabled=false
 
 # Test 10: Schema validation (if schema test script exists)
 if [ -f "$SCRIPT_DIR/test_schema_validation.sh" ]; then

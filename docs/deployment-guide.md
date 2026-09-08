@@ -22,10 +22,14 @@ helm repo update
 helm search repo dev2prod
 ```
 
+Always pin an exact chart version in production, never a range -- these charts
+ship cluster-scoped Gateway API CRDs, and GitOps controllers apply them
+unattended. Pick the exact version with `helm search repo dev2prod/gateway-api --versions`.
+
 ### Install gateway-api (with CRDs)
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>
 ```
 
 ### Install gateway-api (skip CRDs)
@@ -33,20 +37,20 @@ helm install my-gateway dev2prod/gateway-api --version 1.0.0
 Use when CRDs are already installed (e.g. by a controller or another release):
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION> --skip-crds
 ```
 
 ### Install gateway-api-routes
 
 ```bash
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>
 ```
 
 ### Using Examples
 
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 1.0.0 \
+  --version <CHART_VERSION> \
   --values https://raw.githubusercontent.com/dev2prod-hub/gateway-api-chart/main/examples/cloud-providers/aws-alb/values.yaml
 ```
 
@@ -108,16 +112,27 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 - [ ] Controller name in values matches your implementation.
 - [ ] TLS secrets exist when using TLS Terminate; `certificateRefs` point to them.
 - [ ] Route `parentRefs` reference the correct Gateway name and listener.
-- [ ] Chart versions pinned in production (e.g. `--version 1.0.0`).
+- [ ] Chart versions pinned to an exact version in production (never a range).
 
 ## Rollback
+
+`helm rollback` restores the chart's templates only:
 
 ```bash
 helm rollback my-gateway [revision]
 helm rollback routes [revision]
 ```
 
-Ensure Gateway API controller supports any CRD version changes when rolling back.
+It does **not** roll back CRDs. Helm does not track the `crds/` directory in the
+release manifest at all, so after a rollback the cluster keeps whichever CRD bundle
+it currently has. Under Flux or Argo CD, a manual `helm rollback` is additionally
+reverted by the next reconcile -- rolling back there means editing the pinned chart
+version in Git.
+
+If your rollback crosses a Gateway API minor version, read
+[MIGRATION.md](MIGRATION.md) first. CRD downgrades are blocked by Gateway API's own
+admission policy from v1.5 onward and by the API server's `storedVersions` check,
+so a CRD "rollback" is a restore-from-backup procedure, not a one-line command.
 
 ## References
 

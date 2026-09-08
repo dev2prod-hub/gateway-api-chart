@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-This repository provides production-ready Helm charts for **Kubernetes Gateway API** — the successor to Ingress. It ships two charts: **gateway-api** (GatewayClass, Gateway, optional CRDs) and **gateway-api-routes** (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute). CRDs are original from kubernetes-sigs (v1.4.1, experimental channel), unmodified. The charts are cloud-agnostic and work with any Gateway API provider (Envoy, AWS ALB, GKE, AKS, etc.). The project does not include a controller; users install a Gateway API provider separately.
+This repository provides production-ready Helm charts for **Kubernetes Gateway API** — the successor to Ingress. It ships two charts: **gateway-api** (GatewayClass, Gateway, optional CRDs) and **gateway-api-routes** (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute). CRDs are original from kubernetes-sigs (v1.6.2, experimental channel), unmodified; the standard channel ships as the separate **gateway-api-standard** chart. The charts are cloud-agnostic and work with any Gateway API provider (Envoy, AWS ALB, GKE, AKS, etc.). The project does not include a controller; users install a Gateway API provider separately.
 
 ## Project Classification
 
@@ -20,8 +20,8 @@ This repository provides production-ready Helm charts for **Kubernetes Gateway A
 | Category        | Technology              | Version | Justification                                      |
 |----------------|-------------------------|---------|----------------------------------------------------|
 | Packaging      | Helm                    | 3       | Chart format, templating, release management       |
-| Orchestration  | Kubernetes Gateway API  | v1.4.1  | CRD source; experimental channel for max features  |
-| Spec           | Gateway API             | v1.4.1  | GatewayClass, Gateway, *Route resources            |
+| Orchestration  | Kubernetes Gateway API  | v1.6.2  | CRD source; experimental channel for max features  |
+| Spec           | Gateway API             | v1.6.2  | GatewayClass, Gateway, *Route resources            |
 | CI/CD          | GitHub Actions          | -       | Lint, test, chart-releaser                         |
 | Validation     | JSON Schema             | -       | values.schema.json per chart                       |
 | Testing        | Shell scripts, unittest | -       | Integration and schema validation; optional unit   |
@@ -52,9 +52,9 @@ This repository provides production-ready Helm charts for **Kubernetes Gateway A
 ### Getting Started
 
 - Add Helm repo: `helm repo add dev2prod https://charts.cdnn.host/`
-- Install gateway-api: `helm install my-gateway dev2prod/gateway-api --version 1.0.0`
-- Install routes: `helm install routes dev2prod/gateway-api-routes --version 1.0.0`
-- Use `--skip-crds` if CRDs are already installed.
+- Install gateway-api: `helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>`
+- Install routes: `helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>`
+- Always pin an exact chart version in production, never a range. Use `--skip-crds` if CRDs are already installed.
 
 ### Key Commands
 

@@ -31,11 +31,16 @@ bash tests/integration/test_integration.sh
 Running integration tests for gateway-api chart...
 ==================================================
 
-✓ Helm lint check
-✓ Template rendering (default values)
-✓ Template rendering (fixture values)
+✓ Helm lint: gateway-api
+✓ Helm lint: gateway-api-routes
+✓ Helm lint: gateway-api-standard
+✓ Template rendering (default and fixture values)
 ✓ API version is v1
-✓ CRDs are present (found 12 CRDs)
+✓ CRDs are present: gateway-api (found 13 CRDs)
+✓ CRDs are present: gateway-api-standard (found 10 CRDs)
+✓ gateway-api ships only the experimental channel
+✓ gateway-api-standard ships only the standard channel
+✓ crds/ contains only CRD manifests
 
 Testing example configurations...
 ✓ Example: aks-agic
@@ -50,13 +55,32 @@ Testing example configurations...
 
 ==================================================
 Test Summary:
-Passed: 14
+Passed: 20
 Failed: 0
 ```
 
 ### 2. Unit Tests (Requires helm-unittest Plugin)
 
 Unit tests provide detailed assertions about specific template outputs.
+
+```bash
+# Helm 4 verifies plugin sources by default and a git source cannot be verified:
+helm plugin install https://github.com/helm-unittest/helm-unittest --version 1.1.2 --verify=false
+# Helm 3 has no --verify flag; passing it fails with `unknown flag: --verify`:
+helm plugin install https://github.com/helm-unittest/helm-unittest --version 1.1.2
+
+# -f is resolved relative to the CHART directory, hence ../../
+helm unittest ./charts/gateway-api        -f ../../tests/unit/test_gateway.yaml
+helm unittest ./charts/gateway-api-routes -f ../../tests/unit/test_routes.yaml
+```
+
+Two traps worth knowing:
+
+- `helm unittest` exits **0** when it collects no suites at all, so a wrong `-f`
+  path passes silently. CI asserts a suite actually ran.
+- Every assert is evaluated against **each** template listed in the suite, not
+  against the combined set of rendered documents. A test that cares about one kind
+  must scope itself with `template:`.
 
 **Install helm-unittest plugin:**
 ```bash
@@ -127,7 +151,7 @@ Testing gateway-api-routes chart schema validation...
 
 ==================================================
 Schema Validation Test Summary:
-Passed: 16
+Passed: 24
 Failed: 0
 ```
 
@@ -170,14 +194,14 @@ done
 
 #### Verify CRDs
 ```bash
-# Count CRDs
-find charts/gateway-api/crds -name "*.yaml" | wc -l
-
-# List CRDs
+# Count and list CRDs per channel
+find charts/gateway-api/crds -name "*.yaml" | wc -l           # experimental
+find charts/gateway-api-standard/crds -name "*.yaml" | wc -l  # standard
 ls -1 charts/gateway-api/crds/experimental/
 
-# Check CRD version
-grep "bundle-version" charts/gateway-api/crds/experimental/*.yaml | head -1
+# Vendored bundle version -- must equal appVersion in every Chart.yaml
+grep -rhom1 "bundle-version: v[0-9.]*" charts/gateway-api/crds | head -1
+grep -H "^appVersion:" charts/*/Chart.yaml
 ```
 
 ## Quick Test Commands

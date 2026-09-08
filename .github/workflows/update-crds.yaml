@@ -1,30 +1,58 @@
 name: Update Gateway API CRDs
+
 on:
   schedule:
     - cron: '0 0 * * 1'  # Weekly check
   workflow_dispatch:
     inputs:
       version:
-        description: 'Gateway API version (e.g., v1.2.1)'
-        required: true
+        description: 'Gateway API version to vendor, e.g. v1.6.2. Leave empty to advance one minor.'
+        required: false
 
 jobs:
   update-crds:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up environment
-        run: |
-          echo "VERSION=${INPUT_VERSION:-$(curl -s https://api.github.com/repos/kubernetes-sigs/gateway-api/releases/latest | jq -r .tag_name)}" >> $GITHUB_ENV
+      # With no argument the script advances at most ONE minor from the vendored
+      # bundle, so an unattended run can never open a PR that crosses two of them.
+      - name: Vendor CRDs
+        env:
+          VERSION: ${{ inputs.version }}
+        run: ./scripts/update-crds.sh "$VERSION"
 
-      - name: Run update script
-        run: ./scripts/update-crds.sh
+      - name: Read vendored bundle version
+        id: bundle
+        run: |
+          version="$(grep -rhom1 'gateway.networking.k8s.io/bundle-version: v[0-9.]*' \
+            charts/gateway-api/crds | head -1 | sed 's/.*: //')"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Create PR if changes
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: "Update CRDs to ${VERSION}"
-          title: "CRD Update: Gateway API ${VERSION}"
-          body: "Automated update from https://github.com/kubernetes-sigs/gateway-api/releases/tag/${VERSION}"
-          branch: "crd-update-${VERSION}"
+          commit-message: "chore(crds): update Gateway API CRDs to ${{ steps.bundle.outputs.version }}"
+          title: "CRD Update: Gateway API ${{ steps.bundle.outputs.version }}"
+          branch: "crd-update-${{ steps.bundle.outputs.version }}"
+          labels: |
+            crd-update
+            breaking-change-review
+          body: |
+            Automated CRD vendor bump to **${{ steps.bundle.outputs.version }}**.
+
+            Release notes: https://github.com/kubernetes-sigs/gateway-api/releases/tag/${{ steps.bundle.outputs.version }}
+
+            **Do not merge without reading the diff.** These are cluster-scoped CRDs
+            that GitOps consumers apply unattended. Before approving, check:
+
+            - [ ] No version disappears from any CRD's `spec.versions` (that would make
+                  the apply be rejected on clusters with objects stored at it)
+            - [ ] Every `served`/`storage`/`deprecated` change is intentional
+            - [ ] Templates in `charts/gateway-api-routes/templates/` still emit an
+                  `apiVersion` that the new CRDs serve
+            - [ ] `appVersion` in both `Chart.yaml` files is bumped to match
+            - [ ] `docs/MIGRATION.md` covers anything an operator must do by hand

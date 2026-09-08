@@ -2,16 +2,16 @@
 
 **Type:** Monolith (infrastructure)
 **Primary Language:** YAML, Shell
-**Architecture:** Helm chart packaging; gateway-api (infra) + gateway-api-routes (routes)
+**Architecture:** Helm chart packaging; gateway-api (infra) + gateway-api-routes (routes) + gateway-api-standard (standard-channel CRDs)
 **Last Updated:** 2025-01-22
 
 ## Project Overview
 
-Helm charts for **Kubernetes Gateway API** (v1.4.1): **gateway-api** (GatewayClass, Gateway, optional CRDs) and **gateway-api-routes** (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute). CRDs are original from kubernetes-sigs; charts are provider-agnostic. No controller is included—users install a Gateway API implementation separately.
+Helm charts for **Kubernetes Gateway API** (v1.6.2): **gateway-api** (GatewayClass, Gateway, optional CRDs) **gateway-api-routes** (HTTPRoute, GRPCRoute, TCPRoute, TLSRoute, UDPRoute) and **gateway-api-standard** (standard-channel CRDs only). CRDs are original from kubernetes-sigs; charts are provider-agnostic. No controller is included—users install a Gateway API implementation separately.
 
 ## Quick Reference
 
-- **Tech Stack:** Helm 3, Kubernetes Gateway API v1.4.1, JSON Schema, GitHub Actions
+- **Tech Stack:** Helm 3 and 4, Kubernetes Gateway API v1.6.2, JSON Schema, GitHub Actions
 - **Entry Point:** `charts/gateway-api/values.yaml`, `charts/gateway-api-routes/values.yaml`
 - **Architecture Pattern:** Two-chart separation (infrastructure vs routes); config-driven resources
 - **Deployment:** Charts at https://charts.cdnn.host/; install via `helm install dev2prod/gateway-api`, `dev2prod/gateway-api-routes`
@@ -57,11 +57,12 @@ helm repo update
 ### Install
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>
+helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>
 ```
 
-Use `--skip-crds` when CRDs are already installed.
+Always pin an exact chart version in production, never a range. Use
+`--skip-crds` when CRDs are already installed.
 
 ### Run Tests (Development)
 

@@ -25,14 +25,14 @@ The Gateway API follows a role-oriented design with three layers:
 
 ## Chart Architecture 🏗️
 
-This repository provides **two separate Helm charts** that align with the Gateway API resource model:
+This repository provides **three Helm charts** that align with the Gateway API resource model:
 
 ### 1. `gateway-api` - Infrastructure Layer
 
 **Purpose:** Manages the infrastructure layer of Gateway API.
 
 **What it installs:**
-- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.4.1, experimental channel)
+- **CRDs** (optional) - Original Custom Resource Definitions from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api) (v1.6.2, experimental channel)
 - **GatewayClass** - Defines the type of gateway controller (e.g., Envoy, AWS ALB, GKE, AKS)
 - **Gateway** - Declares the actual gateway instance with listeners, TLS configuration, and network settings
 
@@ -46,9 +46,20 @@ This repository provides **two separate Helm charts** that align with the Gatewa
 - **HTTPRoute** - HTTP traffic routing rules
 - **GRPCRoute** - gRPC traffic routing rules
 - **TCPRoute** - TCP traffic routing rules
+- **TLSRoute** - TLS passthrough routing rules
 - **UDPRoute** - UDP traffic routing rules
 
 **When to use:** Install this chart per application or team to define routing rules. Routes reference Gateways via `parentRefs`. Typically managed by application developers.
+
+### 3. `gateway-api-standard` - Standard-channel CRDs
+
+**Purpose:** Ships the Gateway API CRDs from the **standard** channel, and nothing else.
+
+**When to use:** Only if you want Gateway API's GA and beta resources without the
+experimental ones. Install it for the CRDs and pass `--skip-crds` to `gateway-api`
+(Flux: `crds: Skip`). Pick exactly one CRD source per cluster -- do not install both
+channels. Switching channels afterwards is effectively one-directional; see
+[docs/MIGRATION.md](docs/MIGRATION.md).
 
 ### Why Two Charts? 🤔
 
@@ -58,6 +69,7 @@ This separation provides:
 2. **Independent lifecycle** - Infrastructure changes (GatewayClass, Gateway) don't require redeploying routes
 3. **Multi-tenancy** - Multiple teams can deploy routes independently while sharing the same Gateway infrastructure
 4. **Flexibility** - Use `gateway-api` as a dependency in infrastructure charts, and `gateway-api-routes` in application charts
+5. **Channel choice** - CRDs live in Helm's `crds/` directory, which cannot be templated or conditioned, so the channel is a choice of chart rather than a value
 
 ## Why This Chart? 🌟
 Provides opinionated yet flexible configurations for:
@@ -85,30 +97,35 @@ helm repo update
 helm repo search dev2prod
 ```
 
+Always pin an exact chart version in production, never a range -- these charts
+ship cluster-scoped Gateway API CRDs, and GitOps controllers apply them
+unattended. Pick the exact version with `helm search repo dev2prod/gateway-api --versions`.
+
 ### To skip CRD installation, use the following command:
 
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 1.0.0 \
+  --version <CHART_VERSION> \
   --skip-crds
 ```
 
 Install gateway-api with CRDs
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  --version 1.0.0
+  --version <CHART_VERSION>
 ```
 
 ### Install gateway-api-routes
 ```bash
 helm install routes dev2prod/gateway-api-routes \
-  --version 1.0.0
+  --version <CHART_VERSION>
 ```
 
 ## Features 📦
 ✔️ **CRD Management** — Original CRDs from kubernetes-sigs (unchanged)
-✔️ **CRD Version** v1.4.1 (experimental) — TCPRoute, TLSRoute, UDPRoute, experimental features
-✔️ **Two Helm charts** — gateway-api (infra) and gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute)
+✔️ **CRD Version** v1.6.2 (experimental) — TCPRoute, TLSRoute, UDPRoute at `v1`, plus experimental features
+✔️ **Three Helm charts** — gateway-api (infra), gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, TLSRoute, UDPRoute), gateway-api-standard (standard-channel CRDs)
+✔️ **Tested** on Kubernetes 1.33 and 1.37, Helm 3.19 and Helm 4
 
 ## Configuration Example 🔧
 

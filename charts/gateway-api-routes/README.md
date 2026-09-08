@@ -1,6 +1,6 @@
 # gateway-api-routes
 
-![Version: 1.0.5](https://img.shields.io/badge/Version-1.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.2](https://img.shields.io/badge/AppVersion-1.6.2-informational?style=flat-square)
 
 Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts. Replace your ingress to the native Kubernetes Gateway API.
 
@@ -63,6 +63,8 @@ For more information about Gateway API architecture, see the [official Gateway A
 | httpRoute.items | list | `[]` |  |
 | tcpRoute.enabled | bool | `true` |  |
 | tcpRoute.items | list | `[]` |  |
+| tlsRoute.enabled | bool | `true` |  |
+| tlsRoute.items | list | `[]` |  |
 | udpRoute.enabled | bool | `true` |  |
 | udpRoute.items | list | `[]` |  |
 

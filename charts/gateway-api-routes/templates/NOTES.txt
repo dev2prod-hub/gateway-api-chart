@@ -1,0 +1,25 @@
+{{ .Chart.Name }} installed. Routes are rendered from the *Route.items lists in
+your values; every list is empty by default, so a default install creates nothing.
+
+Check what was created:
+
+  kubectl get httproutes,grpcroutes,tcproutes,tlsroutes,udproutes -n {{ .Release.Namespace }}
+
+Route status is reported by your Gateway API controller, not by this chart. If a
+route is not taking effect, look at its parent conditions:
+
+  kubectl describe httproute -n {{ .Release.Namespace }}
+
+This chart ships NO CRDs. It renders routes at the API versions of Gateway API
+{{ .Chart.AppVersion }}:
+
+  HTTPRoute, GRPCRoute, TCPRoute, TLSRoute, UDPRoute   gateway.networking.k8s.io/v1
+
+TCPRoute and UDPRoute reached v1 in Gateway API 1.6 and TLSRoute in 1.5, so the
+cluster needs CRDs at 1.6 or newer. Verify before troubleshooting anything else:
+
+  kubectl get crd tcproutes.gateway.networking.k8s.io \
+    -o jsonpath='{.metadata.annotations.gateway\.networking\.k8s\.io/bundle-version}{"\n"}'
+
+If that reports an older bundle, `helm upgrade` did not update it -- Helm applies
+CRDs on install only. See docs/MIGRATION.md.

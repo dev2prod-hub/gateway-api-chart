@@ -1,0 +1,153 @@
+name: Lint and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  HELM_UNITTEST_VERSION: "1.1.2"
+
+concurrency:
+  group: lint-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-unit:
+    name: Lint & Unit (helm ${{ matrix.helm }})
+    runs-on: ubuntu-latest
+    # Helm 4 is not yet blocking: helm-unittest's support for it is unverified.
+    # Flux's helm-controller already builds on the Helm 4 SDK, so this leg should
+    # become required once the plugin is confirmed working.
+    continue-on-error: ${{ matrix.helm == '4.2.4' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        helm: ["3.19.0", "4.2.4"]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v5
+        with:
+          version: ${{ matrix.helm }}
+
+      - name: Lint Charts
+        run: |
+          for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
+            helm lint "$chart" --strict
+          done
+
+      # appVersion is the only in-cluster signal of which CRD bundle a release
+      # expects (see .pre-commit-config.yaml). The local hook catches drift only
+      # for contributors who have pre-commit installed; this makes it a PR gate.
+      - name: Check appVersion matches vendored CRD bundle
+        run: ./scripts/check-appversion.sh
+
+      # Lint what actually ships. The working tree can contain files that a
+      # packaged chart does not (and vice versa) -- a stray non-CRD file under
+      # crds/ only fails here, which is how it reaches consumers unnoticed.
+      - name: Lint packaged charts
+        run: |
+          mkdir -p /tmp/pkg /tmp/unpacked
+          for chart in $(find ./charts -mindepth 1 -maxdepth 1 -type d); do
+            helm package "$chart" -d /tmp/pkg
+          done
+          for tgz in /tmp/pkg/*.tgz; do
+            tar xzf "$tgz" -C /tmp/unpacked
+          done
+          for chart in /tmp/unpacked/*/; do
+            helm lint "$chart" --strict
+          done
+          echo "--- packaged contents must not carry development files"
+          # tar tzf /tmp/pkg/*.tgz would glob-expand to multiple archives, and tar
+          # treats only the first as the archive and the rest as member names to
+          # look up inside it -- silently never matching. Check each tarball on its
+          # own so a dev file in ANY of them fails the build.
+          leaked=0
+          for tgz in /tmp/pkg/*.tgz; do
+            if tar tzf "$tgz" | grep -E '\.omc|_bmad|fixture-values|README\.md\.gotmpl'; then
+              echo "::error::development files leaked into packaged chart ${tgz}"
+              leaked=1
+            fi
+          done
+          if [ "$leaked" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Run Integration Tests
+        run: ./tests/integration/test_integration.sh
+
+      - name: Run Schema Validation Tests
+        run: ./tests/integration/test_schema_validation.sh
+
+      # Helm 4 verifies plugin sources by default and a git source cannot be
+      # verified, so --verify=false is required there. Helm 3 has no such flag at
+      # all -- passing it fails with `unknown flag: --verify` -- so it must be
+      # conditional on the major version, not passed unconditionally.
+      - name: Install unittest plugin
+        run: |
+          PLUGIN=https://github.com/helm-unittest/helm-unittest
+          if helm version --short | grep -q '^v3'; then
+            helm plugin install "$PLUGIN" --version "${HELM_UNITTEST_VERSION}"
+          else
+            helm plugin install "$PLUGIN" --version "${HELM_UNITTEST_VERSION}" --verify=false
+          fi
+
+      # -f is resolved relative to the CHART directory, hence ../../. And
+      # helm-unittest exits 0 when it collects no suites at all, so a wrong path
+      # passes silently -- assert a suite actually ran.
+      - name: Run Unit Tests
+        run: |
+          set -o pipefail
+          run_suite() {
+            local chart="$1" suite="$2" out
+            out="$(helm unittest "$chart" -f "../../tests/unit/${suite}" 2>&1)" || { echo "$out"; exit 1; }
+            echo "$out"
+            if grep -qE 'Test Suites: +0 passed, 0 total' <<<"$out"; then
+              echo "::error::no test suites collected for ${chart} (${suite}) -- check the -f path"
+              exit 1
+            fi
+          }
+          run_suite ./charts/gateway-api        test_gateway.yaml
+          run_suite ./charts/gateway-api-routes test_routes.yaml
+
+  crd-upgrade:
+    name: CRD upgrade v1.4.1 -> vendored (k8s ${{ matrix.k8s }})
+    needs: lint-and-unit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Floor is the declared kubeVersion; ceiling is current upstream Kubernetes.
+        # The kind version is pinned per entry because each kind release publishes
+        # node images for only a few Kubernetes minors -- kind 0.33 has no 1.33
+        # image, and kind 0.32 cannot boot 1.37 (it writes a kubeadm.k8s.io/v1beta3
+        # config that kubeadm 1.37 refuses).
+        include:
+          - k8s: "1.33.12"
+            kind: "v0.32.0"
+          - k8s: "1.37.0"
+            kind: "v0.33.0"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Create Kind Cluster
+        uses: helm/kind-action@v1.15.0
+        with:
+          version: ${{ matrix.kind }}
+          node_image: kindest/node:v${{ matrix.k8s }}
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v5
+        with:
+          version: "3.19.0"
+
+      - name: Run CRD upgrade test
+        run: ./tests/integration/test_crd_upgrade.sh

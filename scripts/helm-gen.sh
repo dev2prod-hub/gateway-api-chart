@@ -48,22 +48,22 @@ rm -rf "${OUT_DIR:?}/"*
 printf "Generating helm chart for %s...\nENV: %s\n" "$HELM_CHART_NAME" "$env"
 
 extra_values="$HELM_CHART/${env}-values.yaml"
-VALUES=""
+VALUES=()
 if [[ -f ${extra_values} ]]; then
-  VALUES="--values=${extra_values}"
+  VALUES=(--values="${extra_values}")
   printf "Extra Values has been added: %s\n###\n\n" "$extra_values"
 else
   printf "Extra Values did not found: %s\n###\n" "$extra_values"
 fi
 
 printf "Validating helm chart values for %s...\n" "$HELM_CHART_NAME"
-helm lint "$HELM_CHART" ${VALUES} --strict
+helm lint "$HELM_CHART" "${VALUES[@]+"${VALUES[@]}"}" --strict
 
 helm template "$HELM_CHART" \
   --create-namespace \
   --namespace "$ns" \
   --debug \
-  --output-dir "${OUT_DIR}" ${VALUES}
+  --output-dir "${OUT_DIR}" "${VALUES[@]+"${VALUES[@]}"}"
 
 printf "\n####\nHelm chart generated successfully\nDIR: %s\n####\n" "$OUT_DIR"
 

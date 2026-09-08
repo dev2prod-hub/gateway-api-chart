@@ -8,9 +8,9 @@ Practices used in this repository for charts, configuration, testing, and docume
 
 - **CRDs unchanged** — Keep CRDs in `charts/gateway-api/crds/experimental/` as-original from [kubernetes-sigs/gateway-api](https://github.com/kubernetes-sigs/gateway-api). Do not modify them. Update via `./scripts/update-crds.sh`.
 - **Two-chart separation** — Infrastructure (`gateway-api`: GatewayClass, Gateway, CRDs) vs routes (`gateway-api-routes`: HTTPRoute, GRPCRoute, TCPRoute, UDPRoute). Maintain this split.
-- **Experimental CRDs** — Use the experimental channel (v1.4.1) for maximum feature support (TCPRoute, TLSRoute, UDPRoute, etc.).
+- **Experimental CRDs** — the `gateway-api` chart ships the experimental channel (v1.6.2) for maximum feature support. If you only need GA and beta resources, install the `gateway-api-standard` chart instead and pass `--skip-crds` to `gateway-api`.
 - **Provider-agnostic** — Charts work with any Gateway API provider (Envoy, AWS ALB, GKE, AKS). No controller is shipped; users install a provider and set `controllerName` / `gatewayClassName` in values.
-- **Helm 3** — Follow [Helm chart best practices](https://helm.sh/docs/chart_best_practices/) and Kubernetes Gateway API v1.4.1.
+- **Helm** — Follow [Helm chart best practices](https://helm.sh/docs/chart_best_practices/). The charts are tested on Helm 3.19 and Helm 4.
 
 ---
 
@@ -65,11 +65,15 @@ From [examples/README](../examples/README.md):
 2. **TLS certificates** — Replace example `certificateRefs` with your own `Secret` / `Certificate` names.
 3. **Hostnames** — Replace `example.com` (or similar) with your real domains.
 4. **Test in staging first** — Validate configuration before production.
-5. **Version pinning** — Use `--version 1.0.0` (or current) in production.
+5. **Version pinning** — always pin an exact chart version in production, and
+   never a range. These charts ship cluster-scoped Gateway API CRDs, and GitOps
+   controllers apply them unattended, so a floating constraint turns any chart
+   publish into an unreviewed CRD change. See `docs/MIGRATION.md`.
 
 ```bash
+# Pick the exact version with `helm search repo dev2prod/gateway-api --versions`
 helm install my-gateway dev2prod/gateway-api \
-  --version 1.0.0 \
+  --version <CHART_VERSION> \
   --values examples/cloud-providers/aws-alb/values.yaml
 ```
 
@@ -189,5 +193,5 @@ From [.cursorrules](../.cursorrules):
 ## References
 
 - [Gateway API](https://gateway-api.sigs.k8s.io/) — Spec and guides
-- [Gateway API v1.4.1](https://gateway-api.sigs.k8s.io/v1.4.1/)
+- [Gateway API](https://gateway-api.sigs.k8s.io/)
 - [Helm Chart Best Practices](https://helm.sh/docs/chart_best_practices/)

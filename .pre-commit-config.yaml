@@ -1,17 +1,43 @@
 repos:
-  - repo: git@github.com:pre-commit/pre-commit-hooks.git
-    rev: v5.0.0
+  # https, not git@ -- an SSH URL breaks pre-commit for anyone without a key/agent.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=3000' ]
+        # The vendored HTTPRoute CRD alone is over 500 KB, and CRDs are upstream
+        # files we must not modify.
+        exclude: ^charts/[^/]+/crds/
       - id: check-case-conflict
       - id: check-json
       - id: check-merge-conflict
       - id: check-symlinks
-        exclude: ^charts/gateway-api/crds/|^charts/gateway-api/templates/
+        exclude: ^charts/[^/]+/crds/|^charts/[^/]+/templates/
+      - id: check-yaml
+        # Helm templates are Go templates, not YAML. --unsafe still catches
+        # structural breakage in the CRDs and workflows, which is the point.
+        args: [ '--unsafe', '--allow-multiple-documents' ]
+        exclude: ^charts/[^/]+/templates/|^_bmad
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: ^_bmad/|^.agent$|^.claude$|^.cursor|^.github/*.md$
+        exclude: ^_bmad|^\.agent/|^\.claude/|^\.cursor|^\.omc/|^charts/[^/]+/crds/
       - id: no-commit-to-branch
       - id: trailing-whitespace
-        exclude: ^_bmad/|^.agent$|^.claude$|^.cursor|^.github/*.md$
+        exclude: ^_bmad|^\.agent/|^\.claude/|^\.cursor|^\.omc/|^charts/[^/]+/crds/
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+
+  - repo: local
+    hooks:
+      # Keep appVersion equal to the bundle actually vendored in crds/. These drift
+      # apart silently otherwise, and appVersion is the only in-cluster signal of
+      # which CRD bundle a release expects.
+      - id: appversion-matches-crds
+        name: appVersion matches vendored CRD bundle
+        language: system
+        pass_filenames: false
+        files: ^(charts/[^/]+/Chart\.yaml|charts/[^/]+/crds/)
+        entry: scripts/check-appversion.sh

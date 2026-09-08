@@ -33,4 +33,8 @@ _bmad/
 .cursor
 .gemini
 .codex
+.omc/
+.qwen
+.trae
 _bmad-output/
+__snapshot__/

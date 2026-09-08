@@ -1,0 +1,30 @@
+Gateway API CRDs installed: standard channel, bundle {{ .Chart.AppVersion }}.
+
+This release contains CRDs only. Verify what the cluster actually has:
+
+  kubectl get crd gateways.gateway.networking.k8s.io \
+    -o jsonpath='{.metadata.annotations.gateway\.networking\.k8s\.io/bundle-version}{"\n"}'
+  kubectl get crd gateways.gateway.networking.k8s.io \
+    -o jsonpath='{.metadata.annotations.gateway\.networking\.k8s\.io/channel}{"\n"}'
+
+Two things to know about this channel:
+
+  1. TCPRoute, UDPRoute and TLSRoute serve only v1 here. Their deprecated
+     v1alpha2 / v1alpha3 versions are present but served: false, so anything
+     still addressing them fails until it is updated.
+
+  2. `helm upgrade` never updates CRDs -- Helm applies crds/ on install only.
+     Upgrading the bundle takes a deliberate step:
+
+       kubectl apply --server-side --force-conflicts \
+         -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v{{ .Chart.AppVersion }}/standard-install.yaml
+
+     Flux and Argo CD users get this handled by their CRD upgrade policy
+     (`upgrade.crds: CreateReplace` / `ServerSideApply`).
+
+Next: install the gateway-api chart with CRDs skipped, so the two charts do not
+fight over the same cluster-scoped objects:
+
+  helm install my-gateway dev2prod/gateway-api --skip-crds
+
+See docs/MIGRATION.md before changing channels on a live cluster.
