@@ -2,6 +2,7 @@
 
 set -euo pipefail
 ENABLE_BUILD_VER=${ENABLE_BUILD_VER:-false}
+HAVE_GIT=true
 # Function to display usage
 usage() {
   printf "Usage: %s [major|minor|patch|pre-release] [pre-release-label (optional)]\n" "$0"
@@ -10,9 +11,13 @@ usage() {
 
 # Function to ensure script is run from the root of the project
 ensure_project_root() {
-  if [ ! -d .git ]; then
-    printf "Error: Script must be run from the root of the project (where the .git directory is located).\n"
+  if [ ! -f VERSION ] || [ ! -d charts ]; then
+    printf "Error: run this from the repository root (VERSION and charts/ must be here).\n"
     exit 1
+  fi
+  if [ ! -d .git ]; then
+    printf "Warning: no .git directory -- files will be updated but nothing committed or tagged.\n"
+    HAVE_GIT=false
   fi
 }
 
@@ -87,14 +92,6 @@ update_version_file() {
   printf "Updated VERSION file.\n"
 }
 
-# Helm chart version bump
-helm_chart_version_bump() {
-  new_version=${new_version:-$1}
-  chart_dir=${chart_dir:-charts/gateway-api}
-  printf "Bumping version in Helm chart %s to %s\n" "$chart_dir" "$new_version"
-  sed -i "s/version: .*/version: $new_version/" "${chart_dir}/Chart.yaml"
-}
-
 # Function to commit and tag changes
 commit_and_tag_changes() {
   git add VERSION
@@ -132,12 +129,15 @@ main() {
   printf "New version: %s\n" "$new_version"
 
   update_version_file
-  source scripts/helm-bump.sh "$new_version" "gateway-api"
-  source scripts/helm-bump.sh "$new_version" "gateway-api-routes"
+  for chart in gateway-api gateway-api-routes gateway-api-standard; do
+    bash scripts/helm-bump.sh "$new_version" "$chart"
+  done
   source scripts/generate-docs.sh
 
-  commit_and_tag_changes
-  check_git_state
+  if [ "$HAVE_GIT" = true ]; then
+    commit_and_tag_changes
+    check_git_state
+  fi
 
   printf "Version bump script completed successfully.\n"
 }
