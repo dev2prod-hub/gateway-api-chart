@@ -163,12 +163,25 @@ fi
 
 step "Storage migration must bring storedVersions to v1 only"
 for k in tcproutes udproutes; do
-  kubectl get "${k}.gateway.networking.k8s.io" -A -o yaml | kubectl replace -f - >/dev/null 2>&1
-  kubectl patch crd "${k}.gateway.networking.k8s.io" --subresource=status \
-    --type=merge -p '{"status":{"storedVersions":["v1"]}}' >/dev/null 2>&1
+  count="$(kubectl get "${k}.gateway.networking.k8s.io" -A -o name 2>/dev/null | wc -l | tr -d ' ')"
+  if [[ "$count" -eq 0 ]]; then
+    bad "${k}: no objects found to migrate -- storage rewrite would prove nothing"
+    continue
+  fi
+  if ! replace_out="$(kubectl get "${k}.gateway.networking.k8s.io" -A -o yaml | kubectl replace -f - 2>&1)"; then
+    bad "${k}: kubectl replace (storage rewrite) failed" "$(echo "$replace_out" | tail -3)"
+    continue
+  fi
+  stored_between="$(kubectl get crd "${k}.gateway.networking.k8s.io" -o jsonpath='{.status.storedVersions}')"
+  echo "  ${k} storedVersions after rewriting ${count} object(s), before narrowing patch: ${stored_between}"
+  if ! patch_out="$(kubectl patch crd "${k}.gateway.networking.k8s.io" --subresource=status \
+       --type=merge -p '{"status":{"storedVersions":["v1"]}}' 2>&1)"; then
+    bad "${k}: storedVersions narrowing patch was rejected by the API server" "$(echo "$patch_out" | tail -3)"
+    continue
+  fi
   stored="$(kubectl get crd "${k}.gateway.networking.k8s.io" -o jsonpath='{.status.storedVersions}')"
   if [[ "$stored" == '["v1"]' ]]; then
-    ok "${k} storedVersions == [\"v1\"]"
+    ok "${k} storedVersions == [\"v1\"] (rewrote ${count} object(s), narrowing patch accepted)"
   else
     bad "${k} storedVersions == ${stored}"
   fi
