@@ -14,8 +14,28 @@
   kubectl get gatewayclass
   kubectl get gateway
 
-3. Check Gateway API CRDs are installed:
-  kubectl get crd | grep gateway.networking.k8s.io
+3. Check WHICH Gateway API CRDs are installed. This chart ships bundle
+   {{ .Chart.AppVersion }} (experimental channel), but that is not necessarily
+   what the cluster has:
+
+  kubectl get crd gateways.gateway.networking.k8s.io -o jsonpath='{.metadata.annotations.gateway\.networking\.k8s\.io/bundle-version}{"  "}{.metadata.annotations.gateway\.networking\.k8s\.io/channel}{"\n"}'
+
+   IMPORTANT: `helm upgrade` never updates CRDs. Helm applies the chart's crds/
+   directory on install only, and skips CRDs that already exist. So upgrading this
+   chart leaves the cluster's CRDs exactly as they were, with no warning. If the
+   command above reports an older bundle than {{ .Chart.AppVersion }}, update the
+   CRDs deliberately:
+
+  kubectl apply --server-side --force-conflicts \
+    -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v{{ .Chart.AppVersion }}/experimental-install.yaml
+
+   Read docs/MIGRATION.md first if you are crossing a Gateway API minor version --
+   some upgrades need a storage migration afterwards.
+
+   Flux and Argo CD users get this handled by their CRD policy
+   (`upgrade.crds: CreateReplace` / `ServerSideApply`), which means the CRDs are
+   replaced automatically and unattended. Pin an exact chart version so that
+   happens when you decide, not when a chart is published.
 
 {{- if .Values.gatewayClass.enabled }}
 4. GatewayClass "{{ .Values.gatewayClass.name | default (include "gateway-api.fullname" .) }}" has been created.
