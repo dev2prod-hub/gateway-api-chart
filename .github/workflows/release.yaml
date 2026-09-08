@@ -11,6 +11,17 @@ name: Release Chart
 # cluster-scoped CRD change. workflow_run fires on both success and failure, so
 # the job condition below checks conclusion explicitly -- do not drop that
 # check when touching this file.
+#
+# lint-test.yaml also triggers on pull_request, and for a fork PR GitHub
+# resolves it from the fork's head, not from main -- an attacker can gut the
+# job to a no-op while keeping the "Lint and Test" name, get a "success"
+# conclusion, and (since a fork's default branch is commonly also named
+# "main") satisfy head_branch == 'main' too, all while head_sha points at
+# their own commit (reachable from this repo via refs/pull/N/head). The
+# `event == 'push'` check rules out pull_request-triggered runs entirely, and
+# `head_repository.full_name == github.repository` rules out the run having
+# come from a fork even if some other push-triggering path existed. Neither
+# check is redundant with the other -- both must stay.
 on:
   workflow_run:
     workflows: ["Lint and Test"]
@@ -18,7 +29,13 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: release-helm-${{ github.event.workflow_run.head_branch || github.ref }}
+  # workflow_run always reports head_branch as the bare branch name (e.g.
+  # "main"), while workflow_dispatch's github.ref is "refs/heads/main" -- left
+  # unnormalized, the two triggers land in different concurrency groups and a
+  # manual release can run in parallel with an automatic one, both pushing
+  # gh-pages and creating tags. Strip the refs/heads/ prefix so both triggers
+  # for the same branch share one group.
+  group: release-helm-${{ github.event.workflow_run.head_branch || github.ref_name }}
   cancel-in-progress: false
 
 permissions:
@@ -29,7 +46,7 @@ jobs:
     name: Publish Chart
     if: |
       github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' ||
-      github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+      github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository
     permissions:
       contents: write
     runs-on: ubuntu-latest
