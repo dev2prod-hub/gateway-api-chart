@@ -78,7 +78,7 @@ See [deployment-guide.md](./deployment-guide.md) for CI/CD and release process.
 - **Unit (optional):** helm-unittest in `tests/unit/`; referenced in `tests/README.md` (CI wiring TBD).
 - **Integration:** `tests/integration/test_integration.sh` (lint, render, CRD/channel checks) and
   `test_schema_validation.sh` (values.schema.json), both cluster-free and run on every push and PR.
-- **CRD upgrade:** `tests/integration/test_crd_upgrade.sh` runs on a kind cluster (Kubernetes 1.31 and
+- **CRD upgrade:** `tests/integration/test_crd_upgrade.sh` runs on a kind cluster (Kubernetes 1.33 and
   1.37 in CI). It installs the previous CRD bundle, creates objects at the old alpha versions, then
   replays exactly what Flux does -- server-side apply with forced conflicts -- and asserts the objects
   survive and are patched in place rather than recreated. It refuses to run outside a kind cluster.

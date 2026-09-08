@@ -21,9 +21,13 @@ especially if you install via Flux or Argo CD, where CRDs are replaced unattende
 - **`appVersion` now tracks the vendored Gateway API bundle** (`1.6.2`) instead of
   duplicating the chart version. `app.kubernetes.io/version` on every rendered
   object now states which CRD bundle the release expects.
-- **`kubeVersion: ">=1.31.0-0"` declared.** Gateway API 1.5's TLSRoute CEL
-  validation requires Kubernetes 1.31 or newer; the charts refuse to install below
-  that where they previously would.
+- **`kubeVersion: ">=1.33.0-0"` declared.** The experimental XBackend CRD, new in
+  Gateway API 1.6, carries a CEL rule using `format.dns1123Label()`, and the
+  Kubernetes CEL format library only exists from 1.32 -- on 1.31 the API server
+  rejects that CRD outright with `undeclared reference to 'validate'`. Upstream
+  Gateway API supports only the 5 most recent Kubernetes minors, which is 1.33+ for
+  v1.6.2, so the declared floor is 1.33 and CI tests it. The charts refuse to
+  install below that where they previously would.
 
 ### Removed
 

@@ -17,13 +17,40 @@ differently.
 | `gatewayClass.infrastructure` **removed** | The field never existed in the GatewayClass API. It was silently pruned by the API server while `values.schema.json` accepted it. Setting it now fails validation. |
 | New `gateway-api-standard` chart | Ships the standard-channel CRDs, for clusters that do not want the experimental resources. |
 | `appVersion` now tracks Gateway API (`1.6.2`), not the chart version | `app.kubernetes.io/version` on every rendered object finally states which CRD bundle the release expects. |
-| `kubeVersion: ">=1.31.0-0"` added | Gateway API 1.5's TLSRoute CEL validation requires Kubernetes 1.31+. The chart now refuses to install below that. |
+| `kubeVersion: ">=1.33.0-0"` added | The charts refuse to install below Kubernetes 1.33. See [Kubernetes floor](#kubernetes-floor). |
 
 **Nothing in this jump drops an API version.** Every version served by the v1.4.1
 CRDs is still listed in v1.6.2's `spec.versions`, so the CRD update is accepted by
 the API server even on clusters with objects stored at `v1alpha2`. The deprecated
 alpha versions remain **served** in the experimental channel, so existing manifests
 keep working. That is the whole reason this can ship as one release.
+
+### Kubernetes floor
+
+**Chart 2.0.0 requires Kubernetes 1.33 or newer**, and this is a hard stop rather
+than a recommendation.
+
+The experimental `XBackend` CRD, new in Gateway API 1.6, carries a CEL validation
+rule using `format.dns1123Label()`. The Kubernetes CEL *format* library only exists
+from **1.32**, so on 1.31 the API server rejects that CRD outright:
+
+```
+ERROR: <input>:1:50: undeclared reference to 'validate' (in container '')
+ | size(self) == 0 || format.dns1123Label().validate(self) == null
+```
+
+Under a GitOps controller that is not a clean failure: the CRD apply is rejected,
+the reconcile fails, and remediation retries it on every interval indefinitely.
+
+The declared floor is 1.33 rather than the technical 1.32 because upstream Gateway
+API supports only the 5 most recent Kubernetes minors -- 1.33 through 1.37 for
+v1.6.2 -- and CI tests 1.33 and 1.37. Declaring 1.32 would claim a version nobody
+tests.
+
+Note that this rule lives only in the *experimental* channel; the standard-channel
+CRDs contain no CEL format rules at all. The `gateway-api-standard` chart still
+declares the same floor, because the charts move in lockstep and 1.32 and below are
+outside upstream's support window regardless.
 
 ---
 

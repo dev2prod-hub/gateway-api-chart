@@ -4,10 +4,15 @@ description: Kubernetes Gateway API - Routing Layer. Part of the Gateway API cha
 type: application
 version: 2.0.0
 appVersion: "1.6.2"
-# TLSRoute CEL validation (Gateway API v1.5+) requires Kubernetes 1.31 or newer.
-# The -0 suffix is required: Helm semver treats vendor tags like 1.31.4-eks-a1b2c3
-# as prereleases, which a bare >=1.31.0 constraint would reject.
-kubeVersion: ">=1.31.0-0"
+# Floor of 1.33, verified in CI, for two reasons. The hard technical limit is 1.32:
+# the experimental XBackend CRD carries a CEL rule using format.dns1123Label(), and
+# the Kubernetes CEL format library only exists from 1.32 -- on 1.31 the API server
+# rejects the CRD outright with "undeclared reference to 'validate'". Upstream
+# Gateway API supports only the 5 most recent Kubernetes minors, which is 1.33+ for
+# v1.6.2, so 1.33 is both above the technical limit and inside the supported window.
+# The -0 suffix is required: Helm semver treats vendor tags like 1.33.4-eks-a1b2c3
+# as prereleases, which a bare >=1.33.0 constraint would reject.
+kubeVersion: ">=1.33.0-0"
 home: https://charts.cdnn.host/
 sources:
   - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes

@@ -119,7 +119,7 @@ helm install routes dev2prod/gateway-api-routes \
 ✔️ **CRD Management** — Original CRDs from kubernetes-sigs (unchanged)
 ✔️ **CRD Version** v1.6.2 (experimental) — TCPRoute, TLSRoute, UDPRoute at `v1`, plus experimental features
 ✔️ **Three Helm charts** — gateway-api (infra), gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, TLSRoute, UDPRoute), gateway-api-standard (standard-channel CRDs)
-✔️ **Tested** on Kubernetes 1.31 and 1.37, Helm 3.19 and Helm 4
+✔️ **Tested** on Kubernetes 1.33 and 1.37, Helm 3.19 and Helm 4
 
 ## Configuration Example 🔧
 

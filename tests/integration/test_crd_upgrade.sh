@@ -15,11 +15,12 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 CRD_DIR="${REPO_ROOT}/charts/gateway-api/crds/experimental"
 
 PREVIOUS_BUNDLE="v1.4.1"
+PREVIOUS_CHART="1.0.5"   # last release before this upgrade
 NS="gw-upgrade-test"
 
 pass=0; fail=0
 ok()   { printf '  \033[32mPASS\033[0m %s\n' "$1"; pass=$((pass+1)); }
-bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$1"; fail=$((fail+1)); }
+bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$1"; fail=$((fail+1)); [ -n "${2:-}" ] && printf '       %s\n' "$2"; }
 step() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
 
 target_bundle() {
@@ -62,23 +63,26 @@ kubectl apply --server-side -f \
 kubectl wait --for=condition=Established --timeout=90s \
   crd/tcproutes.gateway.networking.k8s.io crd/udproutes.gateway.networking.k8s.io >/dev/null
 
-step "Create objects at the OLD alpha versions so storedVersions is populated"
+step "Install the PREVIOUS published chart so the objects are Helm-owned"
+# Helm refuses to take over a resource lacking its ownership metadata, so an object
+# created with kubectl would fail adoption for a reason unrelated to the CRD jump.
+# A real consumer is upgrading objects created by the previous chart release.
 kubectl create namespace "$NS" --dry-run=client -o yaml | kubectl apply -f - >/dev/null
-kubectl apply -f - >/dev/null <<EOF
-apiVersion: gateway.networking.k8s.io/v1alpha2
-kind: TCPRoute
-metadata: {name: legacy-tcp, namespace: ${NS}}
-spec:
-  parentRefs: [{name: legacy-gw}]
-  rules: [{backendRefs: [{name: tcp-svc, port: 9000}]}]
----
-apiVersion: gateway.networking.k8s.io/v1alpha2
-kind: UDPRoute
-metadata: {name: legacy-udp, namespace: ${NS}}
-spec:
-  parentRefs: [{name: legacy-gw}]
-  rules: [{backendRefs: [{name: udp-svc, port: 9001}]}]
-EOF
+helm repo add dev2prod https://charts.cdnn.host/ >/dev/null 2>&1
+helm repo update dev2prod >/dev/null 2>&1
+if out="$(helm install gwr dev2prod/gateway-api-routes --version "$PREVIOUS_CHART" -n "$NS" --wait --timeout 3m \
+     --set tcpRoute.items[0].name=legacy-tcp \
+     --set tcpRoute.items[0].parentRefs[0].name=legacy-gw \
+     --set tcpRoute.items[0].rules[0].backendRefs[0].name=tcp-svc \
+     --set tcpRoute.items[0].rules[0].backendRefs[0].port=9000 \
+     --set udpRoute.items[0].name=legacy-udp \
+     --set udpRoute.items[0].parentRefs[0].name=legacy-gw \
+     --set udpRoute.items[0].rules[0].backendRefs[0].name=udp-svc \
+     --set udpRoute.items[0].rules[0].backendRefs[0].port=9001 2>&1)"; then
+  ok "chart ${PREVIOUS_CHART} installed, rendering routes at v1alpha2"
+else
+  bad "could not install the previous published chart ${PREVIOUS_CHART}" "$(echo "$out" | tail -3)"
+fi
 
 uid_before_tcp="$(kubectl get tcproute legacy-tcp -n "$NS" -o jsonpath='{.metadata.uid}')"
 stored_before="$(kubectl get crd tcproutes.gateway.networking.k8s.io -o jsonpath='{.status.storedVersions}')"
@@ -88,13 +92,21 @@ echo "  TCPRoute storedVersions before: ${stored_before}"
   || bad "expected v1alpha2 in storedVersions, got ${stored_before}"
 
 step "Replace CRDs exactly as Flux does (server-side apply, forced conflicts)"
-if apply_out="$(kubectl apply --server-side --force-conflicts -f "$CRD_DIR" 2>&1)"; then
-  ok "all vendored CRDs accepted"
+rejected=""
+for crd in "$CRD_DIR"/*.yaml; do
+  if ! out="$(kubectl apply --server-side --force-conflicts -f "$crd" 2>&1)"; then
+    rejected="${rejected}${crd##*/}\n${out}\n"
+  fi
+done
+if [ -z "$rejected" ]; then
+  ok "all vendored CRDs accepted by the API server"
 else
-  bad "CRD apply rejected -- this would loop forever under remediation retries"
-  echo "$apply_out" | grep -i 'must appear in spec.versions' && \
-    echo "  ^ a version was dropped from spec.versions while objects are stored at it"
-  echo "$apply_out" | tail -5
+  bad "the API server rejected at least one CRD -- under remediation retries this loops forever"
+  printf '%b' "$rejected" | sed 's/^/       /'
+  printf '%b' "$rejected" | grep -q 'must appear in spec.versions' && \
+    echo "       ^ a version was dropped from spec.versions while objects are stored at it"
+  printf '%b' "$rejected" | grep -q 'undeclared reference' && \
+    echo "       ^ a CEL rule uses a library this Kubernetes version does not have"
 fi
 
 crd_count="$(find "$CRD_DIR" -name '*.yaml' | wc -l | tr -d ' ')"
@@ -112,17 +124,26 @@ kubectl get udproutes.v1.gateway.networking.k8s.io legacy-udp -n "$NS" >/dev/nul
   || bad "UDPRoute not readable via v1"
 
 step "Install the charts against the new CRDs"
-helm upgrade --install gw "${REPO_ROOT}/charts/gateway-api" \
-  -n "$NS" --skip-crds --wait --timeout 3m >/dev/null 2>&1 \
-  && ok "gateway-api installs" || bad "gateway-api install failed"
+if out="$(helm upgrade --install gw "${REPO_ROOT}/charts/gateway-api" \
+     -n "$NS" --skip-crds --wait --timeout 3m 2>&1)"; then
+  ok "gateway-api installs"
+else
+  bad "gateway-api install failed" "$(echo "$out" | tail -3)"
+fi
 
-helm upgrade --install gwr "${REPO_ROOT}/charts/gateway-api-routes" -n "$NS" --wait --timeout 3m \
-  --set tcpRoute.items[0].name=legacy-tcp \
-  --set tcpRoute.items[0].parentRefs[0].name=legacy-gw \
-  --set tcpRoute.items[0].rules[0].backendRefs[0].name=tcp-svc \
-  --set tcpRoute.items[0].rules[0].backendRefs[0].port=9000 >/dev/null 2>&1 \
-  && ok "gateway-api-routes adopts the pre-existing v1alpha2 object at v1" \
-  || bad "gateway-api-routes upgrade failed"
+if out="$(helm upgrade gwr "${REPO_ROOT}/charts/gateway-api-routes" -n "$NS" --wait --timeout 3m \
+     --set tcpRoute.items[0].name=legacy-tcp \
+     --set tcpRoute.items[0].parentRefs[0].name=legacy-gw \
+     --set tcpRoute.items[0].rules[0].backendRefs[0].name=tcp-svc \
+     --set tcpRoute.items[0].rules[0].backendRefs[0].port=9000 \
+     --set udpRoute.items[0].name=legacy-udp \
+     --set udpRoute.items[0].parentRefs[0].name=legacy-gw \
+     --set udpRoute.items[0].rules[0].backendRefs[0].name=udp-svc \
+     --set udpRoute.items[0].rules[0].backendRefs[0].port=9001 2>&1)"; then
+  ok "routes chart upgrades the v1alpha2 objects to v1 in place"
+else
+  bad "gateway-api-routes upgrade failed" "$(echo "$out" | tail -3)"
+fi
 
 step "The adopted object must be patched in place, not recreated"
 uid_after_tcp="$(kubectl get tcproute legacy-tcp -n "$NS" -o jsonpath='{.metadata.uid}' 2>/dev/null)"
