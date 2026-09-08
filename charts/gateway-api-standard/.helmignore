@@ -1,0 +1,40 @@
+# Patterns to ignore when building packages.
+# This supports shell glob matching, relative path matching, and
+# negation (prefixed with !). Only one pattern per line.
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
+# Agent / assistant state. Anything landing under crds/ with a .yaml, .yml or
+# .json extension is treated as a CRD manifest by both `helm lint` and Flux's
+# helm-controller, so tool state written inside the chart breaks packaging.
+# .gitignore does not affect `helm package` -- these must be listed here too.
+.omc/
+.agent/
+.claude/
+.cursor/
+.gemini/
+.codex/
+.qwen/
+.trae/
+_bmad/
+_bmad-output/
+# Test fixture and helm-docs source: repo inputs, not chart contents.
+fixture-values.yaml
+README.md.gotmpl

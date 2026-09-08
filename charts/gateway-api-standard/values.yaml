@@ -1,0 +1,2 @@
+# This chart ships nothing but CRDs, which Helm applies from crds/ verbatim and
+# does not template. There is nothing to configure.
