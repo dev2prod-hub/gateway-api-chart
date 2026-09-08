@@ -36,13 +36,14 @@ charts/
 
 ```bash
 helm repo add dev2prod https://charts.cdnn.host/
-helm install my-gateway dev2prod/gateway-api
-helm install routes dev2prod/gateway-api-routes
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>
+helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>
 ```
 
-Skip CRDs if already installed:
+Always pin an exact chart version in production, never a range. Skip CRDs if
+already installed:
 ```bash
-helm install my-gateway dev2prod/gateway-api --skip-crds
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION> --skip-crds
 ```
 
 ## Configuration

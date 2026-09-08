@@ -97,22 +97,28 @@ helm repo update
 helm repo search dev2prod
 ```
 
+Always pin an exact chart version in production, never a range -- these charts
+ship cluster-scoped Gateway API CRDs, and GitOps controllers apply them
+unattended. Pick the exact version with `helm search repo dev2prod/gateway-api --versions`.
+
 ### To skip CRD installation, use the following command:
 
 ```bash
 helm install my-gateway dev2prod/gateway-api \
-  \
+  --version <CHART_VERSION> \
   --skip-crds
 ```
 
 Install gateway-api with CRDs
 ```bash
 helm install my-gateway dev2prod/gateway-api \
+  --version <CHART_VERSION>
 ```
 
 ### Install gateway-api-routes
 ```bash
 helm install routes dev2prod/gateway-api-routes \
+  --version <CHART_VERSION>
 ```
 
 ## Features 📦

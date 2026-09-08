@@ -87,9 +87,11 @@ fi
 uid_before_tcp="$(kubectl get tcproute legacy-tcp -n "$NS" -o jsonpath='{.metadata.uid}')"
 stored_before="$(kubectl get crd tcproutes.gateway.networking.k8s.io -o jsonpath='{.status.storedVersions}')"
 echo "  TCPRoute storedVersions before: ${stored_before}"
-[[ "$stored_before" == *v1alpha2* ]] \
-  && ok "objects are stored at v1alpha2 (the case that could strand an upgrade)" \
-  || bad "expected v1alpha2 in storedVersions, got ${stored_before}"
+if [[ "$stored_before" == *v1alpha2* ]]; then
+  ok "objects are stored at v1alpha2 (the case that could strand an upgrade)"
+else
+  bad "expected v1alpha2 in storedVersions, got ${stored_before}"
+fi
 
 step "Replace CRDs exactly as Flux does (server-side apply, forced conflicts)"
 rejected=""
@@ -113,15 +115,21 @@ crd_count="$(find "$CRD_DIR" -name '*.yaml' | wc -l | tr -d ' ')"
 echo "  vendored CRD files: ${crd_count}"
 
 step "Old objects must still be readable through BOTH the old and new versions"
-kubectl get tcproutes.v1alpha2.gateway.networking.k8s.io legacy-tcp -n "$NS" >/dev/null 2>&1 \
-  && ok "TCPRoute readable via v1alpha2 (deprecated but still served)" \
-  || bad "TCPRoute no longer readable via v1alpha2"
-kubectl get tcproutes.v1.gateway.networking.k8s.io legacy-tcp -n "$NS" >/dev/null 2>&1 \
-  && ok "TCPRoute readable via v1" \
-  || bad "TCPRoute not readable via v1"
-kubectl get udproutes.v1.gateway.networking.k8s.io legacy-udp -n "$NS" >/dev/null 2>&1 \
-  && ok "UDPRoute readable via v1" \
-  || bad "UDPRoute not readable via v1"
+if kubectl get tcproutes.v1alpha2.gateway.networking.k8s.io legacy-tcp -n "$NS" >/dev/null 2>&1; then
+  ok "TCPRoute readable via v1alpha2 (deprecated but still served)"
+else
+  bad "TCPRoute no longer readable via v1alpha2"
+fi
+if kubectl get tcproutes.v1.gateway.networking.k8s.io legacy-tcp -n "$NS" >/dev/null 2>&1; then
+  ok "TCPRoute readable via v1"
+else
+  bad "TCPRoute not readable via v1"
+fi
+if kubectl get udproutes.v1.gateway.networking.k8s.io legacy-udp -n "$NS" >/dev/null 2>&1; then
+  ok "UDPRoute readable via v1"
+else
+  bad "UDPRoute not readable via v1"
+fi
 
 step "Install the charts against the new CRDs"
 if out="$(helm upgrade --install gw "${REPO_ROOT}/charts/gateway-api" \
@@ -159,8 +167,11 @@ for k in tcproutes udproutes; do
   kubectl patch crd "${k}.gateway.networking.k8s.io" --subresource=status \
     --type=merge -p '{"status":{"storedVersions":["v1"]}}' >/dev/null 2>&1
   stored="$(kubectl get crd "${k}.gateway.networking.k8s.io" -o jsonpath='{.status.storedVersions}')"
-  [[ "$stored" == '["v1"]' ]] && ok "${k} storedVersions == [\"v1\"]" \
-                             || bad "${k} storedVersions == ${stored}"
+  if [[ "$stored" == '["v1"]' ]]; then
+    ok "${k} storedVersions == [\"v1\"]"
+  else
+    bad "${k} storedVersions == ${stored}"
+  fi
 done
 
 step "Negative test: routes chart against the OLD CRDs must fail cleanly"

@@ -12,7 +12,6 @@ STANDARD_CHART_DIR="${PROJECT_ROOT}/charts/gateway-api-standard"
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Test counter
@@ -37,24 +36,27 @@ test_template() {
     local test_name="$1"
     local chart_path="$2"
     local values_file="${3:-}"
-    local extra_flags="${4:-}"
+    local extra_flags=()
+    if [ "$#" -gt 3 ]; then
+        extra_flags=("${@:4}")
+    fi
 
     if [ -n "$values_file" ] && [ -f "$values_file" ]; then
-        if helm template test-release "$chart_path" --values "$values_file" $extra_flags > /dev/null 2>&1; then
+        if helm template test-release "$chart_path" --values "$values_file" "${extra_flags[@]+"${extra_flags[@]}"}" > /dev/null 2>&1; then
             print_test "$test_name" "PASS"
             return 0
         else
             print_test "$test_name" "FAIL"
-            helm template test-release "$chart_path" --values "$values_file" $extra_flags 2>&1 | tail -5
+            helm template test-release "$chart_path" --values "$values_file" "${extra_flags[@]+"${extra_flags[@]}"}" 2>&1 | tail -5
             return 1
         fi
     else
-        if helm template test-release "$chart_path" $extra_flags > /dev/null 2>&1; then
+        if helm template test-release "$chart_path" "${extra_flags[@]+"${extra_flags[@]}"}" > /dev/null 2>&1; then
             print_test "$test_name" "PASS"
             return 0
         else
             print_test "$test_name" "FAIL"
-            helm template test-release "$chart_path" $extra_flags 2>&1 | tail -5
+            helm template test-release "$chart_path" "${extra_flags[@]+"${extra_flags[@]}"}" 2>&1 | tail -5
             return 1
         fi
     fi
@@ -184,13 +186,13 @@ for example in "$PROJECT_ROOT/examples/cloud-providers"/*/values.yaml "$PROJECT_
 done )
 
 # Test 7: Gateway disabled
-test_template "Gateway disabled" "$CHART_DIR" "" "--set gateway.enabled=false"
+test_template "Gateway disabled" "$CHART_DIR" "" --set gateway.enabled=false
 
 # Test 8: GatewayClass disabled
-test_template "GatewayClass disabled" "$CHART_DIR" "" "--set gatewayClass.enabled=false"
+test_template "GatewayClass disabled" "$CHART_DIR" "" --set gatewayClass.enabled=false
 
 # Test 9: Both disabled (should still render, just empty)
-test_template "Both disabled" "$CHART_DIR" "" "--set gateway.enabled=false --set gatewayClass.enabled=false"
+test_template "Both disabled" "$CHART_DIR" "" --set gateway.enabled=false --set gatewayClass.enabled=false
 
 # Test 10: Schema validation (if schema test script exists)
 if [ -f "$SCRIPT_DIR/test_schema_validation.sh" ]; then

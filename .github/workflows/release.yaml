@@ -20,7 +20,7 @@ permissions:
 jobs:
   chart-releaser:
     name: Publish Chart
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
     runs-on: ubuntu-latest

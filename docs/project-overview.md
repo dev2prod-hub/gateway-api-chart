@@ -52,9 +52,9 @@ This repository provides production-ready Helm charts for **Kubernetes Gateway A
 ### Getting Started
 
 - Add Helm repo: `helm repo add dev2prod https://charts.cdnn.host/`
-- Install gateway-api: `helm install my-gateway dev2prod/gateway-api`
-- Install routes: `helm install routes dev2prod/gateway-api-routes`
-- Use `--skip-crds` if CRDs are already installed.
+- Install gateway-api: `helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>`
+- Install routes: `helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>`
+- Always pin an exact chart version in production, never a range. Use `--skip-crds` if CRDs are already installed.
 
 ### Key Commands
 

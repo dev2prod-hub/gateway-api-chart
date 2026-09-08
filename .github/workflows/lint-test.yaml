@@ -59,8 +59,18 @@ jobs:
             helm lint "$chart" --strict
           done
           echo "--- packaged contents must not carry development files"
-          if tar tzf /tmp/pkg/*.tgz | grep -E '\.omc|_bmad|fixture-values|README\.md\.gotmpl'; then
-            echo "::error::development files leaked into a packaged chart"
+          # tar tzf /tmp/pkg/*.tgz would glob-expand to multiple archives, and tar
+          # treats only the first as the archive and the rest as member names to
+          # look up inside it -- silently never matching. Check each tarball on its
+          # own so a dev file in ANY of them fails the build.
+          leaked=0
+          for tgz in /tmp/pkg/*.tgz; do
+            if tar tzf "$tgz" | grep -E '\.omc|_bmad|fixture-values|README\.md\.gotmpl'; then
+              echo "::error::development files leaked into packaged chart ${tgz}"
+              leaked=1
+            fi
+          done
+          if [ "$leaked" -ne 0 ]; then
             exit 1
           fi
 

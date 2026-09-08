@@ -57,11 +57,12 @@ helm repo update
 ### Install
 
 ```bash
-helm install my-gateway dev2prod/gateway-api
-helm install routes dev2prod/gateway-api-routes
+helm install my-gateway dev2prod/gateway-api --version <CHART_VERSION>
+helm install routes dev2prod/gateway-api-routes --version <CHART_VERSION>
 ```
 
-Use `--skip-crds` when CRDs are already installed.
+Always pin an exact chart version in production, never a range. Use
+`--skip-crds` when CRDs are already installed.
 
 ### Run Tests (Development)
 

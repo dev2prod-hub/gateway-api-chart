@@ -12,7 +12,6 @@ ROUTES_CHART_DIR="${PROJECT_ROOT}/charts/gateway-api-routes"
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Test counter
@@ -121,7 +120,7 @@ echo ""
 
 # Create temporary directory for test values
 TEST_DIR=$(mktemp -d)
-trap "rm -rf $TEST_DIR" EXIT
+trap 'rm -rf "$TEST_DIR"' EXIT
 
 # ============================================
 # gateway-api chart negative tests

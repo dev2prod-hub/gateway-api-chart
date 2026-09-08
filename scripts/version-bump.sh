@@ -132,6 +132,7 @@ main() {
   for chart in gateway-api gateway-api-routes gateway-api-standard; do
     bash scripts/helm-bump.sh "$new_version" "$chart"
   done
+  # shellcheck disable=SC1091 # only reachable via ensure_project_root, so this path always exists
   source scripts/generate-docs.sh
 
   if [ "$HAVE_GIT" = true ]; then
