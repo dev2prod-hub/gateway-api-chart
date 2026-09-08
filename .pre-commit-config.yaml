@@ -40,15 +40,4 @@ repos:
         language: system
         pass_filenames: false
         files: ^(charts/[^/]+/Chart\.yaml|charts/[^/]+/crds/)
-        entry: >
-          bash -c '
-          bundle=$(grep -rhom1 "gateway.networking.k8s.io/bundle-version: v[0-9.]*"
-            charts/gateway-api/crds | head -1 | sed "s/.*: v//");
-          fail=0;
-          for f in charts/*/Chart.yaml; do
-            av=$(grep -m1 "^appVersion:" "$f" | tr -d "\"" | awk "{print \$2}");
-            if [ "$av" != "$bundle" ]; then
-              echo "$f: appVersion $av != vendored CRD bundle $bundle"; fail=1;
-            fi;
-          done;
-          exit $fail'
+        entry: scripts/check-appversion.sh

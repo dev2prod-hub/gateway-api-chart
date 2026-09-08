@@ -43,6 +43,12 @@ jobs:
             helm lint "$chart" --strict
           done
 
+      # appVersion is the only in-cluster signal of which CRD bundle a release
+      # expects (see .pre-commit-config.yaml). The local hook catches drift only
+      # for contributors who have pre-commit installed; this makes it a PR gate.
+      - name: Check appVersion matches vendored CRD bundle
+        run: ./scripts/check-appversion.sh
+
       # Lint what actually ships. The working tree can contain files that a
       # packaged chart does not (and vice versa) -- a stray non-CRD file under
       # crds/ only fails here, which is how it reaches consumers unnoticed.
