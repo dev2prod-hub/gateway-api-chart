@@ -45,7 +45,7 @@ For more information about Gateway API architecture, see the [official Gateway A
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| dev2prod | <k@kazakov.xyz> | <https://cdnn.cloud> |
+| dev2prod | <k@kazakov.xyz> | <https://kazakov.xyz> |
 | Kirill Kazakov | <k@kazakov.xyz> | <https://kazakov.xyz> |
 
 ## Source Code
