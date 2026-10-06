@@ -7,7 +7,7 @@
 
 | Resource | URL |
 |----------|-----|
-| Helm chart repo | [charts.cdnn.host](https://charts.cdnn.host/) |
+| Helm chart repo | [www.oncdn.xyz](https://www.oncdn.xyz/) |
 | Git source | [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart) |
 | Artifact Hub | [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart) |
 
@@ -75,15 +75,28 @@ Designed to be used either:
 
 ## Quick Start 🚀
 
-Install the Gateway API Helm chart from [charts.cdnn.host](https://charts.cdnn.host/):
+Install the Gateway API Helm chart from [www.oncdn.xyz](https://www.oncdn.xyz/):
 
 ### Add repository
 
 ```bash
-helm repo add dev2prod https://charts.cdnn.host/
+helm repo add dev2prod https://www.oncdn.xyz/
 helm repo update
 helm repo search dev2prod
 ```
+
+### Migrating from the old repository URL
+
+The chart repository moved from `charts.cdnn.host` to `https://www.oncdn.xyz/`. Existing users must switch:
+
+```bash
+helm repo remove dev2prod
+helm repo add dev2prod https://www.oncdn.xyz/
+```
+
+Flux users: update `HelmRepository.spec.url` to `https://www.oncdn.xyz/`.
+
+> **Warning:** do not use the old host `charts.cdnn.host`, even if it starts resolving again. The domain has expired; anyone can register it and serve their own `index.yaml`.
 
 ### To skip CRD installation, use the following command:
 

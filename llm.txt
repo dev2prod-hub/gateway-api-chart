@@ -34,7 +34,7 @@ charts/
 ## Installation
 
 ```bash
-helm repo add dev2prod https://charts.cdnn.host/
+helm repo add dev2prod https://www.oncdn.xyz/
 helm install my-gateway dev2prod/gateway-api --version 1.0.0
 helm install routes dev2prod/gateway-api-routes --version 1.0.0
 ```
@@ -115,7 +115,7 @@ helm schema validate values.yaml
 
 - **Project docs index:** `docs/index.md` — Master entry point for architecture, dev/deploy guides, source tree
 - GitHub: `dev2prod-hub/gateway-api-chart`
-- Helm repo: `https://charts.cdnn.host/`
+- Helm repo: `https://www.oncdn.xyz/`
 - Version: `1.0.0` (see VERSION file)
 - License: Apache 2.0
 

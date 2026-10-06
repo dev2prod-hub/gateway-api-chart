@@ -109,7 +109,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.7.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_URL: "https://charts.cdnn.host"
           CR_SKIP_EXISTING: "true"
 
       - name: Deploy index.html for SEO
