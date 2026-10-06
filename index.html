@@ -161,22 +161,22 @@ needing routing</li>
 href="https://charts.oncdn.xyz/">charts.oncdn.xyz</a>:</p>
 <h3 id="add-repository">Add repository</h3>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo add dev2prod https://charts.oncdn.xyz/</span>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo add oncdn https://charts.oncdn.xyz/</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo update</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo search dev2prod</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> repo search oncdn</span></code></pre></div>
 <h3 id="to-skip-crd-installation-use-the-following-command">To skip CRD
 installation, use the following command:</h3>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway dev2prod/gateway-api <span class="dt">\</span></span>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway oncdn/gateway-api <span class="dt">\</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0 <span class="dt">\</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--skip-crds</span></span></code></pre></div>
 <p>Install gateway-api with CRDs</p>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway dev2prod/gateway-api <span class="dt">\</span></span>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install my-gateway oncdn/gateway-api <span class="dt">\</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0</span></code></pre></div>
 <h3 id="install-gateway-api-routes">Install gateway-api-routes</h3>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install routes dev2prod/gateway-api-routes <span class="dt">\</span></span>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install routes oncdn/gateway-api-routes <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0</span></code></pre></div>
 <h2 id="features-">Features 📦</h2>
 <p>✔️ <strong>CRD Management</strong> — Original CRDs from
