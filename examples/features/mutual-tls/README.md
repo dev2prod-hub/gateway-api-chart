@@ -54,7 +54,7 @@ listeners:
 ## Installation
 
 ```bash
-helm install mtls-gateway dev2prod/gateway-api \
+helm install mtls-gateway oncdn/gateway-api \
   --values examples/features/mutual-tls/values.yaml
 ```
 

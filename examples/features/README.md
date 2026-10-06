@@ -30,7 +30,7 @@ Each feature example includes:
 
 ```bash
 # Example: Canary release
-helm install canary-gateway dev2prod/gateway-api \
+helm install canary-gateway oncdn/gateway-api \
   --values examples/features/canary-release/values.yaml
 ```
 

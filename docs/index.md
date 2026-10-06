@@ -14,7 +14,7 @@ Helm charts for **Kubernetes Gateway API** (v1.4.1): **gateway-api** (GatewayCla
 - **Tech Stack:** Helm 3, Kubernetes Gateway API v1.4.1, JSON Schema, GitHub Actions
 - **Entry Point:** `charts/gateway-api/values.yaml`, `charts/gateway-api-routes/values.yaml`
 - **Architecture Pattern:** Two-chart separation (infrastructure vs routes); config-driven resources
-- **Deployment:** Charts at https://charts.oncdn.xyz/; install via `helm install dev2prod/gateway-api`, `dev2prod/gateway-api-routes`
+- **Deployment:** Charts at https://charts.oncdn.xyz/; install via `helm install oncdn/gateway-api`, `oncdn/gateway-api-routes`
 
 ## Generated Documentation
 
@@ -50,15 +50,15 @@ Helm charts for **Kubernetes Gateway API** (v1.4.1): **gateway-api** (GatewayCla
 ### Setup
 
 ```bash
-helm repo add dev2prod https://charts.oncdn.xyz/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
 ```
 
 ### Install
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install my-gateway oncdn/gateway-api --version 1.0.0
+helm install routes oncdn/gateway-api-routes --version 1.0.0
 ```
 
 Use `--skip-crds` when CRDs are already installed.

@@ -11,9 +11,9 @@ Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the nativ
 Add the Helm repository and install this chart:
 
 ```bash
-helm repo add dev2prod https://charts.oncdn.xyz/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm install my-gateway dev2prod/gateway-api
+helm install my-gateway oncdn/gateway-api
 ```
 
 See [charts.oncdn.xyz](https://charts.oncdn.xyz/) for all Gateway API Helm charts.

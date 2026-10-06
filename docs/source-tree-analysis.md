@@ -138,7 +138,7 @@ gateway-api-chart/
 
 - **Main config (gateway-api):** `charts/gateway-api/values.yaml` — GatewayClass, Gateway, listeners.
 - **Main config (routes):** `charts/gateway-api-routes/values.yaml` — `httpRoute`, `grpcRoute`, `tcpRoute`, `udpRoute` items.
-- **Install:** `helm install` with `dev2prod/gateway-api` and `dev2prod/gateway-api-routes` (or local `charts/*`).
+- **Install:** `helm install` with `oncdn/gateway-api` and `oncdn/gateway-api-routes` (or local `charts/*`).
 - **CI:** `.github/workflows/lint-test-release.yaml` — lint, (optional) unit, chart-releaser.
 
 ## File Organization Patterns

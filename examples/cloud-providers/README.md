@@ -38,7 +38,7 @@ Azure Application Gateway via Application Gateway Ingress Controller.
 4. Install the chart with the example values
 
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --values examples/cloud-providers/aws-alb/values.yaml
 ```
 

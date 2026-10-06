@@ -34,14 +34,14 @@ charts/
 ## Installation
 
 ```bash
-helm repo add dev2prod https://charts.oncdn.xyz/
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm repo add oncdn https://charts.oncdn.xyz/
+helm install my-gateway oncdn/gateway-api --version 1.0.0
+helm install routes oncdn/gateway-api-routes --version 1.0.0
 ```
 
 Skip CRDs if already installed:
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+helm install my-gateway oncdn/gateway-api --version 1.0.0 --skip-crds
 ```
 
 ## Configuration

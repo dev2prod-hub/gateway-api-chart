@@ -15,8 +15,10 @@ Existing users must switch to the new repository URL:
 
 ```bash
 helm repo remove dev2prod
-helm repo add dev2prod https://charts.oncdn.xyz/
+helm repo add oncdn https://charts.oncdn.xyz/
 ```
+
+Releases installed from `dev2prod/<chart>` are upgraded from `oncdn/<chart>` from now on (`helm upgrade <release> oncdn/gateway-api ...`).
 
 Flux users: update `HelmRepository.spec.url` to `https://charts.oncdn.xyz/`.
 

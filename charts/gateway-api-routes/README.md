@@ -11,9 +11,9 @@ Kubernetes Gateway API - Routing Layer. Part of the Gateway API charts. Replace 
 Add the Helm repository and install this chart:
 
 ```bash
-helm repo add dev2prod https://charts.oncdn.xyz/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm install routes dev2prod/gateway-api-routes
+helm install routes oncdn/gateway-api-routes
 ```
 
 Requires a Gateway to be installed (use [`gateway-api`](../gateway-api/) chart). See [charts.oncdn.xyz](https://charts.oncdn.xyz/) for all Gateway API Helm charts.

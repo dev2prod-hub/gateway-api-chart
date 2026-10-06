@@ -69,7 +69,7 @@ From [examples/README](../examples/README.md):
 5. **Version pinning** — Use `--version 1.0.0` (or current) in production.
 
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --version 1.0.0 \
   --values examples/cloud-providers/aws-alb/values.yaml
 ```

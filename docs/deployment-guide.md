@@ -17,15 +17,15 @@ Charts are published to **https://charts.oncdn.xyz/** and can be installed as st
 ### Add Repo and Install
 
 ```bash
-helm repo add dev2prod https://charts.oncdn.xyz/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm search repo dev2prod
+helm search repo oncdn
 ```
 
 ### Install gateway-api (with CRDs)
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
+helm install my-gateway oncdn/gateway-api --version 1.0.0
 ```
 
 ### Install gateway-api (skip CRDs)
@@ -33,19 +33,19 @@ helm install my-gateway dev2prod/gateway-api --version 1.0.0
 Use when CRDs are already installed (e.g. by a controller or another release):
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+helm install my-gateway oncdn/gateway-api --version 1.0.0 --skip-crds
 ```
 
 ### Install gateway-api-routes
 
 ```bash
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install routes oncdn/gateway-api-routes --version 1.0.0
 ```
 
 ### Using Examples
 
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --version 1.0.0 \
   --values https://raw.githubusercontent.com/dev2prod-hub/gateway-api-chart/main/examples/cloud-providers/aws-alb/values.yaml
 ```
