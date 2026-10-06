@@ -64,7 +64,7 @@ See [development-guide.md](./development-guide.md) for details.
 
 ## Deployment Architecture
 
-- **Delivery:** Helm charts published to `https://charts.cdnn.host/` via chart-releaser (GitHub Actions on main).
+- **Delivery:** Helm charts published to `https://charts.oncdn.xyz/` via chart-releaser (GitHub Actions on main).
 - **Consumption:** Users add the repo, install gateway-api and gateway-api-routes (or use as subcharts). Cluster must have a Gateway API controller installed separately.
 - **Environments:** Examples show provider-specific controller names and TLS; same charts work across AWS, GKE, AKS, Envoy, etc.
 
@@ -88,7 +88,7 @@ See [deployment-guide.md](./deployment-guide.md) for CI/CD and release process.
 
 - CRDs are **unchanged** from upstream; do not patch them in-repo.
 - Use `{{-` for whitespace control; quote strings in templates; check `.Values.*.enabled` before rendering.
-- Document user-facing changes in README and llm.txt; keep CHANGELOG updated (per .cursorrules).
+- Document user-facing changes in README and llm.txt; keep CHANGELOG updated.
 
 ---
 

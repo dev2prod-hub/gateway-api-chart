@@ -36,7 +36,7 @@ Key settings in `values.yaml`:
 ## Installation
 
 ```bash
-helm install aws-gateway dev2prod/gateway-api \
+helm install aws-gateway oncdn/gateway-api \
   --values examples/cloud-providers/aws-alb/values.yaml
 ```
 

@@ -34,3 +34,20 @@ _bmad/
 .gemini
 .codex
 _bmad-output/
+
+# AI assistants / agent tooling (local only)
+.omc/
+.prgate/
+.cursorrules
+.windsurf/
+.windsurfrules
+.aider*
+.continue/
+CLAUDE.local.md
+.github/agents/
+.serena/
+.kiro/
+.roo/
+.clinerules
+.junie/
+.specstory/

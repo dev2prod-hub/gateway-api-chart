@@ -6,7 +6,7 @@ Ready-to-use configurations for common Gateway API scenarios.
 
 ```bash
 # Use an example with your installation
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --values examples/cloud-providers/aws-alb/values.yaml
 ```
 

@@ -4,19 +4,19 @@
 
 Kubernetes Gateway API - Infrastructure Layer. Replace your ingress to the native Kubernetes Gateway API.
 
-**Homepage:** <https://charts.cdnn.host/>
+**Homepage:** <https://charts.oncdn.xyz/>
 
 ## Install
 
 Add the Helm repository and install this chart:
 
 ```bash
-helm repo add dev2prod https://charts.cdnn.host/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm install my-gateway dev2prod/gateway-api
+helm install my-gateway oncdn/gateway-api
 ```
 
-See [charts.cdnn.host](https://charts.cdnn.host/) for all Gateway API Helm charts.
+See [charts.oncdn.xyz](https://charts.oncdn.xyz/) for all Gateway API Helm charts.
 
 ## Gateway API Resource Model
 
@@ -44,7 +44,7 @@ For more information about Gateway API architecture, see the [official Gateway A
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| dev2prod | <k@kazakov.xyz> | <https://cdnn.cloud> |
+| dev2prod | <k@kazakov.xyz> | <https://kazakov.xyz> |
 | Kirill Kazakov | <k@kazakov.xyz> | <https://kazakov.xyz> |
 
 ## Source Code

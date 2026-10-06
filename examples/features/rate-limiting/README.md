@@ -27,7 +27,7 @@ annotations:
 ## Installation
 
 ```bash
-helm install ratelimit-gateway dev2prod/gateway-api \
+helm install ratelimit-gateway oncdn/gateway-api \
   --values examples/features/rate-limiting/values.yaml
 ```
 

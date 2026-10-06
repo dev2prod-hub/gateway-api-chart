@@ -35,7 +35,7 @@ Key settings in `values.yaml`:
 ## Installation
 
 ```bash
-helm install aks-gateway dev2prod/gateway-api \
+helm install aks-gateway oncdn/gateway-api \
   --values examples/cloud-providers/aks-agic/values.yaml
 ```
 

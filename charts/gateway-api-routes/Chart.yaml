@@ -4,7 +4,7 @@ description: Kubernetes Gateway API - Routing Layer. Part of the Gateway API cha
 type: application
 version: 1.0.5
 appVersion: 1.0.0
-home: https://charts.cdnn.host/
+home: https://charts.oncdn.xyz/
 sources:
   - https://github.com/dev2prod-hub/gateway-api-chart/tree/main/charts/gateway-api-routes
 keywords:
@@ -18,7 +18,7 @@ keywords:
 maintainers:
   - name: dev2prod
     email: k@kazakov.xyz
-    url: https://cdnn.cloud
+    url: https://kazakov.xyz
   - name: Kirill Kazakov
     email: k@kazakov.xyz
     url: https://kazakov.xyz

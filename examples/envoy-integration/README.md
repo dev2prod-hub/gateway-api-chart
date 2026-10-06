@@ -24,7 +24,7 @@ The most common Envoy-based Gateway API implementation.
 
 2. **Install Gateway API chart**
    ```bash
-   helm install envoy-gateway dev2prod/gateway-api \
+   helm install envoy-gateway oncdn/gateway-api \
      --set gatewayClass.controllerName="gateway.envoyproxy.io/gatewayclass-controller"
    ```
 

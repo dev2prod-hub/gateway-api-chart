@@ -7,7 +7,7 @@
 
 | Resource | URL |
 |----------|-----|
-| Helm chart repo | [charts.cdnn.host](https://charts.cdnn.host/) |
+| Helm chart repo | [charts.oncdn.xyz](https://charts.oncdn.xyz/) |
 | Git source | [github.com/dev2prod-hub/gateway-api-chart](https://github.com/dev2prod-hub/gateway-api-chart) |
 | Artifact Hub | [artifacthub.io/packages/search?repo=gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart) |
 
@@ -75,33 +75,50 @@ Designed to be used either:
 
 ## Quick Start 🚀
 
-Install the Gateway API Helm chart from [charts.cdnn.host](https://charts.cdnn.host/):
+Install the Gateway API Helm chart from [charts.oncdn.xyz](https://charts.oncdn.xyz/):
 
 ### Add repository
 
 ```bash
-helm repo add dev2prod https://charts.cdnn.host/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm repo search dev2prod
+helm search repo oncdn
 ```
+
+<!-- landing:exclude:start -->
+### Migrating from the old repository URL
+
+The chart repository moved from `charts.cdnn.host` to `https://charts.oncdn.xyz/`. Existing users must switch:
+
+```bash
+helm repo remove dev2prod
+helm repo add oncdn https://charts.oncdn.xyz/
+```
+
+Releases installed from `dev2prod/<chart>` are upgraded from `oncdn/<chart>` from now on (`helm upgrade <release> oncdn/gateway-api ...`).
+
+Flux users: update `HelmRepository.spec.url` to `https://charts.oncdn.xyz/`.
+
+> **Warning:** do not use the old host `charts.cdnn.host`, even if it starts resolving again. The domain has expired; anyone can register it and serve their own `index.yaml`.
+<!-- landing:exclude:end -->
 
 ### To skip CRD installation, use the following command:
 
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --version 1.0.0 \
   --skip-crds
 ```
 
 Install gateway-api with CRDs
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --version 1.0.0
 ```
 
 ### Install gateway-api-routes
 ```bash
-helm install routes dev2prod/gateway-api-routes \
+helm install routes oncdn/gateway-api-routes \
   --version 1.0.0
 ```
 

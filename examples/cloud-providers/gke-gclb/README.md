@@ -34,7 +34,7 @@ Key settings in `values.yaml`:
 ## Installation
 
 ```bash
-helm install gke-gateway dev2prod/gateway-api \
+helm install gke-gateway oncdn/gateway-api \
   --values examples/cloud-providers/gke-gclb/values.yaml
 ```
 

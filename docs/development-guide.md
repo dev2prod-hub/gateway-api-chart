@@ -132,7 +132,7 @@ Fetches experimental CRDs from kubernetes-sigs and updates `charts/gateway-api/c
 1. Update `values.yaml` and/or `values.schema.json` in the relevant chart.
 2. Run `helm lint` and `helm template`.
 3. Run `test_schema_validation.sh` if you changed schema or validation rules.
-4. Update `README.md` and `llm.txt` if user-facing (per .cursorrules).
+4. Update `README.md` and `llm.txt` if user-facing.
 
 ### Bumping Versions
 
@@ -156,7 +156,7 @@ Edit `README.md` only; do not edit `static/index.html` (it is gitignored and reg
 - **Conditionals:** Check `.Values.*.enabled` before rendering resources; use `with` for optional nested values.
 - **Docs:** Update README and llm.txt for user-facing changes; maintain CHANGELOG.
 
-See `.cursorrules` and `llm.txt` for more detail.
+See [BEST_PRACTICES.md](./BEST_PRACTICES.md) and `llm.txt` for more detail.
 
 ## Troubleshooting
 

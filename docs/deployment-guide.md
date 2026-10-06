@@ -4,11 +4,11 @@
 
 ## Overview
 
-Charts are published to **https://charts.cdnn.host/** and can be installed as standalone releases or as subcharts. This guide covers consumption, release pipeline, and environment configuration.
+Charts are published to **https://charts.oncdn.xyz/** and can be installed as standalone releases or as subcharts. This guide covers consumption, release pipeline, and environment configuration.
 
 ## Helm Repository
 
-- **URL:** https://charts.cdnn.host/
+- **URL:** https://charts.oncdn.xyz/
 - **Charts:** `gateway-api`, `gateway-api-routes`
 - **Artifact Hub:** [gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
@@ -17,15 +17,15 @@ Charts are published to **https://charts.cdnn.host/** and can be installed as st
 ### Add Repo and Install
 
 ```bash
-helm repo add dev2prod https://charts.cdnn.host/
+helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm search repo dev2prod
+helm search repo oncdn
 ```
 
 ### Install gateway-api (with CRDs)
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0
+helm install my-gateway oncdn/gateway-api --version 1.0.0
 ```
 
 ### Install gateway-api (skip CRDs)
@@ -33,19 +33,19 @@ helm install my-gateway dev2prod/gateway-api --version 1.0.0
 Use when CRDs are already installed (e.g. by a controller or another release):
 
 ```bash
-helm install my-gateway dev2prod/gateway-api --version 1.0.0 --skip-crds
+helm install my-gateway oncdn/gateway-api --version 1.0.0 --skip-crds
 ```
 
 ### Install gateway-api-routes
 
 ```bash
-helm install routes dev2prod/gateway-api-routes --version 1.0.0
+helm install routes oncdn/gateway-api-routes --version 1.0.0
 ```
 
 ### Using Examples
 
 ```bash
-helm install my-gateway dev2prod/gateway-api \
+helm install my-gateway oncdn/gateway-api \
   --version 1.0.0 \
   --values https://raw.githubusercontent.com/dev2prod-hub/gateway-api-chart/main/examples/cloud-providers/aws-alb/values.yaml
 ```
@@ -76,7 +76,7 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 | Job             | Triggers     | Steps                                                                 |
 |-----------------|-------------|-----------------------------------------------------------------------|
 | Lint & Unit     | Push/PR to main | Checkout → Setup Helm → `helm lint` for each chart in `./charts` |
-| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://charts.cdnn.host` (gh-pages) |
+| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://charts.oncdn.xyz` (gh-pages) |
 
 - **Helm version:** 3.18.0 (workflow env; 3.18+ required for helm-unittest plugin).
 - **Unit / integration:** Referenced in `tests/README.md`; some steps (unittest, Kind-based integration) are commented in the workflow for later use.
@@ -84,7 +84,7 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 ### Chart Releaser
 
 - **Action:** `helm/chart-releaser-action@v1.7.0`
-- **Publish URL:** `https://charts.cdnn.host` (gh-pages)
+- **Publish URL:** `https://charts.oncdn.xyz` (gh-pages)
 - **Skip existing:** `CR_SKIP_EXISTING: "true"`
 - **Permissions:** `contents: write` for release artifacts.
 

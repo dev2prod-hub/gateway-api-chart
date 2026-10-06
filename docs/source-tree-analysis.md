@@ -10,9 +10,7 @@ Single-part infrastructure project. Two Helm charts under `charts/`, CRDs in `ga
 
 ```
 gateway-api-chart/
-├── .cursorrules                 # Cursor AI rules: Helm style, Gateway API, docs
 ├── .github/
-│   ├── agents/                  # BMAD/BMM agent configs (e.g. bmd-custom-*)
 │   └── workflows/
 │       ├── lint-test-release.yaml   # Lint, unit, chart-releaser
 │       └── update-crds.yaml         # CRD update automation
@@ -94,8 +92,7 @@ gateway-api-chart/
 │   │   └── cluster.yaml
 │   └── unit/
 │       └── test_gateway.yaml    # helm-unittest
-├── VERSION                      # 1.0.0
-└── _bmad/                       # BMAD method (workflows, agents); gitignored in pre-commit
+└── VERSION                      # 1.0.0
 ```
 
 ## Critical Directories
@@ -141,7 +138,7 @@ gateway-api-chart/
 
 - **Main config (gateway-api):** `charts/gateway-api/values.yaml` — GatewayClass, Gateway, listeners.
 - **Main config (routes):** `charts/gateway-api-routes/values.yaml` — `httpRoute`, `grpcRoute`, `tcpRoute`, `udpRoute` items.
-- **Install:** `helm install` with `dev2prod/gateway-api` and `dev2prod/gateway-api-routes` (or local `charts/*`).
+- **Install:** `helm install` with `oncdn/gateway-api` and `oncdn/gateway-api-routes` (or local `charts/*`).
 - **CI:** `.github/workflows/lint-test-release.yaml` — lint, (optional) unit, chart-releaser.
 
 ## File Organization Patterns
@@ -176,7 +173,7 @@ gateway-api-chart/
 - Run `helm lint` and `helm template` from each chart directory.
 - Use `./tests/integration/test_integration.sh` and `test_schema_validation.sh` before PRs.
 - CRD updates: `./scripts/update-crds.sh [version]` (default: latest Gateway API release).
-- Follow `.cursorrules` and `llm.txt` for conventions and AI context.
+- Follow [BEST_PRACTICES.md](./BEST_PRACTICES.md) and `llm.txt` for conventions and AI context.
 
 ---
 

@@ -36,11 +36,11 @@ rules:
 
 ```bash
 # Install Gateway
-helm install canary-gateway dev2prod/gateway-api \
+helm install canary-gateway oncdn/gateway-api \
   --values examples/features/canary-release/values.yaml
 
 # Then create HTTPRoutes with traffic splitting
-helm install canary-routes dev2prod/gateway-api-routes \
+helm install canary-routes oncdn/gateway-api-routes \
   --values your-canary-routes.yaml
 ```
 
