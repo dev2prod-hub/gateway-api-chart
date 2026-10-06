@@ -29,3 +29,8 @@ _bmad-output/
 .agent
 .claude
 .cursor
+.gemini
+.codex
+.omc/
+.prgate/
+.github/agents/
