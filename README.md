@@ -82,7 +82,7 @@ Install the Gateway API Helm chart from [charts.oncdn.xyz](https://charts.oncdn.
 ```bash
 helm repo add oncdn https://charts.oncdn.xyz/
 helm repo update
-helm repo search oncdn
+helm search repo oncdn
 ```
 
 <!-- landing:exclude:start -->
