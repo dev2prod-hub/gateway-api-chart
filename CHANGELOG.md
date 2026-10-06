@@ -8,17 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Helm chart repository is now served from `https://www.oncdn.xyz/`; chart `home` URLs and docs updated
+- Helm chart repository is now served from `https://charts.oncdn.xyz/`; chart `home` URLs and docs updated
 
 ### Migration
 Existing users must switch to the new repository URL:
 
 ```bash
 helm repo remove dev2prod
-helm repo add dev2prod https://www.oncdn.xyz/
+helm repo add dev2prod https://charts.oncdn.xyz/
 ```
 
-Flux users: update `HelmRepository.spec.url` to `https://www.oncdn.xyz/`.
+Flux users: update `HelmRepository.spec.url` to `https://charts.oncdn.xyz/`.
 
 **Warning:** do not use the old host `charts.cdnn.host`, even if it starts resolving again. The domain has expired; anyone can register it and serve their own `index.yaml`.
 

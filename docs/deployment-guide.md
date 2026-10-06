@@ -4,11 +4,11 @@
 
 ## Overview
 
-Charts are published to **https://www.oncdn.xyz/** and can be installed as standalone releases or as subcharts. This guide covers consumption, release pipeline, and environment configuration.
+Charts are published to **https://charts.oncdn.xyz/** and can be installed as standalone releases or as subcharts. This guide covers consumption, release pipeline, and environment configuration.
 
 ## Helm Repository
 
-- **URL:** https://www.oncdn.xyz/
+- **URL:** https://charts.oncdn.xyz/
 - **Charts:** `gateway-api`, `gateway-api-routes`
 - **Artifact Hub:** [gateway-api-chart](https://artifacthub.io/packages/search?repo=gateway-api-chart)
 
@@ -17,7 +17,7 @@ Charts are published to **https://www.oncdn.xyz/** and can be installed as stand
 ### Add Repo and Install
 
 ```bash
-helm repo add dev2prod https://www.oncdn.xyz/
+helm repo add dev2prod https://charts.oncdn.xyz/
 helm repo update
 helm search repo dev2prod
 ```
@@ -76,7 +76,7 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 | Job             | Triggers     | Steps                                                                 |
 |-----------------|-------------|-----------------------------------------------------------------------|
 | Lint & Unit     | Push/PR to main | Checkout → Setup Helm → `helm lint` for each chart in `./charts` |
-| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://www.oncdn.xyz` (gh-pages) |
+| Publish Chart   | After lint  | chart-releaser-action; publishes to `https://charts.oncdn.xyz` (gh-pages) |
 
 - **Helm version:** 3.18.0 (workflow env; 3.18+ required for helm-unittest plugin).
 - **Unit / integration:** Referenced in `tests/README.md`; some steps (unittest, Kind-based integration) are commented in the workflow for later use.
@@ -84,7 +84,7 @@ Workflow: `.github/workflows/lint-test-release.yaml`
 ### Chart Releaser
 
 - **Action:** `helm/chart-releaser-action@v1.7.0`
-- **Publish URL:** `https://www.oncdn.xyz` (gh-pages)
+- **Publish URL:** `https://charts.oncdn.xyz` (gh-pages)
 - **Skip existing:** `CR_SKIP_EXISTING: "true"`
 - **Permissions:** `contents: write` for release artifacts.
 
