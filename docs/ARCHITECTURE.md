@@ -88,7 +88,7 @@ See [deployment-guide.md](./deployment-guide.md) for CI/CD and release process.
 
 - CRDs are **unchanged** from upstream; do not patch them in-repo.
 - Use `{{-` for whitespace control; quote strings in templates; check `.Values.*.enabled` before rendering.
-- Document user-facing changes in README and llm.txt; keep CHANGELOG updated (per .cursorrules).
+- Document user-facing changes in README and llm.txt; keep CHANGELOG updated.
 
 ---
 

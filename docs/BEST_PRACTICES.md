@@ -1,6 +1,6 @@
 # Best Practices
 
-Practices used in this repository for charts, configuration, testing, and documentation. Aligned with [.cursorrules](../.cursorrules), [llm.txt](../llm.txt), and the [examples](../examples/) guides.
+Practices used in this repository for charts, configuration, testing, and documentation. Aligned with [llm.txt](../llm.txt), and the [examples](../examples/) guides.
 
 ---
 
@@ -10,6 +10,7 @@ Practices used in this repository for charts, configuration, testing, and docume
 - **Two-chart separation** — Infrastructure (`gateway-api`: GatewayClass, Gateway, CRDs) vs routes (`gateway-api-routes`: HTTPRoute, GRPCRoute, TCPRoute, UDPRoute). Maintain this split.
 - **Experimental CRDs** — Use the experimental channel (v1.4.1) for maximum feature support (TCPRoute, TLSRoute, UDPRoute, etc.).
 - **Provider-agnostic** — Charts work with any Gateway API provider (Envoy, AWS ALB, GKE, AKS). No controller is shipped; users install a provider and set `controllerName` / `gatewayClassName` in values.
+- **Repository layout** — `charts/gateway-api/` (GatewayClass, Gateway, CRDs), `charts/gateway-api-routes/` (routes), `examples/` (cloud provider and feature examples), `docs/` (documentation).
 - **Helm 3** — Follow [Helm chart best practices](https://helm.sh/docs/chart_best_practices/) and Kubernetes Gateway API v1.4.1.
 
 ---
@@ -155,8 +156,6 @@ Run `pre-commit run --all-files` before pushing.
 ---
 
 ## 12. Documentation
-
-From [.cursorrules](../.cursorrules):
 
 - **README.md** — Update for user-facing changes (install, config, examples).
 - **llm.txt** — Keep AI-oriented summary current (structure, config, validation, patterns).

@@ -51,13 +51,18 @@ read -r -d '' SEO_HEAD << 'HEAD' || true
 HEAD
 
 # Convert markdown to HTML body (try pandoc, then npx marked)
+# Blocks between landing:exclude markers (e.g. old-host migration note) stay in README only.
+landing_md() {
+  sed '/<!-- landing:exclude:start -->/,/<!-- landing:exclude:end -->/d' "$README"
+}
+
 convert_md() {
   if command -v pandoc &>/dev/null; then
-    pandoc "$README" -f gfm -t html 2>/dev/null
+    landing_md | pandoc -f gfm -t html 2>/dev/null
   elif command -v npx &>/dev/null; then
-    npx --yes marked --gfm < "$README" 2>/dev/null
+    landing_md | npx --yes marked --gfm 2>/dev/null
   elif python3 -c "import markdown" 2>/dev/null; then
-    python3 -c "import markdown; print(markdown.markdown(open(\"$README\").read(), extensions=['tables', 'fenced_code']))"
+    landing_md | python3 -c "import sys, markdown; print(markdown.markdown(sys.stdin.read(), extensions=['tables', 'fenced_code']))"
   else
     echo "Error: need pandoc, npx/marked, or python-markdown. Install: brew install pandoc | npm i -g marked | pip install markdown" >&2
     exit 1

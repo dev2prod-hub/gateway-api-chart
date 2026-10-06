@@ -90,7 +90,7 @@ This documentation supports AI agents working with the Gateway API Helm charts.
 
 **Quick context:**
 
-- → Reference: `../llm.txt`, `.cursorrules`
+- → Reference: `../llm.txt`, `BEST_PRACTICES.md`
 
 ### Conventions
 

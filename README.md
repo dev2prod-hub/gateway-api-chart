@@ -85,6 +85,7 @@ helm repo update
 helm repo search dev2prod
 ```
 
+<!-- landing:exclude:start -->
 ### Migrating from the old repository URL
 
 The chart repository moved from `charts.cdnn.host` to `https://www.oncdn.xyz/`. Existing users must switch:
@@ -97,6 +98,7 @@ helm repo add dev2prod https://www.oncdn.xyz/
 Flux users: update `HelmRepository.spec.url` to `https://www.oncdn.xyz/`.
 
 > **Warning:** do not use the old host `charts.cdnn.host`, even if it starts resolving again. The domain has expired; anyone can register it and serve their own `index.yaml`.
+<!-- landing:exclude:end -->
 
 ### To skip CRD installation, use the following command:
 
