@@ -36,7 +36,7 @@
   </style>
 </head>
 <body>
-<h1 id="gateway-api-helm-chart-">Gateway API Helm Chart 🚪⚡</h1>
+<h1 id="gateway-api-helm-chart-doorzap">Gateway API Helm Chart 🚪⚡</h1>
 <p><a
 href="https://github.com/dev2prod-hub/gateway-api-chart/actions"><img
 src="https://github.com/dev2prod-hub/gateway-api-chart/actions/workflows/lint-test-release.yaml/badge.svg"
@@ -49,22 +49,22 @@ API (CRDs, GatewayClass, Gateway, HTTPRoute, GRPCRoute, TCPRoute,
 UDPRoute) via Helm. Kubernetes-native successor to Ingress.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Resource</th>
 <th>URL</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Helm chart repo</td>
 <td><a href="https://charts.oncdn.xyz/">charts.oncdn.xyz</a></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Git source</td>
 <td><a
 href="https://github.com/dev2prod-hub/gateway-api-chart">github.com/dev2prod-hub/gateway-api-chart</a></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Artifact Hub</td>
 <td><a
 href="https://artifacthub.io/packages/search?repo=gateway-api-chart">artifacthub.io/packages/search?repo=gateway-api-chart</a></td>
@@ -83,7 +83,8 @@ alt="Gateway API Resource Model - Infrastructure Provider, Cluster Operator, App
 <p><strong>Source:</strong> <a
 href="https://gateway-api.sigs.k8s.io/">Kubernetes Gateway API
 Documentation</a></p>
-<h2 id="chart-architecture-️">Chart Architecture 🏗️</h2>
+<h2 id="chart-architecture-building_construction">Chart Architecture
+🏗️</h2>
 <p>This repository provides <strong>two separate Helm charts</strong>
 that align with the Gateway API resource model:</p>
 <h3 id="1-gateway-api---infrastructure-layer">1.
@@ -119,7 +120,7 @@ API.</p>
 team to define routing rules. Routes reference Gateways via
 <code>parentRefs</code>. Typically managed by application
 developers.</p>
-<h3 id="why-two-charts-">Why Two Charts? 🤔</h3>
+<h3 id="why-two-charts-thinking">Why Two Charts? 🤔</h3>
 <p>This separation provides:</p>
 <ol type="1">
 <li><strong>Role-oriented design</strong> - Matches Gateway API's
@@ -133,7 +134,7 @@ independently while sharing the same Gateway infrastructure</li>
 dependency in infrastructure charts, and <code>gateway-api-routes</code>
 in application charts</li>
 </ol>
-<h2 id="why-this-chart-">Why This Chart? 🌟</h2>
+<h2 id="why-this-chart-star2">Why This Chart? 🌟</h2>
 <p>Provides opinionated yet flexible configurations for:</p>
 <ul>
 <li><strong>CRD management</strong> (an optional installation)</li>
@@ -156,7 +157,7 @@ routing</li>
 <li><strong>As a dependency/subchart</strong> in larger applications
 needing routing</li>
 </ul>
-<h2 id="quick-start-">Quick Start 🚀</h2>
+<h2 id="quick-start-rocket">Quick Start 🚀</h2>
 <p>Install the Gateway API Helm chart from <a
 href="https://charts.oncdn.xyz/">charts.oncdn.xyz</a>:</p>
 <h3 id="add-repository">Add repository</h3>
@@ -178,13 +179,13 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> install routes oncdn/gateway-api-routes <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--version</span> 1.0.0</span></code></pre></div>
-<h2 id="features-">Features 📦</h2>
+<h2 id="features-package">Features 📦</h2>
 <p>✔️ <strong>CRD Management</strong> — Original CRDs from
 kubernetes-sigs (unchanged) ✔️ <strong>CRD Version</strong> v1.4.1
 (experimental) — TCPRoute, TLSRoute, UDPRoute, experimental features ✔️
 <strong>Two Helm charts</strong> — gateway-api (infra) and
 gateway-api-routes (HTTPRoute, GRPCRoute, TCPRoute, UDPRoute)</p>
-<h2 id="configuration-example-">Configuration Example 🔧</h2>
+<h2 id="configuration-example-wrench">Configuration Example 🔧</h2>
 <h3 id="gateway-api">gateway-api</h3>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values.yaml</span></span>
@@ -243,7 +244,7 @@ Guides</a></li>
 API Providers</a></li>
 </ul>
 <hr />
-<h2 id="maintainer-">Maintainer 👤</h2>
+<h2 id="maintainer-bust_in_silhouette">Maintainer 👤</h2>
 <p>This is a personal project maintained by:</p>
 <p><strong>Kirill Kazakov</strong> - Full Stack DevOps and Magician</p>
 <ul>
